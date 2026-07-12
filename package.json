@@ -1,0 +1,31 @@
+{
+  "name": "moch-eep",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@9.15.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "node scripts/check-contrast.mjs && node scripts/check-logical-props.mjs && turbo run lint",
+    "check:a11y": "node scripts/check-contrast.mjs && node scripts/check-logical-props.mjs",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "test:e2e": "turbo run test:e2e",
+    "infra:up": "docker compose -f infra/docker-compose.yml up -d",
+    "infra:down": "docker compose -f infra/docker-compose.yml down",
+    "db:generate": "pnpm --filter @moch/api prisma:generate",
+    "db:push": "pnpm --filter @moch/api prisma:push",
+    "db:migrate": "pnpm --filter @moch/api prisma:migrate",
+    "db:seed": "pnpm --filter @moch/api db:seed",
+    "db:reset": "pnpm --filter @moch/api db:reset",
+    "format": "prettier --write \"**/*.{ts,tsx,md,json}\""
+  },
+  "devDependencies": {
+    "prettier": "^3.4.2",
+    "turbo": "^2.3.3",
+    "typescript": "^5.7.2"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "name": "משרד הבינוי והשיכון — הבית הדיגיטלי",
+  "short_name": "הבית הדיגיטלי",
+  "description": "הבית הדיגיטלי של עובדי משרד הבינוי והשיכון",
+  "start_url": "/he",
+  "display": "standalone",
+  "background_color": "#f4f7fb",
+  "theme_color": "#0a3a70",
+  "dir": "rtl",
+  "lang": "he",
+  "icons": [
+    {
+      "src": "/ministry-logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "extends": "@moch/config/tsconfig.node.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "noUncheckedIndexedAccess": false
+  },
+  "include": ["src/**/*.ts", "prisma/**/*.ts"],
+  "exclude": ["node_modules", "dist"]
+}

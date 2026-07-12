@@ -1,0 +1,65 @@
+@import "@moch/ui/tokens.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    /* rem-based sizing throughout, so the whole UI scales with the user's
+       browser font size and survives 200% zoom — WCAG 1.4.4. */
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: var(--font-hebrew), "Assistant", "Heebo", system-ui, sans-serif;
+    /* Hebrew sits differently on the line than Latin does; a touch more leading
+       keeps nikud-free Hebrew from feeling cramped at body size. */
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  :focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+    border-radius: var(--radius-sm);
+  }
+
+  /* Numbers stay LTR inside RTL text — "1,240 יח״ד", not "ד״חי 240,1". */
+  [dir="rtl"] .numeric {
+    direction: ltr;
+    unicode-bidi: embed;
+    display: inline-block;
+  }
+}
+
+@layer utilities {
+  .scrollbar-none {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* A rail of cards that scrolls sideways. Logical padding, so it starts on the
+     correct edge in both directions without a single `left` or `right`. */
+  .rail {
+    display: flex;
+    gap: 0.75rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-inline: 1rem;
+    padding-block-end: 0.25rem;
+    scrollbar-width: none;
+  }
+  .rail::-webkit-scrollbar {
+    display: none;
+  }
+  .rail > * {
+    scroll-snap-align: start;
+    flex: 0 0 auto;
+  }
+}

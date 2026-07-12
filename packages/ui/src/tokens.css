@@ -1,0 +1,166 @@
+/**
+ * Design tokens — Ministry of Construction and Housing.
+ *
+ * PROVISIONAL. These are derived from the Ministry's live gov.il page and from
+ * the logo, and they are darkened where the public palette failed WCAG 2.0 AA
+ * at mobile card scale. Israel's national government design system is mandatory
+ * for new government digital projects but is restricted to authorized agencies;
+ * the moment the Ministry obtains it, this file is what gets replaced — and
+ * nothing else has to change, because nothing else hardcodes a color.
+ *
+ * Every foreground/background pair used in the product is checked by
+ * `scripts/check-contrast.mjs`, which runs in `pnpm lint`.
+ */
+
+:root {
+  /* Brand — the gov.il blues */
+  --brand-navy: #0a3a70;
+  --brand-blue: #0b57a4;
+  --brand-blue-hover: #094a8d;
+  --brand-blue-soft: #e7f0fa;
+
+  /* Accents — the colored houses in the Ministry logo. These are what keep the
+     app from being a wall of government blue. */
+  --accent-red: #b93b25;
+  --accent-green: #1f7a51;
+  --accent-amber: #8a5d0c;
+  --accent-blue: #0e5f7a;
+  --accent-teal: #0e6b80;
+  --accent-violet: #58419c;
+
+  /* District colors are tokens, not database hexes.
+     A single hex cannot be legible on both a white card and a dark one, and a
+     district chip is colored text on a tint of itself — so each district needs
+     a light value and a dark value, exactly like every other color here. The
+     database stores `var(--district-haifa)`, and the theme decides what that is. */
+  --district-north: #186b4a;
+  --district-haifa: #0b5d74;
+  --district-center: #a63520;
+  --district-jerusalem: #7a5309;
+  --district-south: #553ba0;
+
+  /* Surfaces */
+  --bg: #f4f7fb;
+  --surface: #ffffff;
+  --surface-raised: #ffffff;
+  --surface-tint: #eaf2fb;
+  --surface-sunken: #e8eef6;
+
+  /* The header is a brand-colored *surface*, which is a different job from
+     `--brand-navy` as a *text* color. They were the same token once; in dark
+     mode the text color inverts to a light blue, and the header quietly became
+     white-on-pale-blue at 1.94:1. Two jobs, two tokens. */
+  --surface-brand: #0a3a70;
+  --on-surface-brand: #ffffff;
+
+  /* The one hero card on Home ("This week at the Ministry"). It is a brand
+     surface too, so it stays dark in dark mode rather than glowing. */
+  --hero-from: #0a3a70;
+  --hero-to: #0b57a4;
+
+  /* Text */
+  --text: #14212e;
+  --text-muted: #5a6b7d;
+  --text-inverse: #ffffff;
+  --text-on-brand: #ffffff;
+
+  /* Lines. `--border` is decorative and may be faint; `--border-strong` marks a
+     real component boundary (an input, a control) and must clear 3:1 — WCAG
+     1.4.11. It is noticeably darker than it "wants" to be for that reason. */
+  --border: #d8e0ea;
+  --border-strong: #74839a;
+
+  /* Feedback */
+  --danger: #b3261e;
+  --danger-soft: #fdecea;
+  --warning: #8a5d0c;
+  --warning-soft: #fdf3e2;
+  --success: #1f7a51;
+  --success-soft: #e6f4ed;
+
+  /* Elevation — soft, never heavy. A government app should feel calm. */
+  --shadow-sm: 0 1px 2px rgb(16 32 51 / 0.06), 0 1px 3px rgb(16 32 51 / 0.04);
+  --shadow-md: 0 2px 8px rgb(16 32 51 / 0.07), 0 1px 3px rgb(16 32 51 / 0.05);
+  --shadow-lg: 0 12px 32px rgb(16 32 51 / 0.1), 0 2px 8px rgb(16 32 51 / 0.06);
+
+  /* Shape */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --radius-full: 999px;
+
+  /* Motion */
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --duration-fast: 140ms;
+  --duration: 220ms;
+
+  --focus-ring: 0 0 0 3px #ffffff, 0 0 0 5px var(--brand-blue);
+}
+
+.dark {
+  --brand-navy: #7fb3e8;
+  --brand-blue: #64a4e6;
+  --brand-blue-hover: #8bbdee;
+  --brand-blue-soft: #16283d;
+
+  /* Lightened so they still clear 4.5:1 against the dark surface. */
+  --accent-red: #f08a72;
+  --accent-green: #5fc394;
+  --accent-amber: #dfae54;
+  --accent-blue: #5fb6d0;
+  --accent-teal: #5cbcd2;
+  --accent-violet: #a693e8;
+
+  --district-north: #5fc394;
+  --district-haifa: #5cbcd2;
+  --district-center: #f08a72;
+  --district-jerusalem: #dfae54;
+  --district-south: #a693e8;
+
+  --bg: #0d151f;
+  --surface: #151f2b;
+  --surface-raised: #1b2734;
+  --surface-tint: #16232f;
+  --surface-sunken: #101923;
+
+  /* Stays a dark surface in dark mode — it is a surface, not a text color. */
+  --surface-brand: #102336;
+  --on-surface-brand: #e9eff5;
+
+  --hero-from: #10243a;
+  --hero-to: #1a3e63;
+
+  --text: #e9eff5;
+  --text-muted: #9fb0c1;
+  --text-inverse: #0d151f;
+  --text-on-brand: #06121f;
+
+  --border: #29384a;
+  --border-strong: #7d8fa6;
+
+  --danger: #f2988f;
+  --danger-soft: #33201f;
+  --warning: #dfae54;
+  --warning-soft: #2d2417;
+  --success: #5fc394;
+  --success-soft: #172c23;
+
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
+  --shadow-md: 0 2px 10px rgb(0 0 0 / 0.45);
+  --shadow-lg: 0 14px 36px rgb(0 0 0 / 0.5);
+
+  --focus-ring: 0 0 0 3px var(--bg), 0 0 0 5px var(--brand-blue);
+}
+
+/* Respect the user, not the designer. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

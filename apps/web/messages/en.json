@@ -1,0 +1,124 @@
+{
+  "app": {
+    "name": "Ministry of Construction and Housing",
+    "shortName": "Digital Home",
+    "tagline": "The digital home of Ministry employees"
+  },
+  "nav": {
+    "home": "Home",
+    "feed": "Feed",
+    "community": "Community",
+    "services": "Services",
+    "profile": "Profile",
+    "primary": "Primary navigation",
+    "skipToContent": "Skip to main content"
+  },
+  "auth": {
+    "loginTitle": "Sign in",
+    "loginSubtitle": "The digital home of Ministry of Construction and Housing employees",
+    "email": "Email address",
+    "password": "Password",
+    "submit": "Sign in",
+    "submitting": "Signing in…",
+    "error": "Incorrect email or password",
+    "demoTitle": "Demo accounts",
+    "demoHint": "Password for all accounts: {password}",
+    "logout": "Sign out"
+  },
+  "home": {
+    "greeting": {
+      "MORNING": "Good morning, {name}",
+      "AFTERNOON": "Good afternoon, {name}",
+      "EVENING": "Good evening, {name}"
+    },
+    "greetingSub": "Here is what matters today",
+    "sections": {
+      "EMERGENCY": "Emergency alerts",
+      "ANNOUNCEMENTS": "Announcements",
+      "WEEKLY_SUMMARY": "This week at the Ministry",
+      "EVENTS": "Upcoming events",
+      "CEO_MESSAGE": "Message from the Director-General",
+      "VIDEO_OF_WEEK": "Video of the week",
+      "PROJECTS": "Projects",
+      "KEY_NUMBERS": "Key numbers",
+      "CAREERS": "Career opportunities",
+      "TRAININGS": "Training",
+      "QUICK_ACTIONS": "Quick actions",
+      "BIRTHDAYS": "Birthdays",
+      "RECOGNITION": "Recognition",
+      "QUICK_LINKS": "Quick links"
+    },
+    "seeAll": "See all {section}",
+    "readMore": "Read more",
+    "pinned": "Pinned",
+    "today": "Today",
+    "birthdayToday": "Celebrating today",
+    "registered": "Registered",
+    "register": "Register",
+    "seatsLeft": "{count} seats left",
+    "attendees": "{count} registered",
+    "online": "Online",
+    "closesAt": "Closes {date}",
+    "internalRole": "Internal role",
+    "housingUnits": "{count} units",
+    "progress": "{percent}% complete",
+    "views": "{count} views",
+    "projectStatus": {
+      "PLANNING": "Planning",
+      "MARKETING": "Marketing",
+      "BUILDING": "Building",
+      "COMPLETED": "Completed"
+    },
+    "trainingFormat": {
+      "ONLINE": "Online",
+      "IN_PERSON": "In person",
+      "HYBRID": "Hybrid"
+    },
+    "empty": "Nothing new for you right now."
+  },
+  "feed": {
+    "title": "Feed",
+    "allChannels": "All",
+    "following": "Following",
+    "bookmarks": "Saved",
+    "follow": "Follow",
+    "unfollow": "Unfollow",
+    "mandatory": "Required channel",
+    "followers": "{count} followers",
+    "posts": "{count} posts",
+    "like": "Like",
+    "liked": "Liked",
+    "comment": "Comment",
+    "comments": "Comments",
+    "share": "Share",
+    "bookmark": "Save",
+    "bookmarked": "Saved",
+    "addComment": "Write a comment…",
+    "send": "Send",
+    "noComments": "No comments yet. Be the first.",
+    "loadMore": "Load more",
+    "search": "Search the feed",
+    "searchPlaceholder": "Search by title or content…",
+    "empty": "No posts to show",
+    "emptyHint": "Try changing the filter, or follow more channels.",
+    "emptyBookmarks": "You haven't saved any posts yet",
+    "emptyBookmarksHint": "Save a post to come back to it later."
+  },
+  "time": {
+    "now": "now",
+    "minutesAgo": "{count} minutes ago",
+    "hoursAgo": "{count} hours ago",
+    "daysAgo": "{count} days ago",
+    "yesterday": "yesterday"
+  },
+  "a11y": {
+    "toggleTheme": "Toggle light and dark mode",
+    "switchLanguage": "Switch language",
+    "loading": "Loading…",
+    "openMenu": "Open menu"
+  },
+  "common": {
+    "comingSoon": "Coming soon",
+    "comingSoonHint": "This module is planned for the next round."
+  }
+}

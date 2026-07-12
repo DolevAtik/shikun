@@ -1,0 +1,45 @@
+name: moch-eep
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: moch-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: moch
+      POSTGRES_PASSWORD: moch_dev_password
+      POSTGRES_DB: moch_eep
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U moch -d moch_eep"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # S3-compatible object storage for post media, videos and documents.
+  # Swapped for a managed bucket in production; the API only speaks S3.
+  minio:
+    image: minio/minio:latest
+    container_name: moch-minio
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: moch_minio
+      MINIO_ROOT_PASSWORD: moch_dev_password
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  postgres_data:
+  minio_data:

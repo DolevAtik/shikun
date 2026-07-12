@@ -1,0 +1,124 @@
+{
+  "app": {
+    "name": "משרד הבינוי והשיכון",
+    "shortName": "הבית הדיגיטלי",
+    "tagline": "הבית הדיגיטלי של עובדי המשרד"
+  },
+  "nav": {
+    "home": "בית",
+    "feed": "עדכונים",
+    "community": "קהילה",
+    "services": "שירותים",
+    "profile": "פרופיל",
+    "primary": "ניווט ראשי",
+    "skipToContent": "דילוג לתוכן הראשי"
+  },
+  "auth": {
+    "loginTitle": "כניסה למערכת",
+    "loginSubtitle": "הבית הדיגיטלי של עובדי משרד הבינוי והשיכון",
+    "email": "כתובת דוא״ל",
+    "password": "סיסמה",
+    "submit": "כניסה",
+    "submitting": "מתחבר…",
+    "error": "כתובת דוא״ל או סיסמה שגויים",
+    "demoTitle": "חשבונות הדגמה",
+    "demoHint": "הסיסמה לכל החשבונות: {password}",
+    "logout": "התנתקות"
+  },
+  "home": {
+    "greeting": {
+      "MORNING": "בוקר טוב, {name}",
+      "AFTERNOON": "צהריים טובים, {name}",
+      "EVENING": "ערב טוב, {name}"
+    },
+    "greetingSub": "הנה מה שחשוב לדעת היום",
+    "sections": {
+      "EMERGENCY": "הודעות חירום",
+      "ANNOUNCEMENTS": "הודעות חשובות",
+      "WEEKLY_SUMMARY": "השבוע במשרד",
+      "EVENTS": "אירועים קרובים",
+      "CEO_MESSAGE": "מסר מהמנכ״ל",
+      "VIDEO_OF_WEEK": "הסרטון השבועי",
+      "PROJECTS": "פרויקטים",
+      "KEY_NUMBERS": "מספרים חשובים",
+      "CAREERS": "הזדמנויות קריירה",
+      "TRAININGS": "הדרכות והשתלמויות",
+      "QUICK_ACTIONS": "פעולות מהירות",
+      "BIRTHDAYS": "ימי הולדת",
+      "RECOGNITION": "הוקרה",
+      "QUICK_LINKS": "קישורים מהירים"
+    },
+    "seeAll": "לכל ה{section}",
+    "readMore": "קריאה נוספת",
+    "pinned": "מוצמד",
+    "today": "היום",
+    "birthdayToday": "חוגג/ת היום",
+    "registered": "רשום/ה",
+    "register": "הרשמה",
+    "seatsLeft": "{count} מקומות פנויים",
+    "attendees": "{count} נרשמו",
+    "online": "מקוון",
+    "closesAt": "מועד אחרון: {date}",
+    "internalRole": "משרה פנימית",
+    "housingUnits": "{count} יח״ד",
+    "progress": "{percent}% התקדמות",
+    "views": "{count} צפיות",
+    "projectStatus": {
+      "PLANNING": "בתכנון",
+      "MARKETING": "בשיווק",
+      "BUILDING": "בבנייה",
+      "COMPLETED": "אוכלס"
+    },
+    "trainingFormat": {
+      "ONLINE": "מקוון",
+      "IN_PERSON": "פרונטלי",
+      "HYBRID": "משולב"
+    },
+    "empty": "אין עדכונים חדשים עבורך כרגע."
+  },
+  "feed": {
+    "title": "עדכונים",
+    "allChannels": "הכול",
+    "following": "במעקב",
+    "bookmarks": "שמורים",
+    "follow": "עקוב",
+    "unfollow": "הפסק מעקב",
+    "mandatory": "ערוץ חובה",
+    "followers": "{count} עוקבים",
+    "posts": "{count} פוסטים",
+    "like": "אהבתי",
+    "liked": "אהבתי",
+    "comment": "תגובה",
+    "comments": "תגובות",
+    "share": "שיתוף",
+    "bookmark": "שמירה",
+    "bookmarked": "נשמר",
+    "addComment": "כתיבת תגובה…",
+    "send": "שליחה",
+    "noComments": "עדיין אין תגובות. תהיו הראשונים.",
+    "loadMore": "טעינת עוד",
+    "search": "חיפוש בעדכונים",
+    "searchPlaceholder": "חיפוש לפי כותרת או תוכן…",
+    "empty": "אין פוסטים להצגה",
+    "emptyHint": "נסו לשנות את הסינון, או לעקוב אחרי ערוצים נוספים.",
+    "emptyBookmarks": "לא שמרתם עדיין אף פוסט",
+    "emptyBookmarksHint": "סמנו פוסט בסימנייה כדי לחזור אליו מאוחר יותר."
+  },
+  "time": {
+    "now": "עכשיו",
+    "minutesAgo": "לפני {count} דקות",
+    "hoursAgo": "לפני {count} שעות",
+    "daysAgo": "לפני {count} ימים",
+    "yesterday": "אתמול"
+  },
+  "a11y": {
+    "toggleTheme": "מעבר בין מצב בהיר לכהה",
+    "switchLanguage": "החלפת שפה",
+    "loading": "טוען…",
+    "openMenu": "פתיחת תפריט"
+  },
+  "common": {
+    "comingSoon": "בקרוב",
+    "comingSoonHint": "המודול הזה מתוכנן לסבב הבא."
+  }
+}

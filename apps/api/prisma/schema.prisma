@@ -1,0 +1,549 @@
+// Employee Experience Platform — Ministry of Construction and Housing
+//
+// Two decisions shape this schema:
+//
+// 1. Every publishable thing is a ContentItem carrying an embedded audience
+//    rule (audDepartmentIds / audDistrictIds / audOrganizationIds / audRoles).
+//    Kind-specific fields live in 1-1 detail tables. One resolver reads the
+//    audience columns and decides visibility for everything in the product.
+//
+// 2. Subordinate bodies (רשות מקרקעי ישראל, עמידר …) are Organizations, not
+//    Departments. They are separate legal entities and will eventually need
+//    scoped access.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  // Managed Postgres serves the app through a connection pooler, but migrations
+  // need a direct session. Locally both point at the same database.
+  directUrl = env("DIRECT_URL")
+}
+
+enum Role {
+  EMPLOYEE
+  MANAGER
+  DISTRICT_MANAGER
+  CONTENT_EDITOR
+  HR
+  EXECUTIVE
+  ADMIN
+}
+
+enum DistrictCode {
+  NORTH
+  HAIFA
+  CENTER
+  JERUSALEM
+  SOUTH
+}
+
+enum DepartmentKind {
+  SENIOR_DIVISION
+  ADMINISTRATION
+  BUREAU
+}
+
+enum ContentKind {
+  ANNOUNCEMENT
+  FEED_POST
+  EVENT
+  CAREER
+  TRAINING
+  CEO_MESSAGE
+  VIDEO
+  ALERT
+}
+
+enum ContentStatus {
+  DRAFT
+  PENDING
+  PUBLISHED
+  ARCHIVED
+}
+
+enum AlertSeverity {
+  INFO
+  WARNING
+  CRITICAL
+}
+
+enum MediaKind {
+  IMAGE
+  VIDEO
+  DOCUMENT
+}
+
+enum InteractionType {
+  LIKE
+  BOOKMARK
+}
+
+enum ProjectStatus {
+  PLANNING
+  MARKETING
+  BUILDING
+  COMPLETED
+}
+
+enum TrainingFormat {
+  ONLINE
+  IN_PERSON
+  HYBRID
+}
+
+enum BadgeKey {
+  COMMUNITY_CONTRIBUTOR
+  INNOVATION_CHAMPION
+  KNOWLEDGE_SHARER
+  DISTRICT_AMBASSADOR
+  VOLUNTEER
+  MENTOR
+  TOP_CONTRIBUTOR
+}
+
+enum HomeSectionType {
+  GREETING
+  EMERGENCY
+  ANNOUNCEMENTS
+  WEEKLY_SUMMARY
+  EVENTS
+  CEO_MESSAGE
+  VIDEO_OF_WEEK
+  PROJECTS
+  KEY_NUMBERS
+  CAREERS
+  TRAININGS
+  QUICK_ACTIONS
+  BIRTHDAYS
+  RECOGNITION
+  QUICK_LINKS
+}
+
+// ─── Organization ────────────────────────────────────────────────────────────
+
+model Organization {
+  id         String   @id @default(cuid())
+  slug       String   @unique
+  nameHe     String
+  nameEn     String
+  isMinistry Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  users User[]
+}
+
+model District {
+  id     String       @id @default(cuid())
+  code   DistrictCode @unique
+  nameHe String
+  nameEn String
+  color  String
+
+  users    User[]
+  projects Project[]
+  content  ContentItem[]
+}
+
+model Department {
+  id     String         @id @default(cuid())
+  slug   String         @unique
+  kind   DepartmentKind
+  nameHe String
+  nameEn String
+
+  users   User[]
+  careers CareerDetail[]
+}
+
+// ─── Identity ────────────────────────────────────────────────────────────────
+
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  passwordHash String
+  firstName    String
+  lastName     String
+  title        String?
+  avatarUrl    String?
+  bio          String?
+  phone        String?
+  /// Stored as a date; only month and day are ever rendered.
+  birthday     DateTime?
+  startedAt    DateTime?
+  locale       String    @default("he")
+  isActive     Boolean   @default(true)
+  roles        Role[]    @default([EMPLOYEE])
+
+  departmentId   String?
+  districtId     String?
+  organizationId String?
+
+  department   Department?   @relation(fields: [departmentId], references: [id])
+  district     District?     @relation(fields: [districtId], references: [id])
+  organization Organization? @relation(fields: [organizationId], references: [id])
+
+  authoredContent      ContentItem[]  @relation("ContentAuthor")
+  comments             Comment[]
+  commentLikes         CommentLike[]
+  interactions         Interaction[]
+  follows              Follow[]
+  registrations        Registration[]
+  refreshTokens        RefreshToken[]
+  recognitionsReceived Recognition[]  @relation("RecognitionRecipient")
+  recognitionsGiven    Recognition[]  @relation("RecognitionGiver")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([departmentId])
+  @@index([districtId])
+}
+
+model RefreshToken {
+  id        String    @id @default(cuid())
+  userId    String
+  tokenHash String    @unique
+  expiresAt DateTime
+  revokedAt DateTime?
+  createdAt DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+// ─── Content ─────────────────────────────────────────────────────────────────
+
+model ContentItem {
+  id     String        @id @default(cuid())
+  kind   ContentKind
+  status ContentStatus @default(PUBLISHED)
+
+  title String?
+  body  String?
+
+  authorId    String?
+  /// Primary district association, used for the district chip on cards.
+  districtId  String?
+  isPinned    Boolean   @default(false)
+  publishedAt DateTime?
+
+  /// Embedded audience rule. Empty list = no constraint on that dimension.
+  /// Dimensions are ANDed. An entirely empty audience means the whole Ministry.
+  audDepartmentIds   String[] @default([])
+  audDistrictIds     String[] @default([])
+  audOrganizationIds String[] @default([])
+  audRoles           Role[]   @default([])
+
+  author   User?     @relation("ContentAuthor", fields: [authorId], references: [id])
+  district District? @relation(fields: [districtId], references: [id])
+
+  announcement AnnouncementDetail?
+  feedPost     FeedPostDetail?
+  event        EventDetail?
+  career       CareerDetail?
+  training     TrainingDetail?
+  video        VideoDetail?
+  ceoMessage   CeoMessageDetail?
+  alert        AlertDetail?
+
+  media         Media[]
+  tags          Tag[]          @relation("ContentTags")
+  comments      Comment[]
+  interactions  Interaction[]
+  registrations Registration[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([kind, status, publishedAt])
+  @@index([districtId])
+}
+
+model AnnouncementDetail {
+  contentItemId String  @id
+  summary       String
+  imageUrl      String?
+
+  contentItem ContentItem @relation(fields: [contentItemId], references: [id], onDelete: Cascade)
+}
+
+model FeedPostDetail {
+  contentItemId String @id
+  channelId     String
+
+  contentItem ContentItem @relation(fields: [contentItemId], references: [id], onDelete: Cascade)
+  channel     Channel     @relation(fields: [channelId], references: [id])
+
+  @@index([channelId])
+}
+
+model EventDetail {
+  contentItemId String    @id
+  startsAt      DateTime
+  endsAt        DateTime?
+  location      String?
+  isOnline      Boolean   @default(false)
+  imageUrl      String?
+  capacity      Int?
+
+  contentItem ContentItem @relation(fields: [contentItemId], references: [id], onDelete: Cascade)
+}
+
+model CareerDetail {
+  contentItemId String    @id
+  departmentId  String?
+  closesAt      DateTime?
+  isInternal    Boolean   @default(true)
+  href          String?
+
+  contentItem ContentItem @relation(fields: [contentItemId], references: [id], onDelete: Cascade)
+  department  Department? @relation(fields: [departmentId], references: [id])
+}
+
+model TrainingDetail {
+  contentItemId String         @id
+  startsAt      DateTime
+  format        TrainingFormat
+  capacity      Int?
+
+  contentItem ContentItem @relation(fields: [contentItemId], references: [id], onDelete: Cascade)
+}
+
+model VideoDetail {
+  contentItemId   String  @id
+  videoUrl        String
+  thumbnailUrl    String?
+  durationSeconds Int?
+  viewCount       Int     @default(0)
+  isVideoOfWeek   Boolean @default(false)
+
+  contentItem ContentItem @relation(fields: [contentItemId], references: [id], onDelete: Cascade)
+}
+
+model CeoMessageDetail {
+  contentItemId String  @id
+  imageUrl      String?
+  videoUrl      String?
+
+  contentItem ContentItem @relation(fields: [contentItemId], references: [id], onDelete: Cascade)
+}
+
+model AlertDetail {
+  contentItemId String        @id
+  severity      AlertSeverity @default(INFO)
+  href          String?
+  expiresAt     DateTime?
+
+  contentItem ContentItem @relation(fields: [contentItemId], references: [id], onDelete: Cascade)
+}
+
+// ─── Feed ────────────────────────────────────────────────────────────────────
+
+model Channel {
+  id            String  @id @default(cuid())
+  slug          String  @unique
+  nameHe        String
+  nameEn        String
+  descriptionHe String
+  descriptionEn String
+  icon          String
+  color         String
+  /// Channels nobody can unfollow (e.g. Organization).
+  isMandatory   Boolean @default(false)
+  order         Int     @default(0)
+
+  posts   FeedPostDetail[]
+  follows Follow[]
+}
+
+model Follow {
+  id        String   @id @default(cuid())
+  userId    String
+  channelId String
+  createdAt DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  channel Channel @relation(fields: [channelId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, channelId])
+  @@index([userId])
+}
+
+model Tag {
+  id    String @id @default(cuid())
+  slug  String @unique
+  label String
+
+  content ContentItem[] @relation("ContentTags")
+}
+
+model Media {
+  id              String    @id @default(cuid())
+  contentItemId   String?
+  kind            MediaKind
+  url             String
+  thumbnailUrl    String?
+  /// Required on images before publish — WCAG 1.1.1, enforced at write time.
+  alt             String?
+  fileName        String?
+  sizeBytes       Int?
+  width           Int?
+  height          Int?
+  durationSeconds Int?
+  order           Int       @default(0)
+  createdAt       DateTime  @default(now())
+
+  contentItem ContentItem? @relation(fields: [contentItemId], references: [id], onDelete: Cascade)
+
+  @@index([contentItemId])
+}
+
+model Interaction {
+  id            String          @id @default(cuid())
+  userId        String
+  contentItemId String
+  type          InteractionType
+  createdAt     DateTime        @default(now())
+
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  contentItem ContentItem @relation(fields: [contentItemId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, contentItemId, type])
+  @@index([contentItemId, type])
+}
+
+model Comment {
+  id            String   @id @default(cuid())
+  contentItemId String
+  authorId      String
+  body          String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  contentItem ContentItem   @relation(fields: [contentItemId], references: [id], onDelete: Cascade)
+  author      User          @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  likes       CommentLike[]
+
+  @@index([contentItemId])
+}
+
+model CommentLike {
+  id        String   @id @default(cuid())
+  commentId String
+  userId    String
+  createdAt DateTime @default(now())
+
+  comment Comment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([commentId, userId])
+}
+
+/// Covers both event and training sign-ups — the same act against a ContentItem.
+model Registration {
+  id            String   @id @default(cuid())
+  userId        String
+  contentItemId String
+  createdAt     DateTime @default(now())
+
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  contentItem ContentItem @relation(fields: [contentItemId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, contentItemId])
+  @@index([contentItemId])
+}
+
+// ─── Home surface ────────────────────────────────────────────────────────────
+
+model Project {
+  id           String        @id @default(cuid())
+  name         String
+  city         String?
+  districtId   String
+  status       ProjectStatus @default(PLANNING)
+  /// 0–100.
+  progress     Int           @default(0)
+  housingUnits Int?
+  imageUrl     String?
+  order        Int           @default(0)
+
+  district District @relation(fields: [districtId], references: [id])
+
+  @@index([districtId])
+}
+
+model KeyMetric {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  label     String
+  value     Float
+  unit      String?
+  changePct Float?
+  period    String?
+  order     Int      @default(0)
+  updatedAt DateTime @updatedAt
+}
+
+model QuickLink {
+  id         String  @id @default(cuid())
+  label      String
+  url        String
+  icon       String?
+  isExternal Boolean @default(true)
+  order      Int     @default(0)
+}
+
+model QuickAction {
+  id    String @id @default(cuid())
+  label String
+  icon  String
+  href  String
+  order Int    @default(0)
+}
+
+model Recognition {
+  id          String   @id @default(cuid())
+  recipientId String
+  giverId     String?
+  badge       BadgeKey
+  reason      String
+  awardedAt   DateTime @default(now())
+
+  recipient User  @relation("RecognitionRecipient", fields: [recipientId], references: [id], onDelete: Cascade)
+  giver     User? @relation("RecognitionGiver", fields: [giverId], references: [id])
+
+  @@index([recipientId])
+}
+
+model WeeklySummary {
+  id          String   @id @default(cuid())
+  weekOf      DateTime @unique
+  title       String
+  teaser      String
+  highlights  String[] @default([])
+  publishedAt DateTime @default(now())
+}
+
+/// The ordered, typed, audience-aware layout of Home. Round-two admins edit
+/// these rows; the frontend never hardcodes the order.
+model HomeSectionConfig {
+  id        String          @id @default(cuid())
+  type      HomeSectionType
+  order     Int
+  title     String?
+  isEnabled Boolean         @default(true)
+  /// How many items the section renders. Null = the section's own default.
+  maxItems  Int?
+
+  audDepartmentIds   String[] @default([])
+  audDistrictIds     String[] @default([])
+  audOrganizationIds String[] @default([])
+  audRoles           Role[]   @default([])
+
+  @@index([order])
+}
