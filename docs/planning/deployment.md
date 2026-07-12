@@ -1,6 +1,9 @@
 # Deployment — Vercel + managed API, database and object storage
 
-## Status: Planning
+## Status: In Progress — repo, code changes and migration are done; the four platform accounts are not
+
+Done: Phase 1 (git + GitHub), the five code changes, `prisma/migrations/0_init`, `vercel.json`, `railway.json`.
+Remaining: creating the Neon / R2 / Railway / Vercel resources and setting their environment variables — none of which can be done without the account owner.
 
 ## Context
 
