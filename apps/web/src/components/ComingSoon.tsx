@@ -2,7 +2,7 @@ import { EmptyState } from "@moch/ui";
 import { getTranslations } from "next-intl/server";
 
 /**
- * Community, Services and Profile are scoped out of round one on purpose. A
+ * Services and Profile are scoped out of round one on purpose. A
  * placeholder that says so is more honest than a fake screen that implies the
  * module exists.
  */

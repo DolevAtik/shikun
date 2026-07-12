@@ -1,7 +1,15 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "globalDependencies": [".env"],
-  "globalEnv": ["NODE_ENV", "DATABASE_URL", "JWT_SECRET", "NEXT_PUBLIC_API_URL"],
+  "globalEnv": [
+    "NODE_ENV",
+    "DATABASE_URL",
+    "DIRECT_URL",
+    "JWT_SECRET",
+    "NEXT_PUBLIC_API_URL",
+    // Inlined into the web build, so it has to take part in the cache key.
+    "NEXT_PUBLIC_MEDIA_HOST"
+  ],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
