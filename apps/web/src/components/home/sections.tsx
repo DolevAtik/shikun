@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { VideoOfWeekCard } from "@/components/home/VideoOfWeekCard";
+import { MediaImage } from "@/components/MediaImage";
 import { ICONS } from "@/components/icons";
 import { Link } from "@/i18n/routing";
 import { formatDate, formatDateTime, formatMonthDay, formatNumber, formatRelative } from "@/lib/format";
@@ -113,9 +114,12 @@ export async function HomeSectionView({ section, locale, firstName, greeting }: 
                       </p>
                     </div>
                     {item.imageUrl ? (
-                      <img
+                      <MediaImage
                         src={item.imageUrl}
                         alt=""
+                        width={80}
+                        height={80}
+                        sizes="80px"
                         className="size-20 shrink-0 rounded-md object-cover"
                       />
                     ) : null}
@@ -525,12 +529,15 @@ function CardCover({ src, Icon }: { src: string | null; Icon: LucideIcon }) {
   }
 
   return (
-    <img
-      src={src}
-      alt=""
-      loading="lazy"
-      className="h-28 w-full shrink-0 bg-surface-sunken object-cover"
-    />
+    <div className="relative h-28 w-full shrink-0 overflow-hidden bg-surface-sunken">
+      <MediaImage
+        src={src}
+        alt=""
+        fill
+        sizes="(max-width: 672px) 50vw, 320px"
+        className="object-cover"
+      />
+    </div>
   );
 }
 

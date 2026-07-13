@@ -49,5 +49,156 @@
     "retry": "Retry",
     "theme": "Appearance",
     "language": "Language"
+  },
+  "search": {
+    "title": "Search the console",
+    "description": "Search employees, content, districts, and media",
+    "placeholder": "Search…",
+    "hint": "Type at least two characters",
+    "empty": "No results found"
+  },
+  "section": {
+    "readyTitle": "This screen is ready to connect",
+    "readyDescription": "Navigation and permissions are live. The full management UI for this module will land once its Phase API is complete."
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "subtitle": "An organizational snapshot — every number comes from real data.",
+    "range": "Time range",
+    "ranges": {
+      "7d": "7 days",
+      "30d": "30 days",
+      "90d": "90 days"
+    },
+    "stats": {
+      "headcount": "Active employees",
+      "newEmployees": "New employees",
+      "comments": "Comments",
+      "likes": "Likes",
+      "registrations": "Event / training registrations",
+      "pendingReview": "Pending review",
+      "dau": "Daily active users",
+      "mau": "Monthly active users",
+      "unreadAnnouncements": "Unread announcements"
+    },
+    "collectingSince": "Collecting since {date}",
+    "notCollecting": "Collection has not started",
+    "vsPrevious": "vs previous period",
+    "communityActivity": "Community activity",
+    "communityActivityHint": "Comments per day — a real signal from the platform",
+    "contentByStatus": "Content by status",
+    "topContent": "Top content",
+    "topDistricts": "Most active districts",
+    "topDepartments": "Most active departments",
+    "upcomingEvents": "Upcoming events",
+    "recentActivity": "Recent activity",
+    "recentActivityHint": "From the audit log — fills as administrators publish",
+    "activityEmpty": "No audit entries yet. Administrative actions will appear here.",
+    "quickActions": "Quick actions",
+    "comments": "comments",
+    "likes": "likes",
+    "interactions": "interactions",
+    "empty": "No data in this range",
+    "viewAll": "View all",
+    "status": {
+      "DRAFT": "Draft",
+      "PENDING": "Pending",
+      "PUBLISHED": "Published",
+      "ARCHIVED": "Archived"
+    },
+    "actions": {
+      "newContent": "New content",
+      "employees": "Manage employees",
+      "homeLayout": "Home layout",
+      "analytics": "Analytics"
+    }
+  },
+  "list": {
+    "of": "of",
+    "pageSize": "Page size",
+    "prev": "Previous page",
+    "next": "Next page"
+  },
+  "content": {
+    "title": "Content",
+    "subtitle": "Announcements, posts, and messages that appear in the employee app",
+    "create": "New content",
+    "search": "Search by title or body…",
+    "untitled": "Untitled",
+    "ministryWide": "Ministry-wide",
+    "allKinds": "All kinds",
+    "allStatuses": "All statuses",
+    "emptyTitle": "No content to show",
+    "emptyDescription": "Try changing the filters, or create a new content item.",
+    "selected": "selected",
+    "saved": "Content saved",
+    "published": "Published — it will appear in the employee app",
+    "unpublished": "Returned to draft",
+    "archived": "Moved to archive",
+    "bulkSuccess": "{count} items updated",
+    "bulkPartial": "{ok} succeeded, {fail} failed",
+    "confirmArchiveTitle": "Move to archive?",
+    "confirmArchiveDescription": "{count} items will be archived. You can restore them later.",
+    "confirmArchiveOne": "This item will be archived and will no longer appear in the app.",
+    "columns": {
+      "title": "Title",
+      "kind": "Kind",
+      "status": "Status",
+      "district": "District",
+      "updated": "Updated"
+    },
+    "actions": {
+      "publish": "Publish",
+      "unpublish": "Unpublish",
+      "archive": "Archive"
+    },
+    "form": {
+      "details": "Content details",
+      "summary": "Summary",
+      "body": "Body"
+    },
+    "kinds": {
+      "ANNOUNCEMENT": "Announcement",
+      "FEED_POST": "Community post",
+      "EVENT": "Event",
+      "CAREER": "Job",
+      "TRAINING": "Training",
+      "CEO_MESSAGE": "CEO message",
+      "VIDEO": "Video",
+      "ALERT": "Alert"
+    },
+    "status": {
+      "DRAFT": "Draft",
+      "PENDING": "Pending",
+      "PUBLISHED": "Published",
+      "ARCHIVED": "Archived"
+    }
+  },
+  "homeLayout": {
+    "settingsTitle": "Settings",
+    "settingsSubtitle": "Manage what appears on the employee Home screen",
+    "title": "Home layout",
+    "subtitle": "Reorder and enable sections — changes appear in the app immediately.",
+    "saved": "Home layout updated",
+    "moveUp": "Move up",
+    "moveDown": "Move down",
+    "enabled": "Enabled",
+    "noAccessTitle": "You cannot edit these settings",
+    "noAccessDescription": "Feed management permission is required to edit the Home layout.",
+    "types": {
+      "GREETING": "Greeting",
+      "EMERGENCY": "Emergency alerts",
+      "ANNOUNCEMENTS": "Announcements",
+      "WEEKLY_SUMMARY": "Weekly summary",
+      "EVENTS": "Events",
+      "CEO_MESSAGE": "CEO message",
+      "VIDEO_OF_WEEK": "Video of the week",
+      "PROJECTS": "Projects",
+      "KEY_NUMBERS": "Key numbers",
+      "CAREERS": "Careers",
+      "TRAININGS": "Trainings",
+      "BIRTHDAYS": "Birthdays",
+      "RECOGNITION": "Recognition"
+    }
   }
 }

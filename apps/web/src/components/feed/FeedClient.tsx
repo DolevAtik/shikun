@@ -70,18 +70,41 @@ export function FeedClient({ locale, channels: initialChannels, initialPage }: P
     };
   }, [buildQuery, query]);
 
-  async function loadMore() {
-    if (!cursor || isLoading) return;
+  const loadMoreRef = useRef<HTMLDivElement | null>(null);
+  const loadingRef = useRef(false);
+  const cursorRef = useRef(cursor);
+  cursorRef.current = cursor;
+
+  const loadMore = useCallback(async () => {
+    const nextCursor = cursorRef.current;
+    if (!nextCursor || loadingRef.current) return;
+    loadingRef.current = true;
     setIsLoading(true);
 
     try {
-      const page = await clientFetch<FeedPage>(`/feed/posts?${buildQuery(cursor)}`);
+      const page = await clientFetch<FeedPage>(`/feed/posts?${buildQuery(nextCursor)}`);
       setPosts((current) => [...current, ...page.items]);
       setCursor(page.nextCursor);
     } finally {
+      loadingRef.current = false;
       setIsLoading(false);
     }
-  }
+  }, [buildQuery]);
+
+  // Infinite scroll: when the sentinel enters the viewport, fetch the next page.
+  useEffect(() => {
+    const node = loadMoreRef.current;
+    if (!node || !cursor) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]?.isIntersecting) void loadMore();
+      },
+      { rootMargin: "240px" },
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [cursor, loadMore]);
 
   async function toggleFollow(channel: Channel) {
     const next = !channel.isFollowing;
@@ -235,9 +258,11 @@ export function FeedClient({ locale, channels: initialChannels, initialPage }: P
         )}
 
         {cursor ? (
-          <Button variant="secondary" onClick={loadMore} isLoading={isLoading} className="mx-auto mt-2">
-            {t("loadMore")}
-          </Button>
+          <div ref={loadMoreRef} className="flex justify-center py-2">
+            <Button variant="secondary" onClick={loadMore} isLoading={isLoading} className="mx-auto">
+              {t("loadMore")}
+            </Button>
+          </div>
         ) : null}
       </div>
     </div>

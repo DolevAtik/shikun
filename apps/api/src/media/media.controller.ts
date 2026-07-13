@@ -1,4 +1,5 @@
 import { Controller, Post } from "@nestjs/common";
+import { Throttle } from "@nestjs/throttler";
 import { z } from "zod";
 import { RequirePermissions } from "../auth/decorators";
 import { ZodBody } from "../common/zod-body.decorator";
@@ -14,6 +15,7 @@ export class MediaController {
   constructor(private readonly media: MediaService) {}
 
   @Post("presign")
+  @Throttle({ default: { ttl: 60_000, limit: 20 } })
   @RequirePermissions("content:publish")
   presign(
     @ZodBody(PresignRequestSchema) body: { fileName: string; contentType: string },

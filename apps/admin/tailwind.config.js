@@ -36,6 +36,33 @@ module.exports = {
           5: "var(--chart-5)",
         },
       },
+
+      /**
+       * Portal enter/exit animations — fade and zoom, and deliberately nothing
+       * else. tailwindcss-animate is not installed on purpose: its slide
+       * utilities are physical (`slide-in-from-left`), and its logical variants
+       * are known-buggy. A fade has no direction, so there is nothing to mirror
+       * in Hebrew and nothing for a reviewer to get wrong. If a dropdown ever
+       * needs to fly in from a side, that is a conversation, not a utility.
+       */
+      keyframes: {
+        "fade-in": { from: { opacity: "0" }, to: { opacity: "1" } },
+        "fade-out": { from: { opacity: "1" }, to: { opacity: "0" } },
+        "pop-in": {
+          from: { opacity: "0", transform: "scale(0.97)" },
+          to: { opacity: "1", transform: "scale(1)" },
+        },
+        "pop-out": {
+          from: { opacity: "1", transform: "scale(1)" },
+          to: { opacity: "0", transform: "scale(0.97)" },
+        },
+      },
+      animation: {
+        "fade-in": "fade-in var(--duration-fast) var(--ease)",
+        "fade-out": "fade-out var(--duration-fast) var(--ease)",
+        "pop-in": "pop-in var(--duration-fast) var(--ease)",
+        "pop-out": "pop-out var(--duration-fast) var(--ease)",
+      },
     },
   },
 };

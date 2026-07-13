@@ -1,10 +1,11 @@
 "use client";
 
-import type { Comment, FeedPost, ToggleResponse } from "@moch/contracts";
+import type { Comment, CommentsPage, FeedPost, ToggleResponse } from "@moch/contracts";
 import { Avatar, Button, Card, Chip, cn } from "@moch/ui";
 import { Bookmark, Heart, MessageCircle, Send } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
+import { MediaImage } from "@/components/MediaImage";
 import { clientFetch } from "@/lib/client-api";
 import { formatRelative } from "@/lib/format";
 
@@ -14,6 +15,7 @@ export function PostCard({ post: initial }: { post: FeedPost }) {
 
   const [post, setPost] = useState(initial);
   const [showComments, setShowComments] = useState(false);
+  const [expanding, setExpanding] = useState(false);
 
   /**
    * Optimistic, then reconciled with the server's count. A like that takes a
@@ -42,6 +44,22 @@ export function PostCard({ post: initial }: { post: FeedPost }) {
       );
     } catch {
       setPost(previous);
+    }
+  }
+
+  async function expandBody() {
+    if (!post.isTruncated || expanding) return;
+    setExpanding(true);
+    try {
+      const full = await clientFetch<FeedPost>(`/feed/posts/${post.id}`);
+      setPost((current) => ({
+        ...current,
+        body: full.body,
+        excerpt: full.excerpt,
+        isTruncated: false,
+      }));
+    } finally {
+      setExpanding(false);
     }
   }
 
@@ -78,6 +96,16 @@ export function PostCard({ post: initial }: { post: FeedPost }) {
             <h2 className="mb-1 font-semibold leading-snug text-content">{post.title}</h2>
           ) : null}
           <p className="whitespace-pre-line text-[0.95rem] leading-relaxed text-content">{post.body}</p>
+          {post.isTruncated ? (
+            <button
+              type="button"
+              onClick={expandBody}
+              disabled={expanding}
+              className="mt-1 text-sm font-medium text-brand hover:underline"
+            >
+              {expanding ? t("loading") : t("readMore")}
+            </button>
+          ) : null}
 
           {(post.districtName || post.tags.length > 0) && (
             <div className="mt-3 flex flex-wrap items-center gap-1.5">
@@ -92,16 +120,17 @@ export function PostCard({ post: initial }: { post: FeedPost }) {
         {post.media
           .filter((media) => media.kind === "IMAGE")
           .map((media) => (
-            <img
-              key={media.id}
-              src={media.url}
-              // Alt text is required at publish time, so by the time a post
-              // renders here it has one. This is not a fallback — it is the
-              // author's own description.
-              alt={media.alt ?? ""}
-              className="aspect-video w-full object-cover"
-              loading="lazy"
-            />
+            <div key={media.id} className="relative aspect-video w-full bg-surface-sunken">
+              <MediaImage
+                src={media.url}
+                // Alt text is required at publish time, so by the time a post
+                // renders here it has one. This is not a fallback — it is the
+                // author's own description.
+                alt={media.alt ?? ""}
+                fill
+                sizes="(max-width: 672px) 100vw, 672px"
+              />
+            </div>
           ))}
 
         <footer className="flex items-center gap-1 border-t border-line px-2 py-1">
@@ -186,24 +215,45 @@ function CommentThread({ postId }: { postId: string }) {
   const locale = useLocale();
 
   const [comments, setComments] = useState<Comment[] | null>(null);
+  const [cursor, setCursor] = useState<string | null>(null);
   const [draft, setDraft] = useState("");
   const [isSending, setIsSending] = useState(false);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
 
-    clientFetch<Comment[]>(`/feed/posts/${postId}/comments`)
-      .then((loaded) => {
-        if (!cancelled) setComments(loaded);
+    clientFetch<CommentsPage>(`/feed/posts/${postId}/comments?limit=20`)
+      .then((page) => {
+        if (cancelled) return;
+        setComments(page.items);
+        setCursor(page.nextCursor);
       })
       .catch(() => {
-        if (!cancelled) setComments([]);
+        if (!cancelled) {
+          setComments([]);
+          setCursor(null);
+        }
       });
 
     return () => {
       cancelled = true;
     };
   }, [postId]);
+
+  async function loadMoreComments() {
+    if (!cursor || isLoadingMore) return;
+    setIsLoadingMore(true);
+    try {
+      const page = await clientFetch<CommentsPage>(
+        `/feed/posts/${postId}/comments?limit=20&cursor=${encodeURIComponent(cursor)}`,
+      );
+      setComments((current) => [...(current ?? []), ...page.items]);
+      setCursor(page.nextCursor);
+    } finally {
+      setIsLoadingMore(false);
+    }
+  }
 
   async function submit(event: React.FormEvent) {
     event.preventDefault();
@@ -248,6 +298,19 @@ function CommentThread({ postId }: { postId: string }) {
         </ul>
       ) : comments ? (
         <p className="mb-3 text-sm text-content-muted">{t("noComments")}</p>
+      ) : null}
+
+      {cursor ? (
+        <Button
+          type="button"
+          variant="secondary"
+          size="sm"
+          className="mb-3"
+          onClick={loadMoreComments}
+          isLoading={isLoadingMore}
+        >
+          {t("loadMoreComments")}
+        </Button>
       ) : null}
 
       <form onSubmit={submit} className="flex items-center gap-2">

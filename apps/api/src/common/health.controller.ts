@@ -1,4 +1,5 @@
 import { Controller, Get } from "@nestjs/common";
+import { SkipThrottle } from "@nestjs/throttler";
 import { Public } from "../auth/decorators";
 import { PrismaService } from "./prisma/prisma.service";
 
@@ -12,6 +13,7 @@ export class HealthController {
   constructor(private readonly prisma: PrismaService) {}
 
   @Public()
+  @SkipThrottle()
   @Get()
   async check(): Promise<{ status: string; database: string }> {
     await this.prisma.$queryRaw`SELECT 1`;

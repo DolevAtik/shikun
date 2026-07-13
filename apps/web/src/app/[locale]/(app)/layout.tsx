@@ -2,6 +2,7 @@ import type { CurrentUser } from "@moch/contracts";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { AppHeader } from "@/components/AppHeader";
 import { BottomNav } from "@/components/BottomNav";
+import { TelemetryBeacon } from "@/components/TelemetryBeacon";
 import { serverFetchOrLogin } from "@/lib/api";
 
 export default async function AppLayout({
@@ -34,6 +35,7 @@ export default async function AppLayout({
       </main>
 
       <BottomNav />
+      <TelemetryBeacon />
     </div>
   );
 }

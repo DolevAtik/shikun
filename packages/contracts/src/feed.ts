@@ -65,6 +65,24 @@ export type Tag = z.infer<typeof TagSchema>;
 export const ContentStatusSchema = z.enum(["DRAFT", "PENDING", "PUBLISHED", "ARCHIVED"]);
 export type ContentStatus = z.infer<typeof ContentStatusSchema>;
 
+/**
+ * Mirrors the Prisma `ContentKind` enum. The employee app never needed it — it
+ * consumes already-typed sections — but the admin edits content *by kind*, so
+ * the kind has to cross the wire. These two lists must stay in step; the API
+ * will not compile if they drift, because Prisma's enum is the parameter type.
+ */
+export const ContentKindSchema = z.enum([
+  "ANNOUNCEMENT",
+  "FEED_POST",
+  "EVENT",
+  "CAREER",
+  "TRAINING",
+  "CEO_MESSAGE",
+  "VIDEO",
+  "ALERT",
+]);
+export type ContentKind = z.infer<typeof ContentKindSchema>;
+
 export const FeedPostSchema = z.object({
   id: z.string(),
   channel: z.object({
@@ -75,8 +93,14 @@ export const FeedPostSchema = z.object({
     color: z.string(),
   }),
   title: z.string().nullable(),
+  /**
+   * On list responses this may be truncated to the excerpt length. Call
+   * `GET /feed/posts/:id` (or expand in the client) when `isTruncated` is true.
+   */
   body: z.string(),
   excerpt: z.string(),
+  /** True when `body` is a truncated preview of the full post. */
+  isTruncated: z.boolean().default(false),
   author: UserSummarySchema.nullable(),
   media: z.array(MediaSchema),
   tags: z.array(TagSchema),
@@ -121,6 +145,19 @@ export const FeedPageSchema = z.object({
   nextCursor: z.string().nullable(),
 });
 export type FeedPage = z.infer<typeof FeedPageSchema>;
+
+/** Comments on a post — cursor pages, oldest first (same order as before). */
+export const CommentsQuerySchema = z.object({
+  cursor: z.string().optional(),
+  limit: z.coerce.number().min(1).max(50).default(20),
+});
+export type CommentsQuery = z.infer<typeof CommentsQuerySchema>;
+
+export const CommentsPageSchema = z.object({
+  items: z.array(CommentSchema),
+  nextCursor: z.string().nullable(),
+});
+export type CommentsPage = z.infer<typeof CommentsPageSchema>;
 
 export const CreateCommentSchema = z.object({
   body: z.string().min(1, "לא ניתן לפרסם תגובה ריקה").max(2000, "התגובה ארוכה מדי"),

@@ -10,6 +10,7 @@ const nextConfig = {
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "images.unsplash.com" },
+      { protocol: "https", hostname: "img.youtube.com" },
       { protocol: "http", hostname: "localhost" },
       // The media bucket's public host, which differs per environment.
       ...(process.env.NEXT_PUBLIC_MEDIA_HOST

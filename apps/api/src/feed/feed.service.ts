@@ -3,6 +3,8 @@ import type {
   Audience,
   Channel,
   Comment,
+  CommentsPage,
+  CommentsQuery,
   CreatePost,
   FeedPage,
   FeedPost,
@@ -13,19 +15,25 @@ import type {
 import type { InteractionType, Prisma } from "@prisma/client";
 import { audienceWhere } from "../audience/audience";
 import { PrismaService } from "../common/prisma/prisma.service";
+import { TtlCache } from "../common/ttl-cache";
 import { toUserSummary, USER_INCLUDE } from "../users/user.mapper";
 
 const POST_INCLUDE = {
   feedPost: { include: { channel: true } },
   author: { include: USER_INCLUDE },
   district: true,
-  media: { orderBy: { order: "asc" } },
+  media: { orderBy: { order: "asc" as const } },
   tags: true,
   _count: { select: { comments: true } },
 } satisfies Prisma.ContentItemInclude;
 
+/** Mandatory channel IDs change rarely — cache to avoid a round-trip on every following filter. */
+const MANDATORY_CHANNELS_TTL_MS = 60_000;
+
 @Injectable()
 export class FeedService {
+  private readonly mandatoryChannelIds = new TtlCache<string[]>(MANDATORY_CHANNELS_TTL_MS);
+
   constructor(private readonly prisma: PrismaService) {}
 
   async listChannels(viewer: ViewerScope): Promise<Channel[]> {
@@ -102,7 +110,11 @@ export class FeedService {
 
     return {
       items: page.map((row) =>
-        this.toFeedPost({ ...row, likeCount: likeCounts.get(row.id) ?? 0 }, interactions),
+        this.toFeedPost(
+          { ...row, likeCount: likeCounts.get(row.id) ?? 0 },
+          interactions,
+          { truncateBody: true },
+        ),
       ),
       nextCursor: hasMore ? (page[page.length - 1]?.id ?? null) : null,
     };
@@ -134,17 +146,14 @@ export class FeedService {
     }
 
     if (query.following) {
-      const follows = await this.prisma.follow.findMany({
-        where: { userId: viewer.userId },
-        select: { channelId: true },
-      });
-      const mandatory = await this.prisma.channel.findMany({
-        where: { isMandatory: true },
-        select: { id: true },
-      });
-      const channelIds = [
-        ...new Set([...follows.map((f) => f.channelId), ...mandatory.map((c) => c.id)]),
-      ];
+      const [follows, mandatoryIds] = await Promise.all([
+        this.prisma.follow.findMany({
+          where: { userId: viewer.userId },
+          select: { channelId: true },
+        }),
+        this.getMandatoryChannelIds(),
+      ]);
+      const channelIds = [...new Set([...follows.map((f) => f.channelId), ...mandatoryIds])];
       where.feedPost = { ...(where.feedPost as object), channelId: { in: channelIds } };
     }
 
@@ -170,6 +179,19 @@ export class FeedService {
     return where;
   }
 
+  private async getMandatoryChannelIds(): Promise<string[]> {
+    const cached = this.mandatoryChannelIds.get("all");
+    if (cached) return cached;
+
+    const mandatory = await this.prisma.channel.findMany({
+      where: { isMandatory: true },
+      select: { id: true },
+    });
+    const ids = mandatory.map((c) => c.id);
+    this.mandatoryChannelIds.set("all", ids);
+    return ids;
+  }
+
   /** One query for the viewer's likes and bookmarks across the page, not one per post. */
   private async interactionsFor(viewer: ViewerScope, contentIds: string[]) {
     if (contentIds.length === 0) return new Map<string, Set<InteractionType>>();
@@ -191,9 +213,13 @@ export class FeedService {
   private toFeedPost(
     row: Prisma.ContentItemGetPayload<{ include: typeof POST_INCLUDE }> & { likeCount?: number },
     interactions: Map<string, Set<InteractionType>>,
+    options: { truncateBody: boolean },
   ): FeedPost {
     const mine = interactions.get(row.id);
     const channel = row.feedPost!.channel;
+    const fullBody = row.body ?? "";
+    const excerpt = excerptOf(fullBody);
+    const isTruncated = options.truncateBody && fullBody.length > excerpt.length;
 
     return {
       id: row.id,
@@ -205,8 +231,9 @@ export class FeedService {
         color: channel.color,
       },
       title: row.title,
-      body: row.body ?? "",
-      excerpt: excerptOf(row.body ?? ""),
+      body: isTruncated ? excerpt : fullBody,
+      excerpt,
+      isTruncated,
       author: row.author ? toUserSummary(row.author) : null,
       media: row.media.map((media) => ({
         id: media.id,
@@ -250,7 +277,7 @@ export class FeedService {
       where: { contentItemId: row.id, type: "LIKE" },
     });
 
-    return this.toFeedPost({ ...row, likeCount }, interactions);
+    return this.toFeedPost({ ...row, likeCount }, interactions, { truncateBody: false });
   }
 
   async toggleInteraction(
@@ -339,7 +366,7 @@ export class FeedService {
       include: POST_INCLUDE,
     });
 
-    return this.toFeedPost({ ...created, likeCount: 0 }, new Map());
+    return this.toFeedPost({ ...created, likeCount: 0 }, new Map(), { truncateBody: false });
   }
 
   private scopedAudience(viewer: ViewerScope, requested?: Audience): Audience {
@@ -361,7 +388,11 @@ export class FeedService {
     return audience;
   }
 
-  async listComments(viewer: ViewerScope, contentItemId: string): Promise<Comment[]> {
+  async listComments(
+    viewer: ViewerScope,
+    contentItemId: string,
+    query: CommentsQuery,
+  ): Promise<CommentsPage> {
     await this.assertVisible(viewer, contentItemId);
 
     const rows = await this.prisma.comment.findMany({
@@ -372,18 +403,26 @@ export class FeedService {
         likes: { where: { userId: viewer.userId }, select: { id: true } },
       },
       orderBy: { createdAt: "asc" },
+      take: query.limit + 1,
+      ...(query.cursor ? { cursor: { id: query.cursor }, skip: 1 } : {}),
     });
 
-    return rows.map((row) => ({
-      id: row.id,
-      postId: row.contentItemId,
-      author: toUserSummary(row.author),
-      body: row.body,
-      createdAt: row.createdAt.toISOString(),
-      likeCount: row._count.likes,
-      isLiked: row.likes.length > 0,
-      isMine: row.authorId === viewer.userId,
-    }));
+    const hasMore = rows.length > query.limit;
+    const page = hasMore ? rows.slice(0, query.limit) : rows;
+
+    return {
+      items: page.map((row) => ({
+        id: row.id,
+        postId: row.contentItemId,
+        author: toUserSummary(row.author),
+        body: row.body,
+        createdAt: row.createdAt.toISOString(),
+        likeCount: row._count.likes,
+        isLiked: row.likes.length > 0,
+        isMine: row.authorId === viewer.userId,
+      })),
+      nextCursor: hasMore ? (page[page.length - 1]?.id ?? null) : null,
+    };
   }
 
   async createComment(viewer: ViewerScope, contentItemId: string, body: string): Promise<Comment> {

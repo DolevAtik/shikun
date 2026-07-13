@@ -194,11 +194,16 @@ model User {
   recognitionsReceived Recognition[]  @relation("RecognitionRecipient")
   recognitionsGiven    Recognition[]  @relation("RecognitionGiver")
 
+  auditLogs       AuditLog[]
+  analyticsEvents AnalyticsEvent[]
+  reads           ContentRead[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([departmentId])
   @@index([districtId])
+  @@index([isActive, birthday])
 }
 
 model RefreshToken {
@@ -254,12 +259,17 @@ model ContentItem {
   comments      Comment[]
   interactions  Interaction[]
   registrations Registration[]
+  reads         ContentRead[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([kind, status, publishedAt])
   @@index([districtId])
+  @@index([audDepartmentIds], type: Gin)
+  @@index([audDistrictIds], type: Gin)
+  @@index([audOrganizationIds], type: Gin)
+  @@index([audRoles], type: Gin)
 }
 
 model AnnouncementDetail {
@@ -290,6 +300,8 @@ model EventDetail {
   capacity      Int?
 
   contentItem ContentItem @relation(fields: [contentItemId], references: [id], onDelete: Cascade)
+
+  @@index([startsAt])
 }
 
 model CareerDetail {
@@ -310,6 +322,8 @@ model TrainingDetail {
   capacity      Int?
 
   contentItem ContentItem @relation(fields: [contentItemId], references: [id], onDelete: Cascade)
+
+  @@index([startsAt])
 }
 
 model VideoDetail {
@@ -413,6 +427,7 @@ model Interaction {
 
   @@unique([userId, contentItemId, type])
   @@index([contentItemId, type])
+  @@index([createdAt])
 }
 
 model Comment {
@@ -428,6 +443,7 @@ model Comment {
   likes       CommentLike[]
 
   @@index([contentItemId])
+  @@index([contentItemId, createdAt])
 }
 
 model CommentLike {
@@ -454,6 +470,7 @@ model Registration {
 
   @@unique([userId, contentItemId])
   @@index([contentItemId])
+  @@index([createdAt])
 }
 
 // ─── Home surface ────────────────────────────────────────────────────────────
@@ -544,4 +561,95 @@ model HomeSectionConfig {
   audRoles           Role[]   @default([])
 
   @@index([order])
+}
+
+// ---------------------------------------------------------------------------
+// Admin console — round two.
+//
+// These three tables start WRITING the day the console ships, even though almost
+// nothing reads them until much later. That is deliberate:
+//
+//   - An audit log that begins recording in the phase that builds its UI has a
+//     three-month hole in it, and completeness is the entire point of an audit log.
+//   - Analytics that begins collecting in the phase that builds its dashboards
+//     ships those dashboards empty. Nothing here has ever logged a page view; the
+//     only way to have history later is to start now.
+// ---------------------------------------------------------------------------
+
+/// Who did what, to which record, when. Append-only: no update path, no delete
+/// path, no `updatedAt`.
+model AuditLog {
+  id String @id @default(cuid())
+
+  actorId String?
+  /// Denormalised on purpose. The actor may later be deactivated, and an audit
+  /// log that loses the identity of its subject is not an audit log.
+  actorEmail String
+
+  /// A dotted verb: "content.publish", "user.deactivate", "role.grant".
+  action     String
+  entityType String
+  entityId   String
+  /// A human sentence, written at write time, so the UI never reconstructs one.
+  summary    String
+
+  /// The changed fields only — never the whole row, which would quietly put
+  /// personal data in a table nobody thinks of as holding personal data.
+  before Json?
+  after  Json?
+
+  ip        String?
+  userAgent String?
+
+  createdAt DateTime @default(now())
+
+  actor User? @relation(fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([entityType, entityId, createdAt])
+  @@index([actorId, createdAt])
+  @@index([createdAt])
+}
+
+/// Raw telemetry, with no rollup tables. ~5,000 employees generate a few hundred
+/// thousand events a month, and Postgres answers DAU/MAU off this directly for
+/// years. Rollups arrive when a query crosses ~300ms, and not before.
+model AnalyticsEvent {
+  id String @id @default(cuid())
+
+  ts        DateTime @default(now())
+  userId    String?
+  sessionId String
+
+  /// "screen.view", "content.view", "search.submit".
+  type       String
+  entityType String?
+  entityId   String?
+  props      Json?
+
+  /// The actor's position in the org, denormalised at write time — so a rollup
+  /// never has to join User, and so someone transferring district does not
+  /// silently rewrite last quarter's history.
+  districtId   String?
+  departmentId String?
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([ts])
+  @@index([type, ts])
+  @@index([userId, ts])
+}
+
+/// Per-user read receipts. One small table that answers "unread announcements"
+/// on the Dashboard, and earns the employee app a "new" badge for free.
+model ContentRead {
+  id            String   @id @default(cuid())
+  userId        String
+  contentItemId String
+  readAt        DateTime @default(now())
+
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  contentItem ContentItem @relation(fields: [contentItemId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, contentItemId])
+  @@index([userId, readAt])
 }

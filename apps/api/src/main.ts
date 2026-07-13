@@ -1,11 +1,16 @@
 import "reflect-metadata";
 import { Logger } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
+import { json, urlencoded } from "express";
 import { AppModule } from "./app.module";
 import { HttpExceptionFilter } from "./common/http-exception.filter";
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { bodyParser: false });
+
+  // Explicit limits so a runaway client cannot pin the process with a huge body.
+  app.use(json({ limit: "1mb" }));
+  app.use(urlencoded({ extended: true, limit: "1mb" }));
 
   app.setGlobalPrefix("api");
   // Validation is zod, via @ZodBody against the shared contracts — so there is

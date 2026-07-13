@@ -5,6 +5,7 @@ import { Card } from "@moch/ui";
 import { Play, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
+import { MediaImage } from "@/components/MediaImage";
 import { formatNumber } from "@/lib/format";
 
 /**
@@ -46,7 +47,13 @@ export function VideoOfWeekCard({ video, locale }: { video: VideoOfWeek; locale:
         >
           <div className="relative aspect-video bg-surface-sunken">
             {thumbnailUrl ? (
-              <img src={thumbnailUrl} alt="" className="size-full object-cover" />
+              <MediaImage
+                src={thumbnailUrl}
+                alt=""
+                fill
+                sizes="(max-width: 672px) 100vw, 672px"
+                className="object-cover"
+              />
             ) : null}
             <div className="absolute inset-0 grid place-items-center bg-black/25 transition-colors duration-[--duration] group-hover:bg-black/10">
               <span className="grid size-14 place-items-center rounded-full bg-white/95 shadow-lg transition-transform duration-[--duration] group-hover:scale-110">

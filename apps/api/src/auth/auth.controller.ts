@@ -1,4 +1,5 @@
 import { Body, Controller, Get, HttpCode, Post } from "@nestjs/common";
+import { Throttle } from "@nestjs/throttler";
 import {
   type CurrentUser as CurrentUserDto,
   type LoginResponse,
@@ -20,6 +21,7 @@ export class AuthController {
   ) {}
 
   @Public()
+  @Throttle({ default: { ttl: 60_000, limit: 10 } })
   @Post("login")
   @HttpCode(200)
   login(@ZodBody(LoginRequestSchema) body: { email: string; password: string }): Promise<LoginResponse> {
@@ -27,6 +29,7 @@ export class AuthController {
   }
 
   @Public()
+  @Throttle({ default: { ttl: 60_000, limit: 30 } })
   @Post("refresh")
   @HttpCode(200)
   refresh(@ZodBody(RefreshRequestSchema) body: { refreshToken: string }) {

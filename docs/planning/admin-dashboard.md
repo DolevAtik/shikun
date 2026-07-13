@@ -1,6 +1,13 @@
 # Admin Dashboard — Employee Experience Platform
 
-## Status: Planning
+## Status: In Progress — Phase 1 wrapping + Phase 2 Content CMS started
+
+Shipped beyond the previous checkpoint:
+- List-page kit (`DataTable`, pagination, toolbar, bulk bar, confirm dialog)
+- `AdminContentRepository` + `/admin/content` CRUD (list/get/create/patch/publish/archive/bulk)
+- Content CMS UI wired to the real API
+- Home layout editor (`GET/PUT /admin/home/sections`) under Settings — drives employee Home
+- `scripts/check-admin-scope.mjs` in the lint gate
 
 ## Context
 

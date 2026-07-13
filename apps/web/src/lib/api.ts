@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { redirect } from "next/navigation";
 import { getAccessToken } from "./session";
 
@@ -8,11 +9,14 @@ export class UnauthorizedError extends Error {}
 /**
  * Server-side fetch against the API, with the viewer's token attached.
  *
+ * Wrapped in React `cache()` so a single RSC tree that asks for `/auth/me`
+ * (layout + page) pays for one round-trip, not two.
+ *
  * Everything is `no-store`: an employee experience platform that serves a
  * cached Home to the wrong person has leaked targeted content, and the whole
  * point of the audience model is that Home differs per viewer.
  */
-export async function serverFetch<T>(path: string): Promise<T> {
+export const serverFetch = cache(async function serverFetch<T>(path: string): Promise<T> {
   const token = await getAccessToken();
   if (!token) throw new UnauthorizedError();
 
@@ -27,7 +31,7 @@ export async function serverFetch<T>(path: string): Promise<T> {
   }
 
   return (await response.json()) as T;
-}
+});
 
 /** Fetch, or send the viewer to the login screen. For pages, not for mutations. */
 export async function serverFetchOrLogin<T>(path: string, locale: string): Promise<T> {

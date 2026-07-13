@@ -3,16 +3,19 @@ import type { JobsResponse, ViewerScope } from "@moch/contracts";
 import { audienceWhere } from "../audience/audience";
 import { PrismaService } from "../common/prisma/prisma.service";
 
+/** Hard cap so the board cannot return an unbounded payload as careers grow. */
+const JOBS_LIMIT = 100;
+
 @Injectable()
 export class JobsService {
   constructor(private readonly prisma: PrismaService) {}
 
   /**
-   * Every open position the viewer is allowed to see.
+   * Open positions the viewer is allowed to see.
    *
    * The board reads the same CAREER items as Home's careers section, through the
-   * same audience filter — Home shows the first few, this shows all of them. A
-   * position drops off the board on its own the day its deadline passes; nobody
+   * same audience filter — Home shows the first few, this shows up to JOBS_LIMIT.
+   * A position drops off the board on its own the day its deadline passes; nobody
    * has to remember to unpublish it.
    *
    * Deadline first, and Postgres sorts NULLs last on an ascending sort, which is
@@ -30,10 +33,15 @@ export class JobsService {
       },
       include: { career: { include: { department: true } }, district: true },
       orderBy: [{ career: { closesAt: "asc" } }, { publishedAt: "desc" }],
+      take: JOBS_LIMIT + 1,
     });
 
+    const truncated = rows.length > JOBS_LIMIT;
+    const page = truncated ? rows.slice(0, JOBS_LIMIT) : rows;
+
     return {
-      items: rows.map((row) => ({
+      truncated,
+      items: page.map((row) => ({
         id: row.id,
         title: row.title ?? "",
         summary: row.body ?? "",

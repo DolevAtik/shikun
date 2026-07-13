@@ -27,5 +27,7 @@ export type JobPosting = z.infer<typeof JobPostingSchema>;
 
 export const JobsResponseSchema = z.object({
   items: z.array(JobPostingSchema),
+  /** True when the board hit the server-side cap and more rows may exist. */
+  truncated: z.boolean().default(false),
 });
 export type JobsResponse = z.infer<typeof JobsResponseSchema>;

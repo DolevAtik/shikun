@@ -1,11 +1,13 @@
-import { Body, Controller, Delete, Get, Param, Post, Query } from "@nestjs/common";
+import { Controller, Delete, Get, Param, Post, Query } from "@nestjs/common";
 import {
   type Channel,
   type Comment,
+  type CommentsPage,
   type CreatePost,
   type FeedPage,
   type FeedPost,
   type ToggleResponse,
+  CommentsQuerySchema,
   CreateCommentSchema,
   CreatePostSchema,
   FeedQuerySchema,
@@ -68,8 +70,12 @@ export class FeedController {
   }
 
   @Get("posts/:id/comments")
-  listComments(@CurrentUser() user: AuthenticatedUser, @Param("id") id: string): Promise<Comment[]> {
-    return this.feed.listComments(user.scope, id);
+  listComments(
+    @CurrentUser() user: AuthenticatedUser,
+    @Param("id") id: string,
+    @Query() query: Record<string, string>,
+  ): Promise<CommentsPage> {
+    return this.feed.listComments(user.scope, id, CommentsQuerySchema.parse(query));
   }
 
   @Post("posts/:id/comments")

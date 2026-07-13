@@ -3,6 +3,7 @@ import type { HomeResponse, HomeSection, ViewerScope } from "@moch/contracts";
 import type { HomeSectionConfig } from "@prisma/client";
 import { audienceMatches, audienceWhere, toAudience } from "../audience/audience";
 import { PrismaService } from "../common/prisma/prisma.service";
+import { mapPool, TtlCache } from "../common/ttl-cache";
 import { toUserSummary, USER_INCLUDE } from "../users/user.mapper";
 import { BADGE_META } from "./badges";
 
@@ -18,8 +19,16 @@ const DEFAULT_LIMITS: Record<string, number> = {
   RECOGNITION: 3,
 };
 
+/** Home section layout is admin-edited rarely — cache the enabled rows briefly. */
+const SECTION_CONFIG_TTL_MS = 30_000;
+
+/** Cap parallel section queries so a morning login spike does not stampede Postgres. */
+const SECTION_CONCURRENCY = 4;
+
 @Injectable()
 export class HomeService {
+  private readonly sectionConfigCache = new TtlCache<HomeSectionConfig[]>(SECTION_CONFIG_TTL_MS);
+
   constructor(private readonly prisma: PrismaService) {}
 
   /**
@@ -31,15 +40,12 @@ export class HomeService {
    * section nobody else sees.
    */
   async getHome(viewer: ViewerScope, now = new Date()): Promise<HomeResponse> {
-    const configs = await this.prisma.homeSectionConfig.findMany({
-      where: { isEnabled: true },
-      orderBy: { order: "asc" },
-    });
+    const configs = await this.getEnabledSectionConfigs();
 
     const visible = configs.filter((config) => audienceMatches(toAudience(config), viewer));
 
-    const sections = await Promise.all(
-      visible.map((config) => this.buildSection(config, viewer, now)),
+    const sections = await mapPool(visible, SECTION_CONCURRENCY, (config) =>
+      this.buildSection(config, viewer, now),
     );
 
     return {
@@ -48,6 +54,23 @@ export class HomeService {
       // empty — an employee should never scroll past a box that says "none".
       sections: sections.filter((section): section is HomeSection => section !== null),
     };
+  }
+
+  private async getEnabledSectionConfigs(): Promise<HomeSectionConfig[]> {
+    const cached = this.sectionConfigCache.get("enabled");
+    if (cached) return cached;
+
+    const configs = await this.prisma.homeSectionConfig.findMany({
+      where: { isEnabled: true },
+      orderBy: { order: "asc" },
+    });
+    this.sectionConfigCache.set("enabled", configs);
+    return configs;
+  }
+
+  /** Called after an admin reorders or toggles sections so employees see the change. */
+  invalidateSectionConfigCache(): void {
+    this.sectionConfigCache.delete("enabled");
   }
 
   private async buildSection(

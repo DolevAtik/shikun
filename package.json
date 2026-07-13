@@ -9,8 +9,8 @@
   "scripts": {
     "dev": "turbo run dev",
     "build": "turbo run build",
-    "lint": "node scripts/check-contrast.mjs && node scripts/check-logical-props.mjs && turbo run lint",
-    "check:a11y": "node scripts/check-contrast.mjs && node scripts/check-logical-props.mjs",
+    "lint": "node scripts/check-contrast.mjs && node scripts/check-logical-props.mjs && node scripts/check-admin-scope.mjs && turbo run lint",
+    "check:a11y": "node scripts/check-contrast.mjs && node scripts/check-logical-props.mjs && node scripts/check-admin-scope.mjs",
     "typecheck": "turbo run typecheck",
     "test": "turbo run test",
     "test:e2e": "turbo run test:e2e",

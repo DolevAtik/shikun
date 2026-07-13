@@ -14,6 +14,8 @@ const SIZES = {
   lg: "size-14 text-base",
 } as const;
 
+const PIXEL = { sm: 32, md: 40, lg: 56 } as const;
+
 export function Avatar({ name, initials, src, size = "md", className }: AvatarProps) {
   return (
     <span
@@ -27,7 +29,15 @@ export function Avatar({ name, initials, src, size = "md", className }: AvatarPr
       {src ? (
         // The name is already announced by the surrounding text, so the image is
         // decorative here — an empty alt keeps a screen reader from saying it twice.
-        <img src={src} alt="" className="size-full object-cover" />
+        <img
+          src={src}
+          alt=""
+          width={PIXEL[size]}
+          height={PIXEL[size]}
+          loading="lazy"
+          decoding="async"
+          className="size-full object-cover"
+        />
       ) : (
         <span aria-hidden="true">{initials}</span>
       )}

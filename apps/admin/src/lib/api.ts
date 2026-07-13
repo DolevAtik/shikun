@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { redirect } from "next/navigation";
 import { getAccessToken } from "./session";
 
@@ -8,12 +9,15 @@ export class UnauthorizedError extends Error {}
 /**
  * Server-side fetch against the API, with the viewer's token attached.
  *
+ * Wrapped in React `cache()` so layout + page asking for the same path in one
+ * RSC tree share a single round-trip.
+ *
  * `no-store` throughout, for a reason that is sharper here than in the employee
  * app: what an administrator may see depends on what they may *manage*, and two
  * administrators of different districts asking for the same list must not be
  * served each other's cache.
  */
-export async function serverFetch<T>(path: string): Promise<T> {
+export const serverFetch = cache(async function serverFetch<T>(path: string): Promise<T> {
   const token = await getAccessToken();
   if (!token) throw new UnauthorizedError();
 
@@ -28,7 +32,7 @@ export async function serverFetch<T>(path: string): Promise<T> {
   }
 
   return (await response.json()) as T;
-}
+});
 
 /** Fetch, or send the viewer to the login screen. For pages, not for mutations. */
 export async function serverFetchOrLogin<T>(path: string, locale: string): Promise<T> {

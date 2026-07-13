@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema.json",
-  "style": "base-nova",
+  "//": "style is `default` (the Tailwind v3 line), not base-nova: this repo is on Tailwind 3.4 and the employee app is not being migrated to v4 to get a codemod. `rtl: true` is kept so that a future `shadcn add` does the right thing the day we do move — but today the primitives in src/components/ui are hand-vendored, logical-first, and scripts/check-logical-props.mjs is what actually enforces it.",
+  "style": "default",
   "rtl": true,
   "rsc": true,
   "tsx": true,

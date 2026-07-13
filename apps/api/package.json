@@ -13,6 +13,8 @@
     "prisma:push": "dotenv -e ../../.env -- prisma db push",
     "prisma:migrate": "dotenv -e ../../.env -- prisma migrate dev",
     "db:seed": "dotenv -e ../../.env -- tsx prisma/seed.ts",
+    "db:backfill-media": "dotenv -e ../../.env -- tsx prisma/backfill-media.ts",
+    "db:backfill-media:prod": "tsx prisma/backfill-media.ts",
     "db:reset": "dotenv -e ../../.env -- prisma db push --force-reset && pnpm db:seed",
     "db:deploy": "prisma migrate deploy",
     "db:seed:prod": "tsx prisma/seed.ts"
@@ -30,6 +32,7 @@
     "@nestjs/jwt": "^10.2.0",
     "@nestjs/passport": "^10.0.3",
     "@nestjs/platform-express": "^10.4.15",
+    "@nestjs/throttler": "^6.5.0",
     "@prisma/client": "^6.1.0",
     "argon2": "^0.41.1",
     "passport": "^0.7.0",

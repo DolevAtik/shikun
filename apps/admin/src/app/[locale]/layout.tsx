@@ -3,7 +3,9 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { Assistant } from "next/font/google";
+import { Toaster } from "@/components/ui/sonner";
 import { DIRECTION, routing, type Locale } from "@/i18n/routing";
+import { Providers } from "@/providers";
 import "../globals.css";
 
 const hebrew = Assistant({
@@ -43,17 +45,23 @@ export default async function LocaleLayout({
 
   setRequestLocale(locale);
   const messages = await getMessages();
+  const direction = DIRECTION[locale as Locale];
 
   return (
     <html
       lang={locale}
-      dir={DIRECTION[locale as Locale]}
+      dir={direction}
       className={hebrew.variable}
       suppressHydrationWarning
     >
       <body>
         <ThemeScript />
-        <NextIntlClientProvider messages={messages}>{children}</NextIntlClientProvider>
+        <Providers direction={direction}>
+          <NextIntlClientProvider messages={messages}>
+            {children}
+            <Toaster />
+          </NextIntlClientProvider>
+        </Providers>
       </body>
     </html>
   );

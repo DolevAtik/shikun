@@ -49,5 +49,156 @@
     "retry": "ניסיון חוזר",
     "theme": "מצב תצוגה",
     "language": "שפה"
+  },
+  "search": {
+    "title": "חיפוש במערכת",
+    "description": "חיפוש בעובדים, תוכן, מחוזות ומדיה",
+    "placeholder": "חיפוש…",
+    "hint": "הקלידו לפחות שני תווים",
+    "empty": "לא נמצאו תוצאות"
+  },
+  "section": {
+    "readyTitle": "המסך מוכן לחיבור",
+    "readyDescription": "הניווט וההרשאות פעילים. מסך הניהול המלא למודול זה יתמלא ברגע שיושלם ה־API של השלב הבא."
+  },
+  "dashboard": {
+    "title": "לוח בקרה",
+    "subtitle": "תמונת מצב ארגונית — כל המספרים מבוססים על נתונים אמיתיים.",
+    "range": "טווח זמן",
+    "ranges": {
+      "7d": "7 ימים",
+      "30d": "30 ימים",
+      "90d": "90 ימים"
+    },
+    "stats": {
+      "headcount": "עובדים פעילים",
+      "newEmployees": "עובדים חדשים",
+      "comments": "תגובות",
+      "likes": "לייקים",
+      "registrations": "הרשמות להדרכות/אירועים",
+      "pendingReview": "ממתינים לאישור",
+      "dau": "משתמשים פעילים ביום",
+      "mau": "משתמשים פעילים בחודש",
+      "unreadAnnouncements": "הודעות שלא נקראו"
+    },
+    "collectingSince": "נאסף מאז {date}",
+    "notCollecting": "האיסוף טרם התחיל",
+    "vsPrevious": "לעומת התקופה הקודמת",
+    "communityActivity": "פעילות קהילה",
+    "communityActivityHint": "תגובות ביום — מדד אמיתי מהפלטפורמה",
+    "contentByStatus": "תוכן לפי סטטוס",
+    "topContent": "תוכן מוביל",
+    "topDistricts": "מחוזות פעילים",
+    "topDepartments": "אגפים פעילים",
+    "upcomingEvents": "אירועים קרובים",
+    "recentActivity": "פעילות אחרונה",
+    "recentActivityHint": "מיומן הביקורת — מתמלא מפרסומים במערכת",
+    "activityEmpty": "עדיין אין רשומות ביומן. פעולות ניהול יופיעו כאן.",
+    "quickActions": "פעולות מהירות",
+    "comments": "תגובות",
+    "likes": "לייקים",
+    "interactions": "אינטראקציות",
+    "empty": "אין נתונים בטווח שנבחר",
+    "viewAll": "הצג הכל",
+    "status": {
+      "DRAFT": "טיוטה",
+      "PENDING": "ממתין",
+      "PUBLISHED": "פורסם",
+      "ARCHIVED": "בארכיון"
+    },
+    "actions": {
+      "newContent": "תוכן חדש",
+      "employees": "ניהול עובדים",
+      "homeLayout": "פריסת בית",
+      "analytics": "נתונים"
+    }
+  },
+  "list": {
+    "of": "מתוך",
+    "pageSize": "גודל עמוד",
+    "prev": "עמוד קודם",
+    "next": "עמוד הבא"
+  },
+  "content": {
+    "title": "ניהול תוכן",
+    "subtitle": "הודעות, פוסטים ומסרים שמופיעים באפליקציית העובדים",
+    "create": "תוכן חדש",
+    "search": "חיפוש לפי כותרת או תוכן…",
+    "untitled": "ללא כותרת",
+    "ministryWide": "כלל משרדי",
+    "allKinds": "כל הסוגים",
+    "allStatuses": "כל הסטטוסים",
+    "emptyTitle": "אין תוכן להצגה",
+    "emptyDescription": "נסו לשנות את הסינון, או צרו פריט תוכן חדש.",
+    "selected": "נבחרו",
+    "saved": "התוכן נשמר",
+    "published": "התוכן פורסם ויופיע באפליקציה",
+    "unpublished": "התוכן הוחזר לטיוטה",
+    "archived": "התוכן הועבר לארכיון",
+    "bulkSuccess": "{count} פריטים עודכנו",
+    "bulkPartial": "{ok} הצליחו, {fail} נכשלו",
+    "confirmArchiveTitle": "העברה לארכיון?",
+    "confirmArchiveDescription": "יועברו לארכיון {count} פריטים. ניתן לשחזר מאוחר יותר.",
+    "confirmArchiveOne": "הפריט יועבר לארכיון ולא יופיע באפליקציה.",
+    "columns": {
+      "title": "כותרת",
+      "kind": "סוג",
+      "status": "סטטוס",
+      "district": "מחוז",
+      "updated": "עודכן"
+    },
+    "actions": {
+      "publish": "פרסום",
+      "unpublish": "ביטול פרסום",
+      "archive": "ארכיון"
+    },
+    "form": {
+      "details": "פרטי התוכן",
+      "summary": "תקציר",
+      "body": "גוף התוכן"
+    },
+    "kinds": {
+      "ANNOUNCEMENT": "הודעה",
+      "FEED_POST": "פוסט בקהילה",
+      "EVENT": "אירוע",
+      "CAREER": "משרה",
+      "TRAINING": "הדרכה",
+      "CEO_MESSAGE": "מסר מנכ״ל",
+      "VIDEO": "וידאו",
+      "ALERT": "התראה"
+    },
+    "status": {
+      "DRAFT": "טיוטה",
+      "PENDING": "ממתין",
+      "PUBLISHED": "פורסם",
+      "ARCHIVED": "בארכיון"
+    }
+  },
+  "homeLayout": {
+    "settingsTitle": "הגדרות",
+    "settingsSubtitle": "ניהול מה שמופיע במסך הבית של העובדים",
+    "title": "פריסת מסך הבית",
+    "subtitle": "סדרו והפעילו מקטעים — השינוי מופיע באפליקציה מיד.",
+    "saved": "פריסת הבית עודכנה",
+    "moveUp": "העלאה",
+    "moveDown": "הורדה",
+    "enabled": "מופעל",
+    "noAccessTitle": "אין הרשאה להגדרות אלה",
+    "noAccessDescription": "נדרשת הרשאת ניהול פידים לעריכת פריסת הבית.",
+    "types": {
+      "GREETING": "ברכה",
+      "EMERGENCY": "התראות חירום",
+      "ANNOUNCEMENTS": "הודעות",
+      "WEEKLY_SUMMARY": "סיכום שבועי",
+      "EVENTS": "אירועים",
+      "CEO_MESSAGE": "מסר מנכ״ל",
+      "VIDEO_OF_WEEK": "סרטון השבוע",
+      "PROJECTS": "פרויקטים",
+      "KEY_NUMBERS": "מספרים מרכזיים",
+      "CAREERS": "קריירה",
+      "TRAININGS": "הדרכות",
+      "BIRTHDAYS": "ימי הולדת",
+      "RECOGNITION": "הכרה"
+    }
   }
 }
