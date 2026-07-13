@@ -1,0 +1,52 @@
+# Render Blueprint — the NestJS API only.
+#
+# The web app stays on Vercel, and the database stays on Neon: Render's free
+# Postgres is deleted 30 days after creation, which is not a demo that survives
+# a month. Nothing here is Render-specific beyond the file name — the service
+# binds $PORT and reads its config from the environment.
+services:
+  - type: web
+    name: shikun-api
+    runtime: node
+    plan: free
+    region: frankfurt
+    rootDir: apps/api
+    # pnpm workspace: install and build from the repository root, so that
+    # @moch/contracts is compiled before the API that imports it.
+    buildCommand: cd ../.. && corepack enable && pnpm install --frozen-lockfile && pnpm turbo run build --filter=@moch/api
+    # Migrations run on every release, before the process serves traffic.
+    startCommand: npx prisma migrate deploy && node dist/src/main.js
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      # Neon: DATABASE_URL is the pooled string, DIRECT_URL the direct one.
+      - key: DATABASE_URL
+        sync: false
+      - key: DIRECT_URL
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+      - key: JWT_ACCESS_TTL
+        value: 15m
+      - key: JWT_REFRESH_TTL
+        value: 7d
+      # CORS. The browser reaches the API through the Next proxy, so this is a
+      # second line of defence rather than the only one.
+      - key: WEB_ORIGIN
+        value: https://shikun-web.vercel.app
+      # Object storage. Until these are set, everything works except uploads.
+      - key: S3_ENDPOINT
+        sync: false
+      - key: S3_REGION
+        sync: false
+      - key: S3_BUCKET
+        sync: false
+      - key: S3_ACCESS_KEY
+        sync: false
+      - key: S3_SECRET_KEY
+        sync: false
+      - key: S3_PUBLIC_URL
+        sync: false

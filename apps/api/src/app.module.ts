@@ -4,6 +4,7 @@ import { APP_GUARD } from "@nestjs/core";
 import { AuthModule } from "./auth/auth.module";
 import { JwtAuthGuard } from "./auth/guards/jwt-auth.guard";
 import { PermissionsGuard } from "./auth/guards/permissions.guard";
+import { HealthController } from "./common/health.controller";
 import { PrismaModule } from "./common/prisma/prisma.module";
 import { FeedModule } from "./feed/feed.module";
 import { HomeModule } from "./home/home.module";
@@ -22,6 +23,7 @@ import { ServicesModule } from "./services/services.module";
     OrgModule,
     MediaModule,
   ],
+  controllers: [HealthController],
   providers: [
     // Authentication is on by default; routes opt out with @Public().
     // Authorization is opt-in per route with @RequirePermissions().
