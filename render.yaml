@@ -34,9 +34,10 @@ services:
       - key: JWT_REFRESH_TTL
         value: 7d
       # CORS. The browser reaches the API through the Next proxy, so this is a
-      # second line of defence rather than the only one.
+      # second line of defence rather than the only one. Two origins now — the
+      # employee app and the admin console. main.ts already splits on the comma.
       - key: WEB_ORIGIN
-        value: https://shikun-web.vercel.app
+        value: https://shikun-web.vercel.app,https://shikun-admin.vercel.app
       # Object storage. Until these are set, everything works except uploads.
       - key: S3_ENDPOINT
         sync: false

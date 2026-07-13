@@ -12,6 +12,10 @@ export const RoleSchema = z.enum([
 export type Role = z.infer<typeof RoleSchema>;
 
 export const PermissionSchema = z.enum([
+  // May open the admin console at all. Every other admin permission is useless
+  // without it, and an EMPLOYEE has none of them — but "has no permissions" is an
+  // accident of the current matrix, not a gate. This is the gate.
+  "admin:access",
   "content:publish",
   "content:edit",
   "content:delete",
@@ -32,12 +36,20 @@ export type Permission = z.infer<typeof PermissionSchema>;
  */
 export const ROLE_PERMISSIONS: Record<Role, readonly Permission[]> = {
   EMPLOYEE: [],
-  MANAGER: ["content:publish", "content:edit"],
-  DISTRICT_MANAGER: ["content:publish", "content:edit", "content:approve"],
-  CONTENT_EDITOR: ["content:publish", "content:edit", "content:delete", "content:manage", "feeds:manage"],
-  HR: ["content:publish", "content:edit", "users:manage"],
-  EXECUTIVE: ["content:publish", "content:approve", "analytics:view"],
+  MANAGER: ["admin:access", "content:publish", "content:edit"],
+  DISTRICT_MANAGER: ["admin:access", "content:publish", "content:edit", "content:approve"],
+  CONTENT_EDITOR: [
+    "admin:access",
+    "content:publish",
+    "content:edit",
+    "content:delete",
+    "content:manage",
+    "feeds:manage",
+  ],
+  HR: ["admin:access", "content:publish", "content:edit", "users:manage"],
+  EXECUTIVE: ["admin:access", "content:publish", "content:approve", "analytics:view"],
   ADMIN: [
+    "admin:access",
     "content:publish",
     "content:edit",
     "content:delete",

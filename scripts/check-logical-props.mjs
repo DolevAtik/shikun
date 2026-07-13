@@ -16,7 +16,14 @@ import { fileURLToPath } from "node:url";
 import { dirname } from "node:path";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
-const ROOTS = ["apps/web/src", "packages/ui/src"];
+/**
+ * `apps/admin/src` is in here on purpose, and it includes the vendored shadcn/ui
+ * primitives. shadcn's CLI emits logical classes when `components.json` sets
+ * `"rtl": true`, but that is a claim made by a tool; this is the build failing.
+ * Never exclude components/ui — those are precisely the components most likely
+ * to break in Hebrew.
+ */
+const ROOTS = ["apps/web/src", "apps/admin/src", "packages/ui/src"];
 
 /** Tailwind utilities whose logical twin should be used instead. */
 const BANNED = [
