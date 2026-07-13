@@ -1,9 +1,10 @@
 # Deployment — Vercel + managed API, database and object storage
 
-## Status: In Progress — the web app is live; the API and database are not
+## Status: Live — https://shikun-web.vercel.app
 
-Done: git + GitHub, the code changes, `prisma/migrations/0_init`, and the Next.js app on Vercel at https://shikun-web.vercel.app (login screen renders; anything behind login returns 500, because there is no API yet).
-Next: Neon, then Render (the API host — replaced Railway at the user's request). R2 is optional and only blocks uploads.
+Web on Vercel (Frankfurt), API on Render (Frankfurt), database on Neon (Frankfurt). Verified end to end against the public URL: login, Home, Feed, Profile, and — the one that matters — audience targeting, with the Haifa-only announcement present for `haifa.employee` and absent for `jerusalem.employee`.
+
+Outstanding: Phase 7 (R2). Until it is done, uploading new media fails; everything else works. See Notes for the demo-seed problem, which is now live on a public URL.
 
 ## Context
 
