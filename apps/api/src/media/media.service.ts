@@ -55,7 +55,26 @@ export class MediaService {
   }
 }
 
-function sanitize(fileName: string): string {
-  // Keep Hebrew letters — a file called "דוח שנתי.pdf" should survive the round trip.
-  return fileName.replace(/[^\p{L}\p{N}._-]/gu, "-").slice(-80);
+/**
+ * Storage keys are ASCII. Supabase — and S3-compatible stores generally —
+ * reject a key containing Hebrew with `InvalidKey`, so "דוח שנתי.pdf" cannot be
+ * the key. It does not have to be: `Media.fileName` carries the name the
+ * employee sees, and the key stays opaque.
+ */
+export function sanitize(fileName: string): string {
+  const dot = fileName.lastIndexOf(".");
+  const rawName = dot > 0 ? fileName.slice(0, dot) : fileName;
+  const rawExtension = dot > 0 ? fileName.slice(dot + 1) : "";
+
+  const name = rawName
+    .replace(/[^A-Za-z0-9._-]/g, "-")
+    .replace(/-{2,}/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(-60);
+  const extension = rawExtension.replace(/[^A-Za-z0-9]/g, "").slice(0, 10).toLowerCase();
+
+  // A name with nothing ASCII left in it — a wholly Hebrew filename — would
+  // otherwise sanitize down to an empty string.
+  const safeName = /[A-Za-z0-9]/.test(name) ? name : "file";
+  return extension ? `${safeName}.${extension}` : safeName;
 }
