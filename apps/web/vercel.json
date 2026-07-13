@@ -2,5 +2,14 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "nextjs",
   "installCommand": "cd ../.. && pnpm install --frozen-lockfile",
-  "buildCommand": "cd ../.. && pnpm turbo run build --filter=@moch/web"
+  "buildCommand": "cd ../.. && pnpm turbo run build --filter=@moch/web",
+  "regions": ["fra1"],
+  "build": {
+    "env": {
+      "NEXT_PUBLIC_API_URL": "https://shikun-api.onrender.com"
+    }
+  },
+  "env": {
+    "NEXT_PUBLIC_API_URL": "https://shikun-api.onrender.com"
+  }
 }
