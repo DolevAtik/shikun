@@ -6,10 +6,12 @@
   "regions": ["fra1"],
   "build": {
     "env": {
-      "NEXT_PUBLIC_API_URL": "https://shikun-api.onrender.com"
+      "NEXT_PUBLIC_API_URL": "https://shikun-api.onrender.com",
+      "NEXT_PUBLIC_MEDIA_HOST": "hzdkqckpvxmkwrvprksy.supabase.co"
     }
   },
   "env": {
-    "NEXT_PUBLIC_API_URL": "https://shikun-api.onrender.com"
+    "NEXT_PUBLIC_API_URL": "https://shikun-api.onrender.com",
+    "NEXT_PUBLIC_MEDIA_HOST": "hzdkqckpvxmkwrvprksy.supabase.co"
   }
 }
