@@ -1,4 +1,4 @@
-import type { User } from "@prisma/client";
+import type { UserWithOrg } from "../../users/user.mapper";
 
 /**
  * The seam that matters most in the whole codebase.
@@ -17,8 +17,12 @@ export interface AuthProvider {
   /**
    * Verify a credential and return the matching user, or null.
    * `secret` is a password today, an OIDC id_token tomorrow.
+   *
+   * The user comes back with `USER_INCLUDE` already loaded: a provider has to
+   * read the row anyway, and the caller needs the org relations to answer the
+   * login. Returning the bare user would only make it fetch the same row twice.
    */
-  verify(identifier: string, secret: string): Promise<User | null>;
+  verify(identifier: string, secret: string): Promise<UserWithOrg | null>;
 }
 
 export const AUTH_PROVIDER = Symbol("AUTH_PROVIDER");

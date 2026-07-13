@@ -42,8 +42,18 @@ export function LoginForm({ locale }: { locale: string }) {
       return;
     }
 
-    router.push(`/${locale}`);
-    router.refresh();
+    // `replace`, not `push`: Back from Home should leave the app, not return to
+    // a login form the viewer has already passed.
+    //
+    // And no `refresh()` afterwards. It used to sit here to pick up the session
+    // cookie, but the navigation already refetches Home with it — Home is
+    // `no-store`, so there is no stale entry to invalidate. All the refresh did
+    // was fire a second render of the same route, in parallel with the first,
+    // at the one moment the API is already busy hashing a password.
+    //
+    // `isSubmitting` is deliberately left true: the page is on its way out, and
+    // the button should not flick back to "sign in" underneath the viewer.
+    router.replace(`/${locale}`);
   }
 
   return (

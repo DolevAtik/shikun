@@ -4,7 +4,7 @@ import { JwtService } from "@nestjs/jwt";
 import type { AuthTokens, LoginResponse } from "@moch/contracts";
 import { createHash, randomBytes } from "node:crypto";
 import { PrismaService } from "../common/prisma/prisma.service";
-import { toCurrentUser, USER_INCLUDE } from "../users/user.mapper";
+import { toCurrentUser } from "../users/user.mapper";
 import { AUTH_PROVIDER, type AuthProvider } from "./providers/auth-provider";
 import type { JwtPayload } from "./types";
 
@@ -18,15 +18,14 @@ export class AuthService {
   ) {}
 
   async login(email: string, password: string): Promise<LoginResponse> {
-    const verified = await this.authProvider.verify(email, password);
-    if (!verified) {
+    // The provider already returns the user with its org relations, so this is
+    // the only read of that row. Login is the slowest request in the app — it
+    // pays for a password hash — and a second round trip to the database for a
+    // row we are already holding is the easiest part of it to not spend.
+    const user = await this.authProvider.verify(email, password);
+    if (!user) {
       throw new UnauthorizedException("כתובת דוא״ל או סיסמה שגויים");
     }
-
-    const user = await this.prisma.user.findUniqueOrThrow({
-      where: { id: verified.id },
-      include: USER_INCLUDE,
-    });
 
     const tokens = await this.issueTokens({ sub: user.id, email: user.email, roles: user.roles });
     return { tokens, user: toCurrentUser(user) };

@@ -50,6 +50,31 @@ export function formatRelative(iso: string, locale: string): string {
   return formatter.format(Math.round(diffDays / 30), "month");
 }
 
+/**
+ * Whole calendar days from today until `iso` — 0 is today, 1 is tomorrow.
+ *
+ * Counted in Jerusalem, not in UTC: a deadline at 09:00 tomorrow is "tomorrow"
+ * to an employee in Israel even when the server has already rolled over.
+ */
+export function daysUntil(iso: string, now: Date = new Date()): number {
+  const dayStart = (date: Date) => {
+    // en-CA formats as YYYY-MM-DD, which is the one locale that parses back cleanly.
+    const [year, month, day] = new Intl.DateTimeFormat("en-CA", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      timeZone: TZ,
+    })
+      .format(date)
+      .split("-")
+      .map(Number);
+
+    return Date.UTC(year ?? 1970, (month ?? 1) - 1, day ?? 1);
+  };
+
+  return Math.round((dayStart(new Date(iso)) - dayStart(now)) / 86_400_000);
+}
+
 /** "12-03" (MM-DD) → a localized "12 במרץ", with no year to leak someone's age. */
 export function formatMonthDay(monthDay: string, locale: string): string {
   const [month, day] = monthDay.split("-").map(Number);

@@ -1,0 +1,47 @@
+name: Keep the API awake
+
+# Render's free tier spins the API down after 15 minutes of inactivity, and a
+# cold wake takes 30–50 seconds. Because Next renders Home on the server and
+# blocks on the API, that lands squarely on whoever opens the app first — most
+# often the person we asked to come and look at it.
+#
+# So we keep it warm during the hours anyone actually opens it.
+#
+# Not around the clock, on purpose: the free plan allows 750 instance-hours a
+# month, and a 24/7 ping would burn ~730 of them, leaving no room for deploys or
+# restarts — and going over suspends the service. The window below keeps it awake
+# ~14 hours a day (~430 hours a month), which is comfortably inside the budget.
+# Outside the window it is allowed to sleep, and the first visitor pays the 30–50
+# seconds. That is the trade the free tier offers; this takes the good half of it.
+
+on:
+  schedule:
+    # Every 5 minutes, 04:00–17:59 UTC ≈ 07:00–21:00 Israel time, every day.
+    #
+    # Five, not ten, because GitHub's scheduler is not punctual — a run can be
+    # held for 10 minutes or more under load. At a 10-minute cadence one such
+    # delay opens a >15-minute gap and the service is asleep again, which is the
+    # one outcome this file exists to prevent.
+    - cron: "*/5 4-17 * * *"
+  # Also runnable by hand — useful to warm the API before a demo outside the
+  # window, and to switch the schedule back on: GitHub disables cron in repos
+  # with no activity for 60 days, and a manual run counts as activity.
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping the health check
+        # /api/health also queries the database, so this keeps Neon warm too.
+        #
+        # --max-time 90: if the service *was* asleep this request is the one that
+        # wakes it, and waking is exactly the slow case. A short timeout would
+        # give up precisely when the ping is doing its job.
+        #
+        # -f: a non-2xx turns the run red, so this doubles as an uptime check.
+        run: |
+          curl -fsS \
+            --max-time 90 \
+            --retry 3 --retry-delay 20 --retry-all-errors \
+            https://shikun-api.onrender.com/api/health

@@ -8,6 +8,7 @@ import { HealthController } from "./common/health.controller";
 import { PrismaModule } from "./common/prisma/prisma.module";
 import { FeedModule } from "./feed/feed.module";
 import { HomeModule } from "./home/home.module";
+import { JobsModule } from "./jobs/jobs.module";
 import { MediaModule } from "./media/media.module";
 import { OrgModule } from "./org/org.module";
 import { ServicesModule } from "./services/services.module";
@@ -19,6 +20,7 @@ import { ServicesModule } from "./services/services.module";
     AuthModule,
     HomeModule,
     ServicesModule,
+    JobsModule,
     FeedModule,
     OrgModule,
     MediaModule,

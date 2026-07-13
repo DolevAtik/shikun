@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { ICONS } from "@/components/icons";
+import { Link } from "@/i18n/routing";
 import { formatDate, formatDateTime, formatMonthDay, formatNumber, formatRelative } from "@/lib/format";
 
 interface Props {
@@ -413,10 +414,21 @@ export async function HomeSectionView({ section, locale, firstName, greeting }: 
       );
     }
 
-    case "CAREERS":
+    case "CAREERS": {
+      // Home shows the first few openings; the board shows all of them.
+      const tJobs = await getTranslations("jobs");
+
       return (
         <section className="py-3">
-          <SectionHeader title={title} className="px-4" />
+          <SectionHeader
+            title={title}
+            className="px-4"
+            action={
+              <Link href="/jobs" className="text-sm font-medium text-brand hover:underline">
+                {tJobs("seeAll")}
+              </Link>
+            }
+          />
           <ul className="flex flex-col gap-2 px-4">
             {section.data.items.map((career) => (
               <li key={career.id}>
@@ -440,6 +452,7 @@ export async function HomeSectionView({ section, locale, firstName, greeting }: 
           </ul>
         </section>
       );
+    }
 
     case "BIRTHDAYS":
       return (

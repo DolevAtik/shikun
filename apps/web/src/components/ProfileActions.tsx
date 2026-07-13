@@ -2,7 +2,6 @@
 
 import { ChevronLeft, Languages, LogOut, Moon, Sun } from "lucide-react";
 import { useTranslations, useLocale } from "next-intl";
-import { useRouter as useNextRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "@/i18n/routing";
 import { Card, cn } from "@moch/ui";
@@ -11,7 +10,6 @@ export function ProfileActions() {
   const t = useTranslations();
   const locale = useLocale();
   const router = useRouter();
-  const nextRouter = useNextRouter();
   const pathname = usePathname();
   const [isDark, setIsDark] = useState(false);
 
@@ -32,8 +30,12 @@ export function ProfileActions() {
 
   async function logout() {
     await fetch("/api/auth/logout", { method: "POST" });
-    nextRouter.push(`/${locale}/login`);
-    nextRouter.refresh();
+
+    // A hard navigation, not `router.push`. Signing out has to leave nothing
+    // behind, and Next's client-side router cache is holding rendered payloads
+    // of the screens this person was just looking at — a soft navigation does
+    // not drop them. This does.
+    window.location.href = `/${locale}/login`;
   }
 
   return (

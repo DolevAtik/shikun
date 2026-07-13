@@ -442,7 +442,7 @@ interface SeedContentArgs {
   channels: { id: string; slug: string }[];
 }
 
-async function seedContent({ users, districts, channels }: SeedContentArgs) {
+async function seedContent({ users, districts, departments, channels }: SeedContentArgs) {
   const mankal = users.find((u) => u.email === "mankal@moch.gov.il")!;
   const editor = users.find((u) => u.email === "editor@moch.gov.il")!;
   const hr = users.find((u) => u.email === "hr@moch.gov.il")!;
@@ -452,6 +452,7 @@ async function seedContent({ users, districts, channels }: SeedContentArgs) {
   const north = districts.find((d) => d.code === "NORTH")!;
   const south = districts.find((d) => d.code === "SOUTH")!;
   const channel = (slug: string) => channels.find((c) => c.slug === slug)!.id;
+  const department = (slug: string) => departments.find((d) => d.slug === slug)!.id;
 
   // ── Announcements ─────────────────────────────────────────────────────────
   // Note the third one: targeted at Haifa only. It is the proof that targeting
@@ -588,25 +589,124 @@ async function seedContent({ users, districts, channels }: SeedContentArgs) {
   });
 
   // ── Careers ───────────────────────────────────────────────────────────────
-  await prisma.contentItem.create({
-    data: {
-      kind: "CAREER", status: "PUBLISHED",
+  // The job board reads these, and Home shows the first few of the same rows.
+  // The mix is deliberate: internal roles and public tenders, deadlines near and
+  // far, one position open until it is filled — and one targeted at Haifa, which
+  // is the board's own proof that a job is only shown to who it is meant for.
+  const careers = [
+    {
+      title: "מנהל/ת תחום רכש",
+      body: "מכרז פומבי. ניהול תחום הרכש והלוגיסטיקה במטה המשרד, כולל אחריות על התקשרויות וספקים.",
+      departmentId: department("procurement"),
+      districtId: null,
+      audDistrictIds: [] as string[],
+      publishedAt: daysAgo(20),
+      closesAt: daysFromNow(2),
+      isInternal: false,
+      href: "https://www.gov.il/he/departments/dynamiccollectors/moch-jobs",
+    },
+    {
+      title: "רכז/ת סיוע בדיור — מחוז דרום",
+      body: "משרה פנימית. טיפול בבקשות זכאות לסיוע בדיור ומתן מענה לפונים במחוז דרום.",
+      departmentId: department("housing-aid"),
+      districtId: south.id,
+      audDistrictIds: [] as string[],
+      publishedAt: daysAgo(12),
+      closesAt: daysFromNow(4),
+      isInternal: true,
+      href: "/services/forms",
+    },
+    {
+      title: "מפקח/ת בנייה — מחוז חיפה",
+      body: "משרה פנימית לעובדי מחוז חיפה. פיקוח על אתרי בנייה מאושרים ודיווח על חריגות.",
+      departmentId: department("planning"),
+      districtId: haifa.id,
+      audDistrictIds: [haifa.id],
+      publishedAt: daysAgo(2),
+      closesAt: daysFromNow(9),
+      isInternal: true,
+      href: "/services/forms",
+    },
+    {
       title: "מנהל/ת פרויקטים בכיר/ה — אגף תכנון",
-      body: "משרה פנימית. ניסיון של 3 שנים לפחות בניהול פרויקטים תכנוניים.",
-      authorId: hr.id, publishedAt: daysAgo(5),
-      career: { create: { closesAt: daysFromNow(14), isInternal: true } },
+      body: "משרה פנימית. ניסיון של שלוש שנים לפחות בניהול פרויקטים תכנוניים מול ועדות מקומיות ומחוזיות.",
+      departmentId: department("planning"),
+      districtId: null,
+      audDistrictIds: [] as string[],
+      publishedAt: daysAgo(5),
+      closesAt: daysFromNow(14),
+      isInternal: true,
+      href: "/services/forms",
     },
-  });
-
-  await prisma.contentItem.create({
-    data: {
-      kind: "CAREER", status: "PUBLISHED",
+    {
       title: "אנליסט/ית נתונים — אגף ניתוח כלכלי",
-      body: "משרה פנימית. עבודה עם נתוני שיווק ואכלוס ברמה הארצית.",
-      authorId: hr.id, publishedAt: daysAgo(8),
-      career: { create: { closesAt: daysFromNow(21), isInternal: true } },
+      body: "משרה פנימית. עבודה עם נתוני שיווק ואכלוס ברמה הארצית, ובניית תחזיות לביקוש לדיור.",
+      departmentId: department("economics"),
+      districtId: null,
+      audDistrictIds: [] as string[],
+      publishedAt: daysAgo(8),
+      closesAt: daysFromNow(21),
+      isInternal: true,
+      href: "/services/forms",
     },
-  });
+    {
+      title: "מפתח/ת Full-Stack — אגף דיגיטל",
+      body: "משרה פנימית. פיתוח מערכות פנים-ארגוניות בעברית, בדגש על נגישות ועל חוויית שימוש בנייד.",
+      departmentId: department("digital"),
+      districtId: null,
+      audDistrictIds: [] as string[],
+      publishedAt: daysAgo(3),
+      closesAt: daysFromNow(30),
+      isInternal: true,
+      href: "/services/forms",
+    },
+    {
+      title: "יועץ/ת משפטי/ת בכיר/ה",
+      body: "מכרז פומבי. ליווי משפטי של הליכי תכנון ושיווק קרקעות, וייצוג המשרד בוועדות.",
+      departmentId: department("legal"),
+      districtId: null,
+      audDistrictIds: [] as string[],
+      publishedAt: daysAgo(6),
+      closesAt: daysFromNow(45),
+      isInternal: false,
+      href: "https://www.gov.il/he/departments/dynamiccollectors/moch-jobs",
+    },
+    {
+      // No deadline and nowhere to click: the position stays open until it is
+      // filled, and the application goes through HR. The board draws both.
+      title: "רכז/ת שיווק קרקעות",
+      body: "משרה פנימית. ריכוז הליכי שיווק קרקעות מול רשות מקרקעי ישראל. הפנייה דרך משאבי אנוש.",
+      departmentId: department("marketing"),
+      districtId: null,
+      audDistrictIds: [] as string[],
+      publishedAt: daysAgo(10),
+      closesAt: null,
+      isInternal: true,
+      href: null,
+    },
+  ];
+
+  for (const job of careers) {
+    await prisma.contentItem.create({
+      data: {
+        kind: "CAREER", status: "PUBLISHED",
+        title: job.title,
+        body: job.body,
+        authorId: hr.id,
+        districtId: job.districtId,
+        audDistrictIds: job.audDistrictIds,
+        publishedAt: job.publishedAt,
+        career: {
+          create: {
+            departmentId: job.departmentId,
+            closesAt: job.closesAt,
+            isInternal: job.isInternal,
+            href: job.href,
+          },
+        },
+      },
+    });
+  }
 
   // ── Feed posts ────────────────────────────────────────────────────────────
   const tagIds = await seedTags();

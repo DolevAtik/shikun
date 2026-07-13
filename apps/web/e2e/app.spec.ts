@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 import { expectNoA11yViolations, login, setDarkMode } from "./helpers";
 
 test.describe("accessibility — IS 5568 / WCAG 2.0 AA", () => {
@@ -27,6 +27,13 @@ test.describe("accessibility — IS 5568 / WCAG 2.0 AA", () => {
     await page.goto("/he/feed");
     await page.getByRole("article").first().waitFor();
     await expectNoA11yViolations(page, "feed (he, light)");
+  });
+
+  test("the job board is clean", async ({ page }) => {
+    await login(page, "haifa.employee@moch.gov.il");
+    await page.goto("/he/jobs");
+    await page.getByRole("heading", { name: "לוח משרות" }).waitFor();
+    await expectNoA11yViolations(page, "jobs (he, light)");
   });
 });
 
@@ -125,6 +132,61 @@ test.describe("feed", () => {
     await page.reload();
     await page.getByRole("article").first().getByRole("button", { name: /תגובה/ }).click();
     await expect(page.getByText(body)).toBeVisible();
+  });
+});
+
+test.describe("job board", () => {
+  /** The board's own headings, not the ones in the nav bar or the header. */
+  const positions = (page: Page) => page.locator("#main").getByRole("heading", { level: 3 });
+
+  test("is reachable from the bottom nav and leads with the closest deadline", async ({ page }) => {
+    await login(page, "employee@moch.gov.il");
+
+    await page.getByRole("navigation", { name: "ניווט ראשי" }).getByRole("link", { name: "משרות" }).click();
+    await page.waitForURL("**/he/jobs");
+
+    // Seeded to close in two days — a board that does not sort by deadline is a
+    // list, and this assertion is the difference.
+    await expect(positions(page).first()).toHaveText("מנהל/ת תחום רכש");
+    await expect(page.getByText("נסגר בעוד יומיים")).toBeVisible();
+
+    // The position with no deadline sorts last, and says so instead of showing a date.
+    await expect(positions(page).last()).toHaveText("רכז/ת שיווק קרקעות");
+    await expect(page.getByText("פתוח עד לאיוש")).toBeVisible();
+  });
+
+  test("filtering by scope narrows the board and survives a reload", async ({ page }) => {
+    await login(page, "employee@moch.gov.il");
+    await page.goto("/he/jobs");
+
+    await page.getByRole("link", { name: /מכרזים פומביים/ }).click();
+    await page.waitForURL("**/he/jobs?scope=external");
+
+    // The two public tenders, and neither of the internal roles.
+    await expect(positions(page)).toHaveCount(2);
+    await expect(page.getByText("משרה פנימית")).toHaveCount(0);
+
+    // The filter is in the URL, so the back button and a shared link both work.
+    await page.reload();
+    await expect(positions(page)).toHaveCount(2);
+  });
+
+  test("a district-targeted opening is invisible to another district", async ({ page }) => {
+    const HAIFA_ONLY = "מפקח/ת בנייה — מחוז חיפה";
+
+    await login(page, "haifa.employee@moch.gov.il");
+    await page.goto("/he/jobs");
+    await expect(page.getByText(HAIFA_ONLY)).toBeVisible();
+  });
+
+  test("…and a Jerusalem employee never sees it", async ({ page }) => {
+    await login(page, "jerusalem.employee@moch.gov.il");
+    await page.goto("/he/jobs");
+
+    // The Ministry-wide openings are there…
+    await expect(page.getByText("מנהל/ת תחום רכש")).toBeVisible();
+    // …and the Haifa-only one is not on the board at all.
+    await expect(page.getByText("מפקח/ת בנייה — מחוז חיפה")).toHaveCount(0);
   });
 });
 

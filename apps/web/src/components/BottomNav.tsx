@@ -1,6 +1,6 @@
 "use client";
 
-import { Home, Newspaper, LayoutGrid, User } from "lucide-react";
+import { Home, Newspaper, Briefcase, LayoutGrid, User } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/routing";
 import { cn } from "@moch/ui";
@@ -8,6 +8,7 @@ import { cn } from "@moch/ui";
 const TABS = [
   { href: "/", key: "home", Icon: Home },
   { href: "/feed", key: "feed", Icon: Newspaper },
+  { href: "/jobs", key: "jobs", Icon: Briefcase },
   { href: "/services", key: "services", Icon: LayoutGrid },
   { href: "/profile", key: "profile", Icon: User },
 ] as const;

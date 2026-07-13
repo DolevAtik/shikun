@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
-import type { User } from "@prisma/client";
 import * as argon2 from "argon2";
 import { PrismaService } from "../../common/prisma/prisma.service";
+import { USER_INCLUDE, type UserWithOrg } from "../../users/user.mapper";
 import type { AuthProvider } from "./auth-provider";
 
 @Injectable()
@@ -10,8 +10,11 @@ export class LocalAuthProvider implements AuthProvider {
 
   constructor(private readonly prisma: PrismaService) {}
 
-  async verify(email: string, password: string): Promise<User | null> {
-    const user = await this.prisma.user.findUnique({ where: { email: email.toLowerCase() } });
+  async verify(email: string, password: string): Promise<UserWithOrg | null> {
+    const user = await this.prisma.user.findUnique({
+      where: { email: email.toLowerCase() },
+      include: USER_INCLUDE,
+    });
     if (!user || !user.isActive) {
       // Hash anyway so a missing account and a wrong password take the same
       // time — otherwise the response time enumerates who works here.

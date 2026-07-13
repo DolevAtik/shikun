@@ -7,6 +7,7 @@
   "nav": {
     "home": "Home",
     "feed": "Feed",
+    "jobs": "Jobs",
     "services": "Services",
     "profile": "Profile",
     "primary": "Primary navigation",
@@ -79,6 +80,27 @@
     "quickLinks": "Quick links",
     "opensInNewWindow": "(opens in a new window)",
     "empty": "No services available right now."
+  },
+  "jobs": {
+    "title": "Job board",
+    "subtitle": "Open positions you are eligible for",
+    "count": "{count, plural, =0 {No open positions} one {1 open position} other {# open positions}}",
+    "filterLabel": "Filter positions",
+    "filters": {
+      "all": "All",
+      "internal": "Internal roles",
+      "external": "Public tenders"
+    },
+    "internal": "Internal role",
+    "external": "Public tender",
+    "closesAt": "Closes {date}",
+    "closingIn": "{days, plural, =0 {Closes today} =1 {Closes tomorrow} other {Closes in # days}}",
+    "openUntilFilled": "Open until filled",
+    "opensInNewWindow": "(opens in a new window)",
+    "seeAll": "All positions",
+    "empty": "No open positions right now",
+    "emptyHint": "New positions appear here as soon as they are published.",
+    "emptyFiltered": "No positions match this filter"
   },
   "feed": {
     "title": "Feed",
