@@ -4,7 +4,9 @@
 
 Web on Vercel (Frankfurt), API on Render (Frankfurt), database on Neon (Frankfurt). Verified end to end against the public URL: login, Home, Feed, Profile, and — the one that matters — audience targeting, with the Haifa-only announcement present for `haifa.employee` and absent for `jerusalem.employee`.
 
-Outstanding: Phase 7 (R2). Until it is done, uploading new media fails; everything else works. See Notes for the demo-seed problem, which is now live on a public URL.
+Media is done too, on **Supabase Storage** rather than R2 (R2 requires a card on file; Supabase does not). Verified through the deployed API: presign → upload → public read.
+
+This plan is finished. The record of what was built, the services, the variables and the verification steps live in [docs/deployment.md](../deployment.md). What remains open is not deployment work: the demo seed's shared password on a public URL, and the question of whether a Ministry system may be hosted outside the government cloud at all. Both are in Notes below.
 
 ## Context
 
