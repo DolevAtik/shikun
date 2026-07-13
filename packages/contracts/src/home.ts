@@ -156,6 +156,7 @@ export const VideoOfWeekSchema = z.object({
   durationSeconds: z.number().nullable(),
   viewCount: z.number(),
 });
+export type VideoOfWeek = z.infer<typeof VideoOfWeekSchema>;
 
 export const WeeklySummaryTeaserSchema = z.object({
   id: z.string(),

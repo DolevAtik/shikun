@@ -78,15 +78,15 @@ const HOME_SECTIONS = [
   { type: "EMERGENCY", order: 1 },
   { type: "ANNOUNCEMENTS", order: 2 },
   { type: "WEEKLY_SUMMARY", order: 3 },
-  { type: "CEO_MESSAGE", order: 4 },
-  { type: "KEY_NUMBERS", order: 5 },
-  { type: "EVENTS", order: 6 },
-  { type: "PROJECTS", order: 7 },
-  { type: "VIDEO_OF_WEEK", order: 8 },
-  { type: "TRAININGS", order: 9 },
-  { type: "CAREERS", order: 10 },
-  { type: "BIRTHDAYS", order: 11 },
-  { type: "RECOGNITION", order: 12 },
+  { type: "KEY_NUMBERS", order: 4 },
+  { type: "EVENTS", order: 5 },
+  { type: "PROJECTS", order: 6 },
+  { type: "VIDEO_OF_WEEK", order: 7 },
+  { type: "TRAININGS", order: 8 },
+  { type: "CAREERS", order: 9 },
+  { type: "BIRTHDAYS", order: 10 },
+  { type: "RECOGNITION", order: 11 },
+  { type: "CEO_MESSAGE", order: 12 },
 ] as const;
 
 const FIRST_NAMES = [
@@ -338,6 +338,16 @@ async function seedUsers({ passwordHash, districts, departments, ministry }: See
   return users;
 }
 
+/**
+ * Cover photos for events and projects. Real photography is the difference
+ * between an intranet and a registration form, and the demo has no media bucket
+ * of its own — so the seed points at Unsplash, sized for a card and no larger.
+ * Production content replaces these the moment an editor uploads anything.
+ */
+function photo(id: string): string {
+  return `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=800&q=70`;
+}
+
 /** Spreads birthdays around today so the Home birthdays card is never empty. */
 function birthdayNear(offsetDays: number): Date {
   const date = new Date();
@@ -361,12 +371,12 @@ async function seedProjects(districts: District[]) {
 
   await prisma.project.createMany({
     data: [
-      { name: "התחדשות עירונית — קריית אליעזר", city: "חיפה", districtId: byCode("HAIFA"), status: "BUILDING", progress: 62, housingUnits: 840, order: 0 },
-      { name: "שכונת הרקפות", city: "כרמיאל", districtId: byCode("NORTH"), status: "MARKETING", progress: 35, housingUnits: 1200, order: 1 },
-      { name: "מתחם הרכבת", city: "לוד", districtId: byCode("CENTER"), status: "PLANNING", progress: 15, housingUnits: 2100, order: 2 },
-      { name: "פינוי-בינוי גבעת שאול", city: "ירושלים", districtId: byCode("JERUSALEM"), status: "BUILDING", progress: 48, housingUnits: 640, order: 3 },
-      { name: "שכונת נווה מדבר", city: "באר שבע", districtId: byCode("SOUTH"), status: "COMPLETED", progress: 100, housingUnits: 950, order: 4 },
-      { name: "מתחם התעשייה הישנה", city: "עכו", districtId: byCode("NORTH"), status: "PLANNING", progress: 8, housingUnits: 480, order: 5 },
+      { name: "התחדשות עירונית — קריית אליעזר", city: "חיפה", districtId: byCode("HAIFA"), status: "BUILDING", progress: 62, housingUnits: 840, imageUrl: photo("1596541513035-630fea51dbb4"), order: 0 },
+      { name: "שכונת הרקפות", city: "כרמיאל", districtId: byCode("NORTH"), status: "MARKETING", progress: 35, housingUnits: 1200, imageUrl: photo("1545324418-cc1a3fa10c00"), order: 1 },
+      { name: "מתחם הרכבת", city: "לוד", districtId: byCode("CENTER"), status: "PLANNING", progress: 15, housingUnits: 2100, imageUrl: photo("1433840496881-cbd845929862"), order: 2 },
+      { name: "פינוי-בינוי גבעת שאול", city: "ירושלים", districtId: byCode("JERUSALEM"), status: "BUILDING", progress: 48, housingUnits: 640, imageUrl: photo("1601074231509-dce351c05199"), order: 3 },
+      { name: "שכונת נווה מדבר", city: "באר שבע", districtId: byCode("SOUTH"), status: "COMPLETED", progress: 100, housingUnits: 950, imageUrl: photo("1612597412360-0612edc938b1"), order: 4 },
+      { name: "מתחם התעשייה הישנה", city: "עכו", districtId: byCode("NORTH"), status: "PLANNING", progress: 8, housingUnits: 480, imageUrl: photo("1460317442991-0ec209397118"), order: 5 },
     ],
   });
 }
@@ -520,16 +530,20 @@ async function seedContent({ users, districts, departments, channels }: SeedCont
   });
 
   // ── Video of the week ─────────────────────────────────────────────────────
+  // The Ministry's own clip, on the Ministry's own channel. The card links out
+  // to YouTube rather than embedding it: an intranet has no business shipping
+  // Google's player and its cookies to every employee who scrolls past Home.
   await prisma.contentItem.create({
     data: {
       kind: "VIDEO", status: "PUBLISHED",
-      title: "סיור בפרויקט ההתחדשות בקריית אליעזר",
-      body: "ארבע דקות בשטח עם צוות המחוז, מהמגרש ועד המסירה.",
+      title: "יש לכם כתובת! משרד הבינוי והשיכון בשבילכם",
+      body: "סרטון ההסברה של המשרד — מה אנחנו עושים, ולמי זה מגיע.",
       authorId: editor.id, publishedAt: daysAgo(2),
       video: {
         create: {
-          videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
-          durationSeconds: 232, viewCount: 418, isVideoOfWeek: true,
+          videoUrl: "https://www.youtube.com/watch?v=ETGuwz5FRaY",
+          thumbnailUrl: "https://img.youtube.com/vi/ETGuwz5FRaY/maxresdefault.jpg",
+          durationSeconds: null, viewCount: 418, isVideoOfWeek: true,
         },
       },
     },
@@ -542,7 +556,7 @@ async function seedContent({ users, districts, departments, channels }: SeedCont
       title: "יום עיון: התחדשות עירונית 2026",
       body: "יום עיון מקצועי לכלל רכזי התכנון והפיקוח, עם מפגשי עומק לפי מחוז.",
       authorId: hr.id, publishedAt: daysAgo(6),
-      event: { create: { startsAt: daysFromNow(5), endsAt: daysFromNow(5), location: "אולם הכנסים, ירושלים", isOnline: false, capacity: 120 } },
+      event: { create: { startsAt: daysFromNow(5), endsAt: daysFromNow(5), location: "אולם הכנסים, ירושלים", isOnline: false, imageUrl: photo("1540575467063-178a50c2df87"), capacity: 120 } },
     },
   });
 
@@ -553,7 +567,7 @@ async function seedContent({ users, districts, departments, channels }: SeedCont
       body: "מפגש עובדי המחוז עם הנהלת המשרד.",
       authorId: hr.id, districtId: south.id, publishedAt: daysAgo(3),
       audDistrictIds: [south.id],
-      event: { create: { startsAt: daysFromNow(9), location: "באר שבע", isOnline: false, capacity: 60 } },
+      event: { create: { startsAt: daysFromNow(9), location: "באר שבע", isOnline: false, imageUrl: photo("1517245386807-bb43f82c33c4"), capacity: 60 } },
     },
   });
 
@@ -563,7 +577,7 @@ async function seedContent({ users, districts, departments, channels }: SeedCont
       title: "וובינר: מה חדש במערכת הרישוי",
       body: "הדגמה חיה של המערכת החדשה, עם זמן לשאלות.",
       authorId: editor.id, publishedAt: daysAgo(1),
-      event: { create: { startsAt: daysFromNow(2), isOnline: true, location: null, capacity: null } },
+      event: { create: { startsAt: daysFromNow(2), isOnline: true, location: null, imageUrl: photo("1588196749597-9ff075ee6b5b"), capacity: null } },
     },
   });
 

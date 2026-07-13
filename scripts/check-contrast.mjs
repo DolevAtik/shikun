@@ -76,6 +76,34 @@ const PAIRS = [
   ["--warning", "--warning-soft", 4.5, "warning alert text on its banner"],
   ["--success", "--success-soft", 4.5, "success text on its banner"],
   ["--border-strong", "--surface", 3, "input border against a card"],
+
+  /**
+   * The admin console adds these. Each one is a shadcn/ui semantic pair that
+   * `apps/admin/src/app/shadcn-bridge.css` aliases onto the tokens above — so
+   * they render in the product even though no employee screen uses them.
+   *
+   * `--danger-on` on `--danger` is the one that matters: shadcn's stock
+   * destructive-foreground is white, and in dark mode `--danger` is a *light*
+   * red. White on it is 2.17:1 — a failing button, shipped by default.
+   */
+  ["--danger-on", "--danger", 4.5, "label on a destructive button (shadcn --destructive)"],
+  ["--text-muted", "--surface-sunken", 4.5, "muted text on a sunken panel (shadcn --muted)"],
+  ["--text", "--surface-raised", 4.5, "text in a popover or dropdown (shadcn --popover)"],
+  ["--text", "--surface-sunken", 4.5, "text on a sunken panel (table header, toolbar)"],
+];
+
+/**
+ * shadcn leans on alpha: `hover:bg-muted/50` on a table row, `bg-primary/10` on
+ * a selected one. The composited pair is what the eye sees, and it is not the
+ * pair checked above — the same blind spot that let the Chip fail at 4.08:1.
+ *
+ * [foreground, tint color, base it composites over, alpha, minimum, description]
+ */
+const COMPOSITE_PAIRS = [
+  ["--text", "--surface-sunken", "--surface", 0.5, 4.5, "row text on a hovered table row"],
+  ["--text-muted", "--surface-sunken", "--surface", 0.5, 4.5, "muted cell text on a hovered row"],
+  ["--text", "--brand-blue", "--surface", 0.1, 4.5, "row text on a selected table row"],
+  ["--text", "--danger", "--surface", 0.1, 4.5, "row text on a row flagged for deletion"],
 ];
 
 /**
@@ -146,6 +174,26 @@ for (const theme of ["\\:root", "\\.dark"]) {
       console.error(
         `  FAIL     [${label}] ${ratio.toFixed(2)}:1 (needs 4.5:1) — chip text on its own tint` +
           `\n           ${token} ${color} on ${tint}`,
+      );
+    }
+  }
+
+  // Alpha surfaces: what the row actually looks like once the tint is composited.
+  for (const [fg, tintToken, baseToken, alpha, minimum, description] of COMPOSITE_PAIRS) {
+    if (!tokens[fg] || !tokens[tintToken] || !tokens[baseToken]) {
+      console.error(`  MISSING  [${label}] a token in "${description}" is not defined`);
+      failures++;
+      continue;
+    }
+
+    checks++;
+    const background = tintOver(tokens[tintToken], tokens[baseToken], alpha);
+    const ratio = contrast(tokens[fg], background);
+    if (ratio < minimum) {
+      failures++;
+      console.error(
+        `  FAIL     [${label}] ${ratio.toFixed(2)}:1 (needs ${minimum}:1) — ${description}` +
+          `\n           ${fg} ${tokens[fg]} on ${tintToken} @ ${alpha} over ${baseToken} = ${background}`,
       );
     }
   }

@@ -61,6 +61,9 @@
     "housingUnits": "{count} units",
     "progress": "{percent}% complete",
     "views": "{count} views",
+    "watchVideo": "Watch video",
+    "playVideo": "Play the video: {title}",
+    "close": "Close",
     "projectStatus": {
       "PLANNING": "Planning",
       "MARKETING": "Marketing",

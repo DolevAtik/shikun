@@ -1,0 +1,65 @@
+/**
+ * shadcn/ui speaks its own colour language (--background, --primary, --muted).
+ * The Ministry's design system speaks another (--bg, --brand-blue, --surface-sunken).
+ * This file is the only place the two meet.
+ *
+ * Every declaration below is an ALIAS, never a value. That is the entire design:
+ * because each right-hand side is a variable that `@moch/ui/tokens.css` already
+ * redefines under `.dark`, dark mode needs no `.dark` block here and gets it for
+ * free — and the property the whole codebase is built on survives intact:
+ * swapping the token file swaps the whole product, including a future migration
+ * to the national government design system.
+ *
+ * Rule: if you are about to write a hex value in this file, you are writing it
+ * in the wrong file. It belongs in packages/ui/src/tokens.css, where
+ * scripts/check-contrast.mjs can see it.
+ */
+:root {
+  --background: var(--bg);
+  --foreground: var(--text);
+
+  --card: var(--surface);
+  --card-foreground: var(--text);
+
+  --popover: var(--surface-raised);
+  --popover-foreground: var(--text);
+
+  --primary: var(--brand-blue);
+  --primary-foreground: var(--text-on-brand);
+
+  --secondary: var(--surface-tint);
+  --secondary-foreground: var(--text);
+
+  --muted: var(--surface-sunken);
+  --muted-foreground: var(--text-muted);
+
+  /* shadcn's "accent" is a hover/selected surface, not our coloured --accent-*. */
+  --accent: var(--surface-tint);
+  --accent-foreground: var(--text);
+
+  /* --danger is danger as text; --danger-on is the label on a destructive button.
+     shadcn ships white here, which fails in dark mode. See tokens.css. */
+  --destructive: var(--danger);
+  --destructive-foreground: var(--danger-on);
+
+  /* --border already exists in tokens.css and already means exactly this, so it
+     is deliberately not redeclared. --input is a real component boundary and
+     must clear 3:1 (WCAG 1.4.11), which is what --border-strong is for. */
+  --input: var(--border-strong);
+  --ring: var(--brand-blue);
+
+  --radius: var(--radius-md);
+
+  --sidebar: var(--surface-brand);
+  --sidebar-foreground: var(--on-surface-brand);
+
+  /* Charts reuse the six accent tokens — the coloured houses in the Ministry
+     logo — rather than inventing a palette. They are already contrast-checked
+     against --surface in both themes, and they are already what the product
+     looks like. */
+  --chart-1: var(--accent-blue);
+  --chart-2: var(--accent-green);
+  --chart-3: var(--accent-amber);
+  --chart-4: var(--accent-violet);
+  --chart-5: var(--accent-red);
+}

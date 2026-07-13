@@ -1,0 +1,53 @@
+{
+  "app": {
+    "title": "Admin Console",
+    "ministry": "Ministry of Construction and Housing",
+    "skipToContent": "Skip to main content"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "content": "Content",
+    "community": "Community",
+    "districts": "Districts",
+    "employees": "Employees",
+    "events": "Events",
+    "learning": "Learning",
+    "careers": "Careers",
+    "services": "Services",
+    "media": "Media Library",
+    "notifications": "Notifications",
+    "analytics": "Analytics",
+    "settings": "Settings",
+    "permissions": "Permissions",
+    "audit": "Audit Logs",
+    "collapse": "Collapse menu",
+    "expand": "Expand menu",
+    "menu": "Navigation menu"
+  },
+  "auth": {
+    "signIn": "Sign in",
+    "email": "Email",
+    "password": "Password",
+    "submit": "Sign in",
+    "signingIn": "Signing in…",
+    "failed": "Sign-in failed. Check your email and password.",
+    "signOut": "Sign out"
+  },
+  "access": {
+    "title": "You do not have access to the admin console",
+    "description": "Your account exists, but it does not carry an administrator permission. If you believe this is a mistake, contact your system administrator.",
+    "backToApp": "Back to the employee app"
+  },
+  "common": {
+    "search": "Search",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "confirm": "Confirm",
+    "loading": "Loading…",
+    "error": "Something went wrong",
+    "retry": "Retry",
+    "theme": "Appearance",
+    "language": "Language"
+  }
+}

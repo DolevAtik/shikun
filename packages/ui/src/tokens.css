@@ -70,8 +70,12 @@
   --border: #d8e0ea;
   --border-strong: #74839a;
 
-  /* Feedback */
+  /* Feedback. `--danger` is danger as *text*; `--danger-on` is the label printed
+     on top of danger as a *surface* (a destructive button). They are not the
+     same job: in dark mode `--danger` lightens to stay legible on a dark card,
+     and white on that light red is 2.17:1. */
   --danger: #b3261e;
+  --danger-on: #ffffff;
   --danger-soft: #fdecea;
   --warning: #8a5d0c;
   --warning-soft: #fdf3e2;
@@ -140,6 +144,7 @@
   --border-strong: #7d8fa6;
 
   --danger: #f2988f;
+  --danger-on: #2a0f0d;
   --danger-soft: #33201f;
   --warning: #dfae54;
   --warning-soft: #2d2417;

@@ -3,7 +3,6 @@
 import { Button, Card } from "@moch/ui";
 import { AlertCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const DEMO_ACCOUNTS = [
@@ -18,7 +17,6 @@ const DEMO_PASSWORD = "Moch2026!";
 
 export function LoginForm({ locale }: { locale: string }) {
   const t = useTranslations("auth");
-  const router = useRouter();
 
   const [email, setEmail] = useState("employee@moch.gov.il");
   const [password, setPassword] = useState(DEMO_PASSWORD);
@@ -42,18 +40,23 @@ export function LoginForm({ locale }: { locale: string }) {
       return;
     }
 
-    // `replace`, not `push`: Back from Home should leave the app, not return to
-    // a login form the viewer has already passed.
+    // A document navigation, not `router.push`. This is measured, not stylistic.
     //
-    // And no `refresh()` afterwards. It used to sit here to pick up the session
-    // cookie, but the navigation already refetches Home with it — Home is
-    // `no-store`, so there is no stale entry to invalidate. All the refresh did
-    // was fire a second render of the same route, in parallel with the first,
-    // at the one moment the API is already busy hashing a password.
+    // On a soft navigation the client router fetches the RSC payload for Home
+    // and commits it in one piece, so nothing is drawn until the whole server
+    // render is done — the login button just sits on "מתחבר…" for the duration.
+    // A `loading.tsx` does not help there: its fallback only becomes an *instant*
+    // state for a route whose shell is already prefetched, and Home cannot be
+    // prefetched from here because we are not signed in yet.
     //
-    // `isSubmitting` is deliberately left true: the page is on its way out, and
-    // the button should not flick back to "sign in" underneath the viewer.
-    router.replace(`/${locale}`);
+    // A document request streams. Next flushes the app shell and the loading
+    // skeleton in the first chunk and streams Home in behind it, so the viewer is
+    // out of the login form in a few hundred milliseconds and watching the app
+    // arrive, instead of watching a spinner and wondering.
+    //
+    // Signing in is also the right moment to pay for a full load: it is a new
+    // session, and it leaves nothing of the last one in the router cache.
+    window.location.assign(`/${locale}`);
   }
 
   return (

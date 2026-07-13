@@ -27,10 +27,10 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#0a3a70" },
-    { media: "(prefers-color-scheme: dark)", color: "#0d151f" },
-  ],
+  // One colour, because the app no longer follows the OS: it is light unless the
+  // person chose dark, so a `prefers-color-scheme` split would tint the browser
+  // chrome dark around a light page.
+  themeColor: "#0a3a70",
   // No maximum-scale: pinch-zoom must never be disabled — WCAG 1.4.4.
   width: "device-width",
   initialScale: 1,
@@ -69,16 +69,15 @@ export default async function LocaleLayout({
 }
 
 /**
- * Applies the saved theme before first paint. Without this the app flashes
- * light before turning dark, which looks broken and is genuinely unpleasant at
- * 7am — which is exactly when people open this app.
+ * Applies the saved theme before first paint. The default is light — the OS
+ * preference is deliberately ignored — so only an explicit choice of dark, kept
+ * in localStorage from the profile toggle, turns the app dark. Doing it here
+ * rather than on mount avoids a flash of light before it switches.
  */
 function ThemeScript() {
   const script = `
     try {
-      var saved = localStorage.getItem('theme');
-      var dark = saved ? saved === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
-      if (dark) document.documentElement.classList.add('dark');
+      if (localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark');
     } catch (e) {}
   `;
   return <script dangerouslySetInnerHTML={{ __html: script }} />;

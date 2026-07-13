@@ -4,17 +4,18 @@ import {
   AlertTriangle,
   ArrowLeft,
   ArrowRight,
+  Building2,
   Cake,
   CalendarDays,
   ChevronLeft,
   ChevronRight,
   ExternalLink,
-  Play,
   TrendingDown,
   TrendingUp,
   type LucideIcon,
 } from "lucide-react";
 import { getTranslations } from "next-intl/server";
+import { VideoOfWeekCard } from "@/components/home/VideoOfWeekCard";
 import { ICONS } from "@/components/icons";
 import { Link } from "@/i18n/routing";
 import { formatDate, formatDateTime, formatMonthDay, formatNumber, formatRelative } from "@/lib/format";
@@ -246,35 +247,32 @@ export async function HomeSectionView({ section, locale, firstName, greeting }: 
           <ul className="rail" tabIndex={0} aria-label={title}>
             {section.data.items.map((event) => (
               <li key={event.id} className="w-64">
-                <Card interactive className="flex h-full flex-col p-4">
-                  <div className="flex items-start gap-2">
-                    <span className="grid size-10 shrink-0 place-items-center rounded-md bg-brand-soft text-brand">
-                      <CalendarDays aria-hidden="true" className="size-5" />
-                    </span>
-                    <div className="min-w-0 flex-1">
-                      <h3 className="line-clamp-2 text-sm font-semibold leading-snug text-content">
-                        {event.title}
-                      </h3>
-                      <p className="mt-1 text-xs text-content-muted">
-                        {formatDateTime(event.startsAt, locale)}
-                      </p>
+                <Card interactive className="flex h-full flex-col overflow-hidden">
+                  <CardCover src={event.imageUrl} Icon={CalendarDays} />
+
+                  <div className="flex flex-1 flex-col p-4">
+                    <h3 className="line-clamp-2 text-sm font-semibold leading-snug text-content">
+                      {event.title}
+                    </h3>
+                    <p className="mt-1 text-xs text-content-muted">
+                      {formatDateTime(event.startsAt, locale)}
+                    </p>
+
+                    <div className="mt-3 flex flex-wrap items-center gap-1.5">
+                      {event.isOnline ? (
+                        <Chip className="bg-success-soft text-success">{t("online")}</Chip>
+                      ) : event.location ? (
+                        <Chip>{event.location}</Chip>
+                      ) : null}
+                      {event.isRegistered ? (
+                        <Chip className="bg-brand-soft text-brand">{t("registered")}</Chip>
+                      ) : null}
                     </div>
-                  </div>
 
-                  <div className="mt-3 flex flex-wrap items-center gap-1.5">
-                    {event.isOnline ? (
-                      <Chip className="bg-success-soft text-success">{t("online")}</Chip>
-                    ) : event.location ? (
-                      <Chip>{event.location}</Chip>
-                    ) : null}
-                    {event.isRegistered ? (
-                      <Chip className="bg-brand-soft text-brand">{t("registered")}</Chip>
-                    ) : null}
+                    <p className="mt-auto pt-3 text-xs text-content-muted">
+                      {t("attendees", { count: event.attendeeCount })}
+                    </p>
                   </div>
-
-                  <p className="mt-auto pt-3 text-xs text-content-muted">
-                    {t("attendees", { count: event.attendeeCount })}
-                  </p>
                 </Card>
               </li>
             ))}
@@ -290,6 +288,8 @@ export async function HomeSectionView({ section, locale, firstName, greeting }: 
             {section.data.items.map((project) => (
               <li key={project.id} className="w-64">
                 <Card interactive className="flex h-full flex-col overflow-hidden">
+                  <CardCover src={project.imageUrl} Icon={Building2} />
+
                   <div className="p-4">
                     <div className="flex items-center gap-1.5">
                       {project.districtName ? (
@@ -348,30 +348,12 @@ export async function HomeSectionView({ section, locale, firstName, greeting }: 
       const video = section.data.video;
       if (!video) return null;
 
+      // The player is a client component: it opens in a modal over Home rather
+      // than sending the viewer to YouTube and losing their place.
       return (
         <section className="px-4 py-3">
           <SectionHeader title={title} />
-          <Card interactive className="overflow-hidden">
-            <div className="relative aspect-video bg-surface-sunken">
-              {video.thumbnailUrl ? (
-                <img src={video.thumbnailUrl} alt="" className="size-full object-cover" />
-              ) : null}
-              <div className="absolute inset-0 grid place-items-center bg-black/25">
-                <span className="grid size-14 place-items-center rounded-full bg-white/95 shadow-lg">
-                  <Play aria-hidden="true" className="ms-0.5 size-6 fill-brand text-brand" />
-                </span>
-              </div>
-            </div>
-            <div className="p-4">
-              <h3 className="font-semibold text-content">{video.title}</h3>
-              {video.description ? (
-                <p className="mt-1 text-sm text-content-muted">{video.description}</p>
-              ) : null}
-              <p className="mt-2 numeric text-xs tabular-nums text-content-muted">
-                {t("views", { count: formatNumber(video.viewCount, locale) })}
-              </p>
-            </div>
-          </Card>
+          <VideoOfWeekCard video={video} locale={locale} />
         </section>
       );
     }
@@ -522,6 +504,34 @@ export async function HomeSectionView({ section, locale, firstName, greeting }: 
     default:
       return null;
   }
+}
+
+/**
+ * The photo at the top of an event or project card. The image is decorative —
+ * the title right beneath it already says what the card is — so it carries an
+ * empty alt rather than a caption a screen reader would have to hear twice.
+ *
+ * Not every row has a photo, and a card that simply loses its top edge when the
+ * editor skipped one makes the rail look broken. So the fallback keeps the same
+ * height and shows the section's own icon.
+ */
+function CardCover({ src, Icon }: { src: string | null; Icon: LucideIcon }) {
+  if (!src) {
+    return (
+      <div className="grid h-28 shrink-0 place-items-center bg-gradient-to-bl from-surface-tint to-surface-sunken">
+        <Icon aria-hidden="true" className="size-7 text-content-muted" />
+      </div>
+    );
+  }
+
+  return (
+    <img
+      src={src}
+      alt=""
+      loading="lazy"
+      className="h-28 w-full shrink-0 bg-surface-sunken object-cover"
+    />
+  );
 }
 
 /** The arrow points the way the language reads. */

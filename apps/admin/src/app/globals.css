@@ -1,0 +1,39 @@
+@import "@moch/ui/tokens.css";
+@import "./shadcn-bridge.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    /* rem-based sizing throughout, so the whole UI scales with the user's
+       browser font size and survives 200% zoom — WCAG 1.4.4. */
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: var(--font-hebrew), "Assistant", "Heebo", system-ui, sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* One focus treatment across both apps. Vendored shadcn components have their
+     own `focus-visible:ring-*` classes stripped at vendor time in favour of this
+     one, which is already contrast-checked. */
+  :focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+    border-radius: var(--radius-sm);
+  }
+
+  /* Numbers stay LTR inside RTL text — "1,240 יח״ד", not "ד״חי 240,1". An admin
+     console is mostly numbers, so this earns its keep here more than anywhere. */
+  [dir="rtl"] .numeric {
+    direction: ltr;
+    unicode-bidi: embed;
+    display: inline-block;
+  }
+}
