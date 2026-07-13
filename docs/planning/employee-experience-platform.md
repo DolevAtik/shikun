@@ -1,6 +1,20 @@
 # Employee Experience Platform — Ministry of Construction and Housing
 
-## Status: In Progress (Round 1)
+## Status: Round 1 delivered
+
+Foundation, Home and Feed are built and verified. Round two starts with the admin
+publishing surface. What shipped, and how it was checked, is in the README.
+
+Two things changed during the build and are worth recording:
+
+- **District colors became design tokens, not database hexes.** A single hex cannot clear
+  WCAG contrast on both a white card and a dark one, and a district chip is colored text on
+  a tint of itself. The database now stores `var(--district-haifa)` and the theme resolves it.
+- **The header needed its own surface token.** `--brand-navy` was doing two jobs — a text
+  color and the header background. In dark mode the text color correctly inverts to a light
+  blue, which quietly turned the header into white-on-pale-blue at 1.94:1. axe caught it on
+  the real page; the static contrast check had not, because it tested the pair that was
+  written down rather than the pair that rendered.
 
 ## Context
 

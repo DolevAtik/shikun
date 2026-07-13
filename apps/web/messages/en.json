@@ -42,10 +42,8 @@
       "KEY_NUMBERS": "Key numbers",
       "CAREERS": "Career opportunities",
       "TRAININGS": "Training",
-      "QUICK_ACTIONS": "Quick actions",
       "BIRTHDAYS": "Birthdays",
-      "RECOGNITION": "Recognition",
-      "QUICK_LINKS": "Quick links"
+      "RECOGNITION": "Recognition"
     },
     "seeAll": "See all {section}",
     "readMore": "Read more",
@@ -74,6 +72,13 @@
       "HYBRID": "Hybrid"
     },
     "empty": "Nothing new for you right now."
+  },
+  "services": {
+    "title": "Services",
+    "quickActions": "Quick actions",
+    "quickLinks": "Quick links",
+    "opensInNewWindow": "(opens in a new window)",
+    "empty": "No services available right now."
   },
   "feed": {
     "title": "Feed",
@@ -115,6 +120,13 @@
     "switchLanguage": "Switch language",
     "loading": "Loading…",
     "openMenu": "Open menu"
+  },
+  "settings": {
+    "title": "Settings",
+    "theme": "Theme",
+    "themeLight": "Light mode",
+    "themeDark": "Dark mode",
+    "language": "Language"
   },
   "common": {
     "comingSoon": "Coming soon",

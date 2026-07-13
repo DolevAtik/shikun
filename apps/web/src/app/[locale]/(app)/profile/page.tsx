@@ -2,6 +2,7 @@ import type { CurrentUser } from "@moch/contracts";
 import { Avatar, Card, Chip, SectionHeader } from "@moch/ui";
 import { Building2, Mail, MapPin, Phone } from "lucide-react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { ProfileActions } from "@/components/ProfileActions";
 import { serverFetchOrLogin } from "@/lib/api";
 import { formatDate } from "@/lib/format";
 
@@ -20,6 +21,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ locale
   setRequestLocale(locale);
 
   const t = await getTranslations("nav");
+  const tSettings = await getTranslations("settings");
   const user = await serverFetchOrLogin<CurrentUser>("/auth/me", locale);
 
   return (
@@ -56,6 +58,11 @@ export default async function ProfilePage({ params }: { params: Promise<{ locale
             <Row Icon={MapPin} label="מחוז" value="מטה" />
           )}
         </Card>
+      </section>
+
+      <section>
+        <SectionHeader title={tSettings("title")} />
+        <ProfileActions />
       </section>
 
       {user.startedAt ? (

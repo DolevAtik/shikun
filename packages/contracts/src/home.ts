@@ -22,10 +22,8 @@ export const HomeSectionTypeSchema = z.enum([
   "KEY_NUMBERS",
   "CAREERS",
   "TRAININGS",
-  "QUICK_ACTIONS",
   "BIRTHDAYS",
   "RECOGNITION",
-  "QUICK_LINKS",
 ]);
 export type HomeSectionType = z.infer<typeof HomeSectionTypeSchema>;
 
@@ -108,13 +106,6 @@ export const TrainingCardSchema = z.object({
   isRegistered: z.boolean(),
 });
 
-export const QuickActionSchema = z.object({
-  id: z.string(),
-  label: z.string(),
-  icon: z.string(),
-  href: z.string(),
-});
-
 export const BirthdaySchema = z.object({
   user: UserSummarySchema,
   /** MM-DD; the year is never shown and never stored for display. */
@@ -144,14 +135,6 @@ export const RecognitionCardSchema = z.object({
   badge: BadgeSchema,
   reason: z.string(),
   awardedAt: z.string(),
-});
-
-export const QuickLinkSchema = z.object({
-  id: z.string(),
-  label: z.string(),
-  url: z.string(),
-  icon: z.string().nullable(),
-  isExternal: z.boolean(),
 });
 
 export const CeoMessageSchema = z.object({
@@ -243,11 +226,6 @@ export const HomeSectionSchema = z.discriminatedUnion("type", [
   }),
   z.object({
     ...sectionBase,
-    type: z.literal("QUICK_ACTIONS"),
-    data: z.object({ items: z.array(QuickActionSchema) }),
-  }),
-  z.object({
-    ...sectionBase,
     type: z.literal("BIRTHDAYS"),
     data: z.object({ items: z.array(BirthdaySchema) }),
   }),
@@ -255,11 +233,6 @@ export const HomeSectionSchema = z.discriminatedUnion("type", [
     ...sectionBase,
     type: z.literal("RECOGNITION"),
     data: z.object({ items: z.array(RecognitionCardSchema) }),
-  }),
-  z.object({
-    ...sectionBase,
-    type: z.literal("QUICK_LINKS"),
-    data: z.object({ items: z.array(QuickLinkSchema) }),
   }),
 ]);
 export type HomeSection = z.infer<typeof HomeSectionSchema>;

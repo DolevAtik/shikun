@@ -117,10 +117,8 @@ enum HomeSectionType {
   KEY_NUMBERS
   CAREERS
   TRAININGS
-  QUICK_ACTIONS
   BIRTHDAYS
   RECOGNITION
-  QUICK_LINKS
 }
 
 // ─── Organization ────────────────────────────────────────────────────────────

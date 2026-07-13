@@ -42,10 +42,8 @@
       "KEY_NUMBERS": "מספרים חשובים",
       "CAREERS": "הזדמנויות קריירה",
       "TRAININGS": "הדרכות והשתלמויות",
-      "QUICK_ACTIONS": "פעולות מהירות",
       "BIRTHDAYS": "ימי הולדת",
-      "RECOGNITION": "הוקרה",
-      "QUICK_LINKS": "קישורים מהירים"
+      "RECOGNITION": "הוקרה"
     },
     "seeAll": "לכל ה{section}",
     "readMore": "קריאה נוספת",
@@ -74,6 +72,13 @@
       "HYBRID": "משולב"
     },
     "empty": "אין עדכונים חדשים עבורך כרגע."
+  },
+  "services": {
+    "title": "שירותים",
+    "quickActions": "פעולות מהירות",
+    "quickLinks": "קישורים מהירים",
+    "opensInNewWindow": "(נפתח בחלון חדש)",
+    "empty": "אין שירותים זמינים כרגע."
   },
   "feed": {
     "title": "עדכונים",
@@ -115,6 +120,13 @@
     "switchLanguage": "החלפת שפה",
     "loading": "טוען…",
     "openMenu": "פתיחת תפריט"
+  },
+  "settings": {
+    "title": "הגדרות",
+    "theme": "ערכת נושא",
+    "themeLight": "מצב בהיר",
+    "themeDark": "מצב כהה",
+    "language": "שפה"
   },
   "common": {
     "comingSoon": "בקרוב",

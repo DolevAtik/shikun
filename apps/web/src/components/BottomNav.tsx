@@ -20,7 +20,9 @@ export function BottomNav() {
     <nav
       aria-label={t("primary")}
       className={cn(
-        "fixed inset-x-0 bottom-0 z-40 border-t border-line bg-surface/95 backdrop-blur",
+        // Solid, not translucent: content scrolling underneath was showing
+        // through the bar and muddying the labels.
+        "fixed inset-x-0 bottom-0 z-40 border-t border-line bg-surface shadow-lg",
         // Clears the iPhone home indicator without hardcoding a magic number.
         "pb-[env(safe-area-inset-bottom)]",
       )}

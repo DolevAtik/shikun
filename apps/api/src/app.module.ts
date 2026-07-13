@@ -9,6 +9,7 @@ import { FeedModule } from "./feed/feed.module";
 import { HomeModule } from "./home/home.module";
 import { MediaModule } from "./media/media.module";
 import { OrgModule } from "./org/org.module";
+import { ServicesModule } from "./services/services.module";
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { OrgModule } from "./org/org.module";
     PrismaModule,
     AuthModule,
     HomeModule,
+    ServicesModule,
     FeedModule,
     OrgModule,
     MediaModule,

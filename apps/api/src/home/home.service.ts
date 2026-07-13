@@ -16,8 +16,6 @@ const DEFAULT_LIMITS: Record<string, number> = {
   TRAININGS: 3,
   BIRTHDAYS: 6,
   RECOGNITION: 3,
-  QUICK_LINKS: 8,
-  QUICK_ACTIONS: 6,
 };
 
 @Injectable()
@@ -335,12 +333,6 @@ export class HomeService {
         };
       }
 
-      case "QUICK_ACTIONS": {
-        const rows = await this.prisma.quickAction.findMany({ orderBy: { order: "asc" }, take: limit });
-        if (rows.length === 0) return null;
-        return { ...base, type: "QUICK_ACTIONS", data: { items: rows } };
-      }
-
       case "BIRTHDAYS": {
         const items = await this.upcomingBirthdays(now, limit);
         if (items.length === 0) return null;
@@ -367,12 +359,6 @@ export class HomeService {
             })),
           },
         };
-      }
-
-      case "QUICK_LINKS": {
-        const rows = await this.prisma.quickLink.findMany({ orderBy: { order: "asc" }, take: limit });
-        if (rows.length === 0) return null;
-        return { ...base, type: "QUICK_LINKS", data: { items: rows } };
       }
 
       default:

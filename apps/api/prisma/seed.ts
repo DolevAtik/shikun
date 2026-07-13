@@ -83,12 +83,10 @@ const HOME_SECTIONS = [
   { type: "EVENTS", order: 6 },
   { type: "PROJECTS", order: 7 },
   { type: "VIDEO_OF_WEEK", order: 8 },
-  { type: "QUICK_ACTIONS", order: 9 },
-  { type: "TRAININGS", order: 10 },
-  { type: "CAREERS", order: 11 },
-  { type: "BIRTHDAYS", order: 12 },
-  { type: "RECOGNITION", order: 13 },
-  { type: "QUICK_LINKS", order: 14 },
+  { type: "TRAININGS", order: 9 },
+  { type: "CAREERS", order: 10 },
+  { type: "BIRTHDAYS", order: 11 },
+  { type: "RECOGNITION", order: 12 },
 ] as const;
 
 const FIRST_NAMES = [
