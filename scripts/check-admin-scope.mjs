@@ -14,6 +14,9 @@ const ALLOW = [
   "admin/content.repository.ts",
   "admin/search.service.ts",
   "admin/dashboard.service.ts",
+  // Global content aggregates for the districts overview — counts grouped by
+  // district, not row-level management. Same category as dashboard.service.ts.
+  "admin/districts.service.ts",
   "feed/",
   "home/",
   "media/",

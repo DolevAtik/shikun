@@ -1,4 +1,4 @@
-import { Controller, Get, HttpCode, Param, Patch, Post, Query } from "@nestjs/common";
+import { Controller, Get, HttpCode, Param, Patch, Post } from "@nestjs/common";
 import {
   AdminContentListQuerySchema,
   BulkContentActionSchema,
@@ -14,7 +14,7 @@ import {
 } from "@moch/contracts";
 import { CurrentUser, RequirePermissions } from "../auth/decorators";
 import type { AuthenticatedUser } from "../auth/types";
-import { ZodBody } from "../common/zod-body.decorator";
+import { ZodBody, ZodQuery } from "../common/zod-body.decorator";
 import { AdminContentRepository } from "./content.repository";
 
 /**
@@ -33,9 +33,8 @@ export class ContentController {
   @Get()
   list(
     @CurrentUser() user: AuthenticatedUser,
-    @Query() raw: Record<string, unknown>,
+    @ZodQuery(AdminContentListQuerySchema) query: AdminContentListQuery,
   ): Promise<AdminContentPage> {
-    const query = AdminContentListQuerySchema.parse(raw) as AdminContentListQuery;
     return this.content.list(user, query);
   }
 

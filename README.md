@@ -1,9 +1,14 @@
 # משרד הבינוי והשיכון — הבית הדיגיטלי
 
 Employee Experience Platform for the Israeli Ministry of Construction and Housing.
-Round one: the foundation, **Home**, and the **Feed**.
 
-The plan this was built from is in [docs/planning/employee-experience-platform.md](docs/planning/employee-experience-platform.md).
+The employee web app ships **Home**, the **Feed**, the **Job board**, **Services**, and
+**Profile**. A separate **admin console** (round two) is in the tree and builds — content
+publishing, home-section ordering, media, analytics, audit, and permissions.
+
+The plans this was built from are in [docs/planning/](docs/planning/). For a map of the
+whole system start with [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md); for the folder
+layout, [docs/PROJECT_STRUCTURE.md](docs/PROJECT_STRUCTURE.md).
 
 ## Running it
 
@@ -38,8 +43,9 @@ The Haifa office-move announcement appears for exactly one of them.
 
 ```
 apps/
-  api/        NestJS + Prisma + PostgreSQL — modular monolith
-  web/        Next.js PWA — mobile-first, Hebrew/RTL first
+  api/        NestJS + Prisma + PostgreSQL — modular monolith  (:4000, prefix /api)
+  web/        Next.js PWA — employee-facing, mobile-first, Hebrew/RTL first  (:3001)
+  admin/      Next.js — admin console, round two  (:3002)
 packages/
   contracts/  zod schemas; the API and the clients compile against the same types
   ui/         design system — tokens, primitives
@@ -49,6 +55,7 @@ infra/
 scripts/
   check-contrast.mjs       WCAG 2.0 AA gate over the design tokens
   check-logical-props.mjs  bans physical-direction CSS (ml-, text-left, …)
+  check-admin-scope.mjs    guards the admin/employee import boundary
 ```
 
 ## The three ideas worth knowing
@@ -94,10 +101,11 @@ pnpm db:reset       # wipe and reseed
 
 ## What is not here
 
-Community, the full Services module, the interactive district map, the Weekly Summary
-page, the admin dashboard, analytics, and push notifications are all scoped out of round
-one. Content is created by the seed script and the REST API — the admin publishing UI is
-the first thing in round two.
+The interactive district map, the Weekly Summary page, Community, and push notifications
+are not built yet. The admin console exists and builds, but treat it as round-two work in
+progress rather than a finished product — some screens are further along than others.
+Content still originates from the seed script and the REST API; the admin publishing UI is
+the layer being brought up on top of them.
 
 ## Open questions for the Ministry
 

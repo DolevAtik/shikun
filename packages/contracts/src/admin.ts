@@ -3,6 +3,8 @@ import { AudienceSchema } from "./audience";
 import { ChannelSlugSchema, ContentKindSchema, ContentStatusSchema } from "./feed";
 import { HomeSectionTypeSchema } from "./home";
 import { arrayParam, ListQuerySchema, pageOf } from "./list";
+import { DistrictCodeSchema } from "./org";
+import { RoleSchema } from "./roles";
 
 /**
  * A single number on the Dashboard.
@@ -233,3 +235,108 @@ export const UpdateHomeSectionsSchema = z.object({
     .min(1),
 });
 export type UpdateHomeSections = z.infer<typeof UpdateHomeSectionsSchema>;
+
+// ─── Employees ───────────────────────────────────────────────────────────────
+
+// No "last login" sort: the User model does not record one, and inventing a
+// column to fill a UI affordance is the same dishonesty the Dashboard avoids.
+export const AdminEmployeeSortSchema = z.enum(["name", "startedAt"]);
+export type AdminEmployeeSort = z.infer<typeof AdminEmployeeSortSchema>;
+
+export const AdminEmployeeListQuerySchema = ListQuerySchema.extend({
+  sort: AdminEmployeeSortSchema.default("name"),
+  role: arrayParam(RoleSchema),
+  districtId: z.string().optional(),
+  departmentId: z.string().optional(),
+  /** "true" shows only deactivated accounts; omitted shows active ones. */
+  inactive: z
+    .union([z.boolean(), z.enum(["true", "false"])])
+    .optional()
+    .transform((v) => v === true || v === "true"),
+});
+export type AdminEmployeeListQuery = z.infer<typeof AdminEmployeeListQuerySchema>;
+
+export const AdminEmployeeListItemSchema = z.object({
+  id: z.string(),
+  fullName: z.string(),
+  initials: z.string(),
+  email: z.string(),
+  avatarUrl: z.string().nullable(),
+  title: z.string().nullable(),
+  roles: z.array(RoleSchema),
+  districtName: z.string().nullable(),
+  districtColor: z.string().nullable(),
+  departmentName: z.string().nullable(),
+  isActive: z.boolean(),
+  startedAt: z.string().nullable(),
+});
+export type AdminEmployeeListItem = z.infer<typeof AdminEmployeeListItemSchema>;
+
+export const AdminEmployeePageSchema = pageOf(AdminEmployeeListItemSchema);
+export type AdminEmployeePage = z.infer<typeof AdminEmployeePageSchema>;
+
+export const AdminEmployeeDetailSchema = AdminEmployeeListItemSchema.extend({
+  phone: z.string().nullable(),
+  bio: z.string().nullable(),
+  organizationName: z.string().nullable(),
+  /** Counts that make the profile useful without a second request. */
+  authoredCount: z.number(),
+  commentCount: z.number(),
+});
+export type AdminEmployeeDetail = z.infer<typeof AdminEmployeeDetailSchema>;
+
+// ─── Districts ───────────────────────────────────────────────────────────────
+
+export const AdminDistrictSchema = z.object({
+  id: z.string(),
+  code: DistrictCodeSchema,
+  nameHe: z.string(),
+  nameEn: z.string(),
+  /** A CSS custom property name, never a hex. */
+  color: z.string(),
+  employeeCount: z.number(),
+  contentCount: z.number(),
+  projectCount: z.number(),
+  managerName: z.string().nullable(),
+});
+export type AdminDistrict = z.infer<typeof AdminDistrictSchema>;
+
+export const AdminDistrictsSchema = z.object({
+  districts: z.array(AdminDistrictSchema),
+});
+export type AdminDistricts = z.infer<typeof AdminDistrictsSchema>;
+
+// ─── Audit log ───────────────────────────────────────────────────────────────
+
+export const AuditListQuerySchema = ListQuerySchema.extend({
+  action: z.string().max(64).optional(),
+  entityType: z.string().max(64).optional(),
+  actorId: z.string().optional(),
+  from: z.coerce.date().optional(),
+  to: z.coerce.date().optional(),
+});
+export type AuditListQuery = z.infer<typeof AuditListQuerySchema>;
+
+export const AuditLogItemSchema = z.object({
+  id: z.string(),
+  action: z.string(),
+  actorEmail: z.string(),
+  entityType: z.string(),
+  entityId: z.string(),
+  summary: z.string(),
+  before: z.unknown().nullable(),
+  after: z.unknown().nullable(),
+  ip: z.string().nullable(),
+  createdAt: z.string(),
+});
+export type AuditLogItem = z.infer<typeof AuditLogItemSchema>;
+
+export const AuditLogPageSchema = pageOf(AuditLogItemSchema);
+export type AuditLogPage = z.infer<typeof AuditLogPageSchema>;
+
+/** The distinct action verbs present in the log, for the filter dropdown. */
+export const AuditFacetsSchema = z.object({
+  actions: z.array(z.string()),
+  entityTypes: z.array(z.string()),
+});
+export type AuditFacets = z.infer<typeof AuditFacetsSchema>;

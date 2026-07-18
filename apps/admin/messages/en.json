@@ -200,5 +200,60 @@
       "BIRTHDAYS": "Birthdays",
       "RECOGNITION": "Recognition"
     }
+  },
+  "employees": {
+    "title": "Employees",
+    "subtitle": "The Ministry directory — filtered to what you may manage.",
+    "search": "Search by name, email, or title…",
+    "allRoles": "All roles",
+    "allDistricts": "All districts",
+    "headquarters": "Headquarters",
+    "inactiveBadge": "Inactive",
+    "emptyTitle": "No employees found",
+    "emptyDescription": "Try changing the filters or the search term.",
+    "columns": {
+      "name": "Employee",
+      "roles": "Roles",
+      "district": "District",
+      "department": "Department",
+      "startedAt": "Started"
+    },
+    "roles": {
+      "EMPLOYEE": "Employee",
+      "MANAGER": "Manager",
+      "DISTRICT_MANAGER": "District manager",
+      "CONTENT_EDITOR": "Content editor",
+      "HR": "HR",
+      "EXECUTIVE": "Executive",
+      "ADMIN": "Administrator"
+    }
+  },
+  "districts": {
+    "title": "Districts",
+    "subtitle": "The Ministry's five districts, with live figures.",
+    "employees": "Employees",
+    "content": "Content",
+    "projects": "Projects",
+    "manager": "Manager",
+    "noManager": "Unassigned"
+  },
+  "audit": {
+    "title": "Audit Logs",
+    "subtitle": "Every administrative action — who, what, and when. Read-only.",
+    "search": "Search summary or actor…",
+    "allActions": "All actions",
+    "allEntities": "All record types",
+    "viewChange": "view change",
+    "before": "Before",
+    "after": "After",
+    "emptyTitle": "No audit entries",
+    "emptyDescription": "Administrative actions will appear here as they happen.",
+    "columns": {
+      "when": "When",
+      "actor": "Actor",
+      "action": "Action",
+      "entity": "Record",
+      "summary": "Summary"
+    }
   }
 }

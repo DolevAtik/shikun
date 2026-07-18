@@ -1,4 +1,11 @@
-import { ArgumentMetadata, BadRequestException, Body, Injectable, PipeTransform } from "@nestjs/common";
+import {
+  ArgumentMetadata,
+  BadRequestException,
+  Body,
+  Injectable,
+  PipeTransform,
+  Query,
+} from "@nestjs/common";
 import type { ZodSchema } from "zod";
 
 /**
@@ -36,3 +43,12 @@ export class ZodValidationPipe implements PipeTransform {
 
 /** `@ZodBody(LoginRequestSchema) body: LoginRequest` — validated and typed. */
 export const ZodBody = (schema: ZodSchema) => Body(new ZodValidationPipe(schema));
+
+/**
+ * `@ZodQuery(ListQuerySchema) query: ListQuery` — the same validation for the
+ * query string. Without it, a controller parsing `Schema.parse(rawQuery)` by
+ * hand turns a malformed `?pageSize=999` into a 500 (an uncaught ZodError)
+ * instead of the 400 a bad request deserves. The pipe maps it to the same
+ * `{ message, errors }` shape as a bad body.
+ */
+export const ZodQuery = (schema: ZodSchema) => Query(new ZodValidationPipe(schema));

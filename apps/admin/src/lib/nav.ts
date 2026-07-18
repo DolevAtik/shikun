@@ -57,12 +57,9 @@ export const NAV_ITEMS: readonly NavItem[] = [
     icon: MessagesSquare,
     permissions: ["content:edit", "content:manage"],
   },
-  {
-    id: "districts",
-    href: "/districts",
-    icon: MapPinned,
-    permissions: ["users:manage", "content:manage", "content:approve"],
-  },
+  // Open to any console user: the districts overview is general org context
+  // (the same counts the Dashboard shows), and the API gate matches — admin:access.
+  { id: "districts", href: "/districts", icon: MapPinned, permissions: [] },
   { id: "employees", href: "/employees", icon: Users, permissions: ["users:manage"] },
   { id: "events", href: "/events", icon: CalendarDays, permissions: ["content:edit", "content:manage"] },
   {
@@ -83,7 +80,7 @@ export const NAV_ITEMS: readonly NavItem[] = [
   { id: "analytics", href: "/analytics", icon: BarChart3, permissions: ["analytics:view"] },
   { id: "settings", href: "/settings", icon: Settings, permissions: ["content:manage", "feeds:manage"] },
   { id: "permissions", href: "/permissions", icon: Shield, permissions: ["users:manage"] },
-  { id: "audit", href: "/audit", icon: ScrollText, permissions: ["analytics:view", "users:manage"] },
+  { id: "audit", href: "/audit", icon: ScrollText, permissions: ["analytics:view"] },
 ] as const;
 
 export function visibleNav(permissions: readonly Permission[]): NavItem[] {

@@ -2,8 +2,6 @@ import type { HomeSection } from "@moch/contracts";
 import { Avatar, Card, Chip, SectionHeader } from "@moch/ui";
 import {
   AlertTriangle,
-  ArrowLeft,
-  ArrowRight,
   Building2,
   Cake,
   CalendarDays,
@@ -546,5 +544,3 @@ function ArrowIcon({ locale }: { locale: string }) {
   const Icon = locale === "he" ? ChevronLeft : ChevronRight;
   return <Icon aria-hidden="true" className="size-4 shrink-0 text-content-muted" />;
 }
-
-export { ArrowLeft, ArrowRight };

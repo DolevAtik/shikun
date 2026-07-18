@@ -43,6 +43,11 @@ export const qk = {
     detail: (id: string) => ["employees", "detail", id] as const,
   },
 
+  districts: {
+    all: ["districts"] as const,
+    list: ["districts", "list"] as const,
+  },
+
   media: {
     all: ["media"] as const,
     list: (query: Record<string, unknown>) => ["media", "list", normalize(query)] as const,
@@ -63,5 +68,6 @@ export const qk = {
   audit: {
     all: ["audit"] as const,
     list: (query: Record<string, unknown>) => ["audit", "list", normalize(query)] as const,
+    facets: ["audit", "facets"] as const,
   },
 } as const;

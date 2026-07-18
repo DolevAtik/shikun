@@ -13,9 +13,15 @@ services:
     rootDir: apps/api
     # pnpm workspace: install and build from the repository root, so that
     # @moch/contracts is compiled before the API that imports it.
-    buildCommand: cd ../.. && corepack enable && pnpm install --frozen-lockfile && pnpm turbo run build --filter=@moch/api
-    # Migrations run on every release, before the process serves traffic.
-    startCommand: npx prisma migrate deploy && node dist/src/main.js
+    #
+    # Migrations run here, in the build, rather than in the start command: the
+    # free plan has no pre-deploy phase, and the start command re-runs on every
+    # cold-start wake-up — so a `migrate deploy` there added seconds of `npx`
+    # resolution and a DB round-trip to each wake before the API served traffic.
+    # The build runs once per release; DATABASE_URL/DIRECT_URL are present in it.
+    buildCommand: cd ../.. && corepack enable && pnpm install --frozen-lockfile && pnpm turbo run build --filter=@moch/api && cd apps/api && npx prisma migrate deploy
+    # Boot is now just the process: instant on a cold-start wake-up.
+    startCommand: node dist/src/main.js
     healthCheckPath: /api/health
     envVars:
       - key: NODE_VERSION
@@ -26,8 +32,6 @@ services:
       - key: DIRECT_URL
         sync: false
       - key: JWT_SECRET
-        generateValue: true
-      - key: JWT_REFRESH_SECRET
         generateValue: true
       - key: JWT_ACCESS_TTL
         value: 15m

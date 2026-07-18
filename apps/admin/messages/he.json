@@ -200,5 +200,60 @@
       "BIRTHDAYS": "ימי הולדת",
       "RECOGNITION": "הכרה"
     }
+  },
+  "employees": {
+    "title": "עובדים",
+    "subtitle": "מדריך העובדים של המשרד — מסונן לפי ההרשאות שלך.",
+    "search": "חיפוש לפי שם, דוא״ל או תפקיד…",
+    "allRoles": "כל התפקידים",
+    "allDistricts": "כל המחוזות",
+    "headquarters": "מטה",
+    "inactiveBadge": "לא פעיל",
+    "emptyTitle": "לא נמצאו עובדים",
+    "emptyDescription": "נסו לשנות את הסינון או את מונח החיפוש.",
+    "columns": {
+      "name": "עובד",
+      "roles": "תפקידים",
+      "district": "מחוז",
+      "department": "יחידה",
+      "startedAt": "במשרד מאז"
+    },
+    "roles": {
+      "EMPLOYEE": "עובד",
+      "MANAGER": "מנהל",
+      "DISTRICT_MANAGER": "מנהל מחוז",
+      "CONTENT_EDITOR": "עורך תוכן",
+      "HR": "משאבי אנוש",
+      "EXECUTIVE": "הנהלה בכירה",
+      "ADMIN": "מנהל מערכת"
+    }
+  },
+  "districts": {
+    "title": "מחוזות",
+    "subtitle": "חמשת מחוזות המשרד, עם נתונים חיים.",
+    "employees": "עובדים",
+    "content": "תוכן",
+    "projects": "פרויקטים",
+    "manager": "מנהל",
+    "noManager": "לא הוגדר"
+  },
+  "audit": {
+    "title": "יומן פעילות",
+    "subtitle": "כל פעולה מנהלית — מי, מה ומתי. לקריאה בלבד.",
+    "search": "חיפוש בתיאור או במבצע…",
+    "allActions": "כל הפעולות",
+    "allEntities": "כל סוגי הרשומות",
+    "viewChange": "הצג שינוי",
+    "before": "לפני",
+    "after": "אחרי",
+    "emptyTitle": "אין רשומות ביומן",
+    "emptyDescription": "פעולות מנהליות יופיעו כאן ברגע שיתבצעו.",
+    "columns": {
+      "when": "מתי",
+      "actor": "מבצע",
+      "action": "פעולה",
+      "entity": "רשומה",
+      "summary": "תיאור"
+    }
   }
 }
