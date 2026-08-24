@@ -28,11 +28,22 @@ on:
   # with no activity for 60 days, and a manual run counts as activity.
   workflow_dispatch:
 
+permissions:
+  # Default is read-only; the alerting steps below need to open/close an
+  # issue when the ping fails or recovers.
+  contents: read
+  issues: write
+
 jobs:
   ping:
     runs-on: ubuntu-latest
     steps:
       - name: Ping the health check
+        id: ping
+        # continue-on-error, not a bare failure: we still want the alerting
+        # steps below to run when this fails, and we fail the job explicitly
+        # at the end so the run still goes red (see "Fail the job" below).
+        continue-on-error: true
         # /api/health also queries the database, so this keeps Neon warm too.
         #
         # --max-time 90: if the service *was* asleep this request is the one that
@@ -45,3 +56,77 @@ jobs:
             --max-time 90 \
             --retry 3 --retry-delay 20 --retry-all-errors \
             https://shikun-api.onrender.com/api/health
+
+      # A run that never gets a single byte back across 4 attempts (the
+      # request plus 3 retries, ~90s each) isn't a slow cold wake — a cold
+      # wake answers well inside the timeout. It means the service is down,
+      # suspended (e.g. free-tier instance-hours exceeded), or otherwise
+      # unreachable, and nothing here retries across runs. Open an issue so
+      # that's visible without someone noticing the app is slow/broken and
+      # asking first.
+      - name: Open an issue if the API is unreachable
+        if: steps.ping.outcome == 'failure'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const label = 'api-down';
+            const { data: open } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: label,
+            });
+            if (open.length > 0) return; // already tracked, don't spam
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'API unreachable — keep-api-awake ping failing',
+              labels: [label],
+              body: [
+                'The scheduled health-check ping timed out with 0 bytes received.',
+                '',
+                `Failing run: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
+                '',
+                'This is not the expected cold-wake case (that responds within the',
+                "timeout). Check Render's dashboard for a suspended service (free-tier",
+                'instance-hours exceeded) or a platform outage.',
+                '',
+                'This issue closes automatically once a ping succeeds again.',
+              ].join('\n'),
+            });
+
+      # Mirror image of the step above: close out the alert once the API is
+      # reachable again, so the issue tracker reflects current state.
+      - name: Close the alert if the API has recovered
+        if: steps.ping.outcome == 'success'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const label = 'api-down';
+            const { data: open } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: label,
+            });
+            for (const issue of open) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                body: `Recovered — ping succeeded again: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
+              });
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                state: 'closed',
+                state_reason: 'completed',
+              });
+            }
+
+      # Preserve the original behavior: a failed ping still turns the run
+      # red (the uptime check the top-level comment already relies on).
+      - name: Fail the job if the ping failed
+        if: steps.ping.outcome == 'failure'
+        run: exit 1
