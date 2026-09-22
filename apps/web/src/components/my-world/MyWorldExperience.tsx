@@ -54,21 +54,14 @@ export function MyWorldExperience({ initial }: { initial: EmployeeGamification }
   };
 
   const { flags } = initial;
-  const hasOpenMission = snapshot.missions.some((mission) => !mission.completed);
-  const upcoming = initial.unlocks.filter((unlock) => unlock.level > snapshot.xp.level).slice(0, 3);
-  const showSide =
-    (flags.showDepartmentProgress && snapshot.department !== null) ||
-    (flags.showUnlocks && upcoming.length > 0);
+  const upcoming = initial.unlocks.filter((unlock) => unlock.level > snapshot.xp.level).slice(0, 4);
+  const nextUnlock = upcoming[0] ?? null;
 
   return (
-    <div className="flex min-w-0 flex-col gap-8">
-      <MyWorldHero
-        profile={initial.profile}
-        xp={snapshot.xp}
-        gain={gain?.amount ?? null}
-        hasOpenMission={flags.showMissions && hasOpenMission}
-      />
+    <div className="flex min-w-0 flex-col gap-10">
+      <MyWorldHero profile={initial.profile} xp={snapshot.xp} gain={gain?.amount ?? null} nextUnlock={nextUnlock} />
 
+      {flags.showOverallProgress ? <OverallProgress stats={snapshot.stats} /> : null}
       {flags.showMissions ? (
         <MissionSection
           missions={snapshot.missions}
@@ -77,30 +70,13 @@ export function MyWorldExperience({ initial }: { initial: EmployeeGamification }
           onComplete={complete}
         />
       ) : null}
-
       {flags.showJourney ? <JourneySection journeys={snapshot.journeys} /> : null}
-      {flags.showOverallProgress ? <OverallProgress stats={snapshot.stats} /> : null}
       {flags.showAchievements ? <AchievementsSection items={initial.achievements} /> : null}
-
-      {flags.showRecognition && showSide ? (
-        <div className="grid items-start gap-8 lg:grid-cols-2">
-          <RecognitionSection items={initial.recognitions} />
-          <div className="flex flex-col gap-8">
-            {flags.showDepartmentProgress && snapshot.department ? (
-              <DepartmentProgress department={snapshot.department} />
-            ) : null}
-            {flags.showUnlocks ? <UnlocksSection items={upcoming} /> : null}
-          </div>
-        </div>
-      ) : (
-        <>
-          {flags.showRecognition ? <RecognitionSection items={initial.recognitions} /> : null}
-          {flags.showDepartmentProgress && snapshot.department ? (
-            <DepartmentProgress department={snapshot.department} />
-          ) : null}
-          {flags.showUnlocks ? <UnlocksSection items={upcoming} /> : null}
-        </>
-      )}
+      {flags.showRecognition ? <RecognitionSection items={initial.recognitions} /> : null}
+      {flags.showDepartmentProgress && snapshot.department ? (
+        <DepartmentProgress department={snapshot.department} />
+      ) : null}
+      {flags.showUnlocks ? <UnlocksSection items={upcoming} /> : null}
 
       <p aria-live="polite" className="sr-only">
         {announcement}

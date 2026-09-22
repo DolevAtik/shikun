@@ -26,13 +26,19 @@ export interface XpProgress {
 
 export type MissionAction = "complete" | "view";
 
+/** What the button says. Only `complete` grants XP — a link never does. */
+export type MissionCta = "start" | "details";
+
 export interface Mission {
   id: string;
   title: string;
   description: string;
   world: WorldId;
   xp: number;
+  /** Minutes the real action takes. Null when there is no honest estimate. */
+  minutes: number | null;
   action: MissionAction;
+  cta: MissionCta;
   /** Set when the mission sends the employee somewhere that already exists. */
   href: string | null;
   completed: boolean;
@@ -47,6 +53,11 @@ export interface Journey {
   xp: number;
   target: number;
   completedActivities: number;
+  activityTarget: number;
+  /** Activities still needed for the next badge. Null when none is in reach. */
+  activitiesUntilBadge: number | null;
+  /** Where "continue" goes. Null hides the link. */
+  href: string | null;
   status: JourneyStatus;
 }
 
@@ -54,6 +65,8 @@ export interface OverallStats {
   totalXp: number;
   missionsCompleted: number;
   achievementsUnlocked: number;
+  /** Days with a meaningful action. Opening the app does not count. */
+  activeDays: number;
 }
 
 export interface Achievement {
@@ -87,6 +100,16 @@ export interface Unlock {
   id: string;
   level: number;
   title: string;
+}
+
+/**
+ * Cosmetic stage of the figure. A future picker can set `customizationId`
+ * without changing the screen: null means "the stage that matches the level".
+ */
+export interface AvatarProgress {
+  level: number;
+  stage: "base" | "upgrade" | "badge" | "frame";
+  customizationId: string | null;
 }
 
 /**

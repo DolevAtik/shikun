@@ -23,16 +23,17 @@ export interface SectionHeaderProps {
   title: string;
   action?: ReactNode;
   className?: string;
+  titleClassName?: string;
 }
 
 /**
  * The heading above each Home section. It renders a real <h2>, so a screen
  * reader user can jump between sections instead of scrolling through them.
  */
-export function SectionHeader({ title, action, className }: SectionHeaderProps) {
+export function SectionHeader({ title, action, className, titleClassName }: SectionHeaderProps) {
   return (
     <div className={cn("mb-3 flex items-center justify-between gap-3 px-1", className)}>
-      <h2 className="text-base font-semibold text-content">{title}</h2>
+      <h2 className={cn("text-base font-semibold text-content", titleClassName)}>{title}</h2>
       {action}
     </div>
   );

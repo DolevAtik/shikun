@@ -1,21 +1,62 @@
 "use client";
 
 import { Button, Card, cn } from "@moch/ui";
-import { Check } from "lucide-react";
+import { Check, Clock } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
 import { Numeric } from "./Numeric";
 import { formatXp } from "./progress";
 import type { Mission } from "./types";
 import { WORLD_COLOR, worldTint } from "./world-tone";
 
+const primaryLink =
+  "inline-flex h-11 items-center justify-center rounded-md bg-brand px-4 text-sm font-medium text-content-onbrand shadow-sm hover:bg-brand-hover focus-visible:outline-none focus-visible:shadow-focus";
+const secondaryLink =
+  "inline-flex h-11 items-center justify-center rounded-md border border-line-strong bg-surface px-4 text-sm font-medium text-content hover:bg-surface-tint focus-visible:outline-none focus-visible:shadow-focus";
+
+interface MissionActionProps {
+  mission: Mission;
+  startLabel: string;
+  detailsLabel: string;
+  completedLabel: string;
+  onComplete: (id: string) => void;
+}
+
+/** A confirmed step grants XP. Opening a page does not. */
+export function MissionAction({ mission, startLabel, detailsLabel, completedLabel, onComplete }: MissionActionProps) {
+  if (mission.completed) {
+    return (
+      <p className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-success">
+        <Check aria-hidden="true" className="size-4" />
+        {completedLabel}
+      </p>
+    );
+  }
+
+  if (mission.action === "view" && mission.href) {
+    const label = mission.cta === "details" ? detailsLabel : startLabel;
+    return (
+      <Link href={mission.href} className={mission.cta === "details" ? secondaryLink : primaryLink}>
+        {label}
+      </Link>
+    );
+  }
+
+  return (
+    <Button type="button" size="md" onClick={() => onComplete(mission.id)}>
+      {startLabel}
+    </Button>
+  );
+}
+
 interface MissionCardProps {
   mission: Mission;
   worldLabel: string;
   icon: LucideIcon;
   locale: string;
-  completeLabel: string;
-  viewLabel: string;
+  startLabel: string;
+  detailsLabel: string;
   completedLabel: string;
   showGain: boolean;
   reducedMotion: boolean;
@@ -27,18 +68,17 @@ export function MissionCard({
   worldLabel,
   icon: Icon,
   locale,
-  completeLabel,
-  viewLabel,
+  startLabel,
+  detailsLabel,
   completedLabel,
   showGain,
   reducedMotion,
   onComplete,
 }: MissionCardProps) {
+  const t = useTranslations("myWorld");
+
   return (
-    <Card
-      className={cn("relative flex h-full flex-col gap-3 border-s-4 p-4", mission.completed && "bg-surface")}
-      style={{ borderInlineStartColor: WORLD_COLOR[mission.world] }}
-    >
+    <Card className="relative flex h-full flex-col gap-3 p-4">
       <div className="flex items-start gap-3">
         <span
           aria-hidden="true"
@@ -59,27 +99,26 @@ export function MissionCard({
             </Numeric>
           </div>
           <p className="mt-1 text-sm leading-relaxed text-content-muted">{mission.description}</p>
-          <p className="mt-1 text-xs font-medium" style={{ color: WORLD_COLOR[mission.world] }}>
-            {worldLabel}
+          <p className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-medium text-content-muted">
+            <span style={{ color: WORLD_COLOR[mission.world] }}>{worldLabel}</span>
+            {mission.minutes != null ? (
+              <span className="inline-flex items-center gap-1">
+                <Clock aria-hidden="true" className="size-3.5" />
+                {t("duration", { count: mission.minutes })}
+              </span>
+            ) : null}
           </p>
         </div>
       </div>
 
       <div className="mt-auto">
-        {mission.completed ? (
-          <p className="inline-flex min-h-11 items-center text-sm font-semibold text-success">{completedLabel}</p>
-        ) : mission.action === "view" && mission.href ? (
-          <Link
-            href={mission.href}
-            className="inline-flex h-11 items-center justify-center rounded-md border border-line-strong bg-surface px-4 text-sm font-medium text-content hover:bg-surface-tint"
-          >
-            {viewLabel}
-          </Link>
-        ) : (
-          <Button type="button" size="md" onClick={() => onComplete(mission.id)}>
-            {completeLabel}
-          </Button>
-        )}
+        <MissionAction
+          mission={mission}
+          startLabel={startLabel}
+          detailsLabel={detailsLabel}
+          completedLabel={completedLabel}
+          onComplete={onComplete}
+        />
       </div>
 
       {showGain && !reducedMotion ? (

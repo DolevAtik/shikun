@@ -2,7 +2,7 @@
 
 import { SectionHeader } from "@moch/ui";
 import { useTranslations } from "next-intl";
-import { JourneyCard } from "./JourneyCard";
+import { JourneyPath } from "./JourneyPath";
 import type { Journey } from "./types";
 
 export function JourneySection({ journeys }: { journeys: Journey[] }) {
@@ -10,18 +10,15 @@ export function JourneySection({ journeys }: { journeys: Journey[] }) {
 
   return (
     <section>
-      <SectionHeader title={t("journeyTitle")} />
-      <ul className="grid grid-cols-2 gap-3 xl:grid-cols-4">
-        {journeys.map((journey) => (
-          <li key={journey.id}>
-            <JourneyCard
-              journey={journey}
-              activityLabel={t("activities", { count: journey.completedActivities })}
-              statusLabel={t(`journeyStatus.${journey.status}`)}
-            />
-          </li>
-        ))}
-      </ul>
+      <SectionHeader title={t("journeyTitle")} titleClassName="text-lg" />
+      <p className="-mt-1 mb-4 px-1 text-sm text-content-muted">{t("journeyHint")}</p>
+      {journeys.length === 0 ? (
+        <p className="rounded-xl border border-line bg-surface px-5 py-6 text-center text-sm text-content-muted shadow-sm">
+          {t("journeyEmpty")}
+        </p>
+      ) : (
+        <JourneyPath journeys={journeys} />
+      )}
     </section>
   );
 }

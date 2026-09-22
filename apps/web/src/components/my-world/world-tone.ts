@@ -22,3 +22,8 @@ export function worldTint(world: WorldId): { color: string; backgroundColor: str
     backgroundColor: `color-mix(in srgb, ${color} 14%, transparent)`,
   };
 }
+
+/** A card wash. The world color is a tint, never the text color by itself. */
+export function worldWash(world: WorldId): string {
+  return `color-mix(in srgb, ${WORLD_COLOR[world]} 8%, var(--surface))`;
+}

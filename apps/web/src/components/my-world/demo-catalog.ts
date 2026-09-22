@@ -1,5 +1,5 @@
 import type { WorldId } from "@moch/ui";
-import type { JourneyStatus, MissionAction } from "./types";
+import type { JourneyStatus, MissionAction, MissionCta } from "./types";
 
 /**
  * Presentation snapshot for the progression layer.
@@ -12,6 +12,11 @@ import type { JourneyStatus, MissionAction } from "./types";
  * The signed-in person's name, role and department are NOT here. They come
  * from GET /auth/me. Recognition rows use the same badge names as colleague
  * recognition, and they are not converted into XP.
+ *
+ * XP is granted only by `action: "complete"` — a confirmed meaningful step.
+ * `action: "view"` shows the reward the real action is worth, and the click
+ * only opens a page that already exists. Login, likes and opening a screen
+ * are not missions.
  */
 
 export const DEMO_XP = {
@@ -25,18 +30,21 @@ export const DEMO_STATS = {
   totalXp: DEMO_XP.total,
   missionsCompleted: 12,
   achievementsUnlocked: 4,
+  activeDays: 3,
 } as const;
 
 export const DEMO_MISSIONS: {
-  id: "weekly" | "training" | "briefing";
+  id: "weekly" | "training" | "activity";
   world: WorldId;
   xp: number;
+  minutes: number | null;
   action: MissionAction;
+  cta: MissionCta;
   href: string | null;
 }[] = [
-  { id: "weekly", world: "know", xp: 20, action: "complete", href: null },
-  { id: "training", world: "develop", xp: 40, action: "view", href: "/" },
-  { id: "briefing", world: "participate", xp: 30, action: "complete", href: null },
+  { id: "weekly", world: "know", xp: 20, minutes: 2, action: "complete", cta: "start", href: null },
+  { id: "training", world: "develop", xp: 40, minutes: 10, action: "view", cta: "start", href: "/services" },
+  { id: "activity", world: "participate", xp: 50, minutes: null, action: "view", cta: "details", href: "/feed" },
 ];
 
 export const DEMO_JOURNEYS: {
@@ -44,12 +52,15 @@ export const DEMO_JOURNEYS: {
   xp: number;
   target: number;
   completedActivities: number;
+  activityTarget: number;
+  activitiesUntilBadge: number | null;
+  href: string;
   status: JourneyStatus;
 }[] = [
-  { id: "know", xp: 130, target: 200, status: "active", completedActivities: 4 },
-  { id: "feel", xp: 80, target: 200, status: "active", completedActivities: 2 },
-  { id: "develop", xp: 110, target: 200, status: "active", completedActivities: 3 },
-  { id: "participate", xp: 60, target: 200, status: "active", completedActivities: 1 },
+  { id: "know", xp: 120, target: 185, completedActivities: 4, activityTarget: 6, activitiesUntilBadge: 2, href: "/feed", status: "active" },
+  { id: "feel", xp: 80, target: 200, completedActivities: 2, activityTarget: 5, activitiesUntilBadge: 3, href: "/", status: "active" },
+  { id: "develop", xp: 150, target: 273, completedActivities: 3, activityTarget: 5, activitiesUntilBadge: null, href: "/services", status: "active" },
+  { id: "participate", xp: 100, target: 333, completedActivities: 2, activityTarget: 6, activitiesUntilBadge: null, href: "/feed", status: "active" },
 ];
 
 export const DEMO_ACHIEVEMENTS: {
@@ -77,12 +88,12 @@ export const DEMO_RECOGNITIONS: {
 
 /** Collective totals only. No employee names and no rank. */
 export const DEMO_DEPARTMENT = {
-  earned: 1240,
-  target: 1500,
+  earned: 1640,
+  target: 2000,
 } as const;
 
-export const DEMO_UNLOCKS: { id: "pin" | "skyline" | "frame"; level: number }[] = [
+export const DEMO_UNLOCKS: { id: "pin" | "badge" | "frame"; level: number }[] = [
   { id: "pin", level: 5 },
-  { id: "skyline", level: 10 },
+  { id: "badge", level: 10 },
   { id: "frame", level: 15 },
 ];

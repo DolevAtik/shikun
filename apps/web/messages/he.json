@@ -102,29 +102,37 @@
     "levelReady": "הרמה הבאה מוכנה",
     "nextMission": "מה המשימה הבאה שלי?",
     "explore": "גלו מה חדש במשרד",
-    "missionsTitle": "המשימות שלך",
-    "complete": "השלמת משימה",
-    "view": "לצפייה",
+    "missionsTitle": "המשימה הבאה שלך",
+    "moreMissions": "עוד משימות",
+    "start": "התחל",
+    "details": "לפרטים",
     "completed": "הושלם",
+    "duration": "{count, plural, one {דקה} two {שתי דקות} other {# דקות}}",
     "missionsEmptyTitle": "הכול רגוע כרגע",
     "missionsEmpty": "אין לך משימות פתוחות.",
     "missionsEmptyHint": "משימות חדשות יופיעו כאן כשיהיו זמינות.",
     "missionsDone": "סיימת את המשימות הפתוחות.",
     "missions": {
       "weekly": {
-        "title": "עדכון השבוע",
-        "description": "כדאי להישאר מעודכנים במה שקורה במשרד."
+        "title": "קראו את עדכון השבוע",
+        "description": "הישארו מעודכנים במה שקורה במשרד."
       },
       "training": {
-        "title": "הדרכה חדשה",
-        "description": "השלימו את ההדרכה וקבלו נקודות ניסיון."
+        "title": "השלימו הדרכה",
+        "description": "הדרכה קצרה בתחום ההתפתחות. הנקודות נספרות רק אחרי השלמה."
       },
-      "briefing": {
-        "title": "עדכון קצר מהמחלקה",
-        "description": "עברו על הסיכום הקצר וסמנו שהגעתם אליו."
+      "activity": {
+        "title": "השתתפו בפעילות",
+        "description": "פעילות של המשרד. ההרשמה עצמה היא מה שמזכה בנקודות."
       }
     },
     "journeyTitle": "המסע שלי",
+    "journeyHint": "אפשר להתקדם בכל תחום בנפרד. המסלול רק מראה את המסע.",
+    "journeyStart": "התחלה",
+    "journeyEmpty": "המסע יופיע כאן כשיהיו פעילויות.",
+    "continueJourney": "המשך מסע",
+    "activitiesDoneLabel": "פעילויות הושלמו",
+    "untilBadge": "{count, plural, one {עוד פעילות אחת לפתיחת הישג} two {עוד שתי פעילויות לפתיחת הישג} other {עוד # פעילויות לפתיחת הישג}}",
     "activities": "{count, plural, one {פעילות אחת הושלמה} two {שתי פעילויות הושלמו} other {# פעילויות הושלמו}}",
     "journeyStatus": {
       "locked": "נעול כרגע",
@@ -132,26 +140,30 @@
       "completed": "הושלם"
     },
     "worlds": {
-      "know": { "name": "ידע", "description": "ידע ומידע" },
-      "feel": { "name": "חיבור", "description": "רווחה וחיבור" },
-      "develop": { "name": "צמיחה", "description": "התפתחות וצמיחה" },
-      "participate": { "name": "מעורבות", "description": "מעורבות והשפעה" }
+      "know": { "name": "ידע ומידע", "code": "KNOW", "description": "להישאר מעודכנים במה שקורה במשרד" },
+      "feel": { "name": "רווחה וחיבור", "code": "FEEL", "description": "חיבור לצוות ולרווחה האישית" },
+      "develop": { "name": "התפתחות וצמיחה", "code": "DEVELOP", "description": "לצמוח בתפקיד ולבנות מיומנות" },
+      "participate": { "name": "מעורבות והשפעה", "code": "PARTICIPATE", "description": "להשפיע ולהיות חלק ממה שקורה" }
     },
     "progressTitle": "ההתקדמות שלי",
     "stats": {
       "totalXp": "סה״כ",
       "missions": "משימות",
-      "achievements": "הישגים"
+      "achievements": "הישגים",
+      "activeDays": "ימים פעילים"
     },
+    "streakHint": "נצבר מפעילות משמעותית, לא מכניסה למערכת.",
     "achievementsTitle": "ההישגים שלי",
+    "achievementsEmpty": "עדיין אין הישגים",
+    "achievementsEmptyHint": "הישג נפתח אחרי פעולה אמיתית, לא אחרי כניסה.",
     "lockedAchievement": "הישג נעול",
     "achievements": {
-      "firstStep": { "title": "צעד ראשון", "description": "השלמת המשימה הראשונה", "hint": "" },
-      "knowledge": { "title": "סקרן/ית", "description": "חמש פעילויות בתחום הידע", "hint": "" },
-      "growth": { "title": "צמיחה", "description": "פעילות ראשונה בתחום ההתפתחות", "hint": "" },
-      "consistent": { "title": "רצף", "description": "פעילות במשך חמישה ימים", "hint": "" },
-      "closer": { "title": "עוד קצת", "description": "עוד שתי פעילויות", "hint": "עוד שתי פעילויות לפתיחה" },
-      "frame": { "title": "מסגרת", "description": "מסגרת מיוחדת לאווטאר", "hint": "נפתח ברמה 10" }
+      "firstStep": { "title": "צעד ראשון", "description": "השלמתם את המשימה הראשונה", "hint": "" },
+      "knowledge": { "title": "סקרנות", "description": "השלמתם 5 פעילויות ידע", "hint": "" },
+      "growth": { "title": "צמיחה", "description": "השלמתם פעילות ראשונה בתחום ההתפתחות", "hint": "" },
+      "consistent": { "title": "עקביות", "description": "פעילות משמעותית במשך 5 ימים", "hint": "" },
+      "closer": { "title": "מומחה לידע", "description": "עוד פעילויות בתחום הידע", "hint": "עוד 3 פעילויות לפתיחה" },
+      "frame": { "title": "מסגרת מיוחדת", "description": "מסגרת חדשה לאווטאר", "hint": "נפתח ברמה 15" }
     },
     "recognitionTitle": "ההוקרות שלי",
     "recognitionNote": "הוקרה מעמיתים. היא לא נספרת כנקודות ניסיון.",
@@ -168,31 +180,33 @@
       "guide": { "reason": "ליווי עובד חדש באגף בסבלנות ובבהירות" },
       "day": { "reason": "עזרה בארגון יום השיא של האגף" }
     },
-    "departmentTitle": "יחד כמחלקה",
-    "departmentHint": "ההתקדמות המשותפת, בלי דירוג אישי",
+    "departmentTitle": "המשימה של המחלקה",
+    "departmentHint": "התקדמות משותפת, בלי דירוג אישי",
     "departmentEarned": "שנצברו יחד",
     "departmentGoal": "ליעד המחלקתי",
-    "departmentReached": "המחלקה הגיעה ליעד",
+    "departmentReached": "המחלקה השלימה את המשימה!",
     "departmentMilestone": "יעד",
     "headquarters": "המטה",
-    "unlocksTitle": "מה מחכה לי בהמשך?",
+    "unlocksTitle": "מה מחכה לי?",
+    "unlocksEmpty": "אין כרגע פתיחות חדשות בהמשך הדרך.",
     "unlocks": {
-      "pin": "אביזר חדש לאווטאר",
-      "skyline": "רקע של קו הרקיע",
-      "frame": "מסגרת מיוחדת"
+      "pin": "אווטאר חדש",
+      "badge": "תג מיוחד",
+      "frame": "מסגרת לפרופיל"
     },
-    "levelUpTitle": "עלית רמה",
+    "levelUpTitle": "עלית רמה!",
     "levelUpReached": "הגעת לרמה",
     "levelUpContinue": "המשך",
+    "unlockedLabel": "נפתח",
     "levelUpDetail": {
-      "5": "נפתח אביזר חדש לאווטאר",
-      "10": "נפתח רקע חדש לאווטאר",
-      "15": "נפתחה מסגרת חדשה לאווטאר",
+      "5": "אווטאר חדש",
+      "10": "תג מיוחד",
+      "15": "מסגרת לפרופיל",
       "default": "המסע שלך ממשיך"
     },
     "xpLive": "נוספו {xp} נקודות ניסיון. כעת {current} מתוך {next}.",
     "loading": "טוען את העולם שלך",
-    "errorTitle": "לא הצלחנו לטעון את העולם שלך",
+    "errorTitle": "לא הצלחנו לטעון את ההתקדמות שלך",
     "errorHint": "נסו שוב בעוד רגע.",
     "retry": "ניסיון נוסף"
   },

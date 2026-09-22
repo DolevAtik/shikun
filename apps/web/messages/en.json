@@ -102,29 +102,37 @@
     "levelReady": "The next level is ready",
     "nextMission": "What's my next mission?",
     "explore": "See what's new",
-    "missionsTitle": "Your missions",
-    "complete": "Complete mission",
-    "view": "View",
+    "missionsTitle": "Your next mission",
+    "moreMissions": "Also waiting",
+    "start": "Start",
+    "details": "Details",
     "completed": "Completed",
+    "duration": "{count, plural, one {1 minute} other {# minutes}}",
     "missionsEmptyTitle": "All quiet for now",
     "missionsEmpty": "You have no open missions.",
     "missionsEmptyHint": "New missions will show up here when they are available.",
     "missionsDone": "You've finished the open missions.",
     "missions": {
       "weekly": {
-        "title": "This week's update",
+        "title": "Read this week's update",
         "description": "Stay current with what is happening at the Ministry."
       },
       "training": {
-        "title": "A new training is waiting",
-        "description": "Finish the training and collect experience."
+        "title": "Complete a training",
+        "description": "A short training in Develop. Experience counts only after you finish it."
       },
-      "briefing": {
-        "title": "A short update from your unit",
-        "description": "Read the short brief and mark it done."
+      "activity": {
+        "title": "Join an activity",
+        "description": "A Ministry activity. Registering is what earns the experience."
       }
     },
     "journeyTitle": "My journey",
+    "journeyHint": "Each area stands on its own. The path is only there so it feels like a journey.",
+    "journeyStart": "Start",
+    "journeyEmpty": "Your journey will show up here when there are activities.",
+    "continueJourney": "Continue",
+    "activitiesDoneLabel": "activities completed",
+    "untilBadge": "{count, plural, one {1 more activity to unlock a badge} other {# more activities to unlock a badge}}",
     "activities": "{count, plural, one {1 activity completed} other {# activities completed}}",
     "journeyStatus": {
       "locked": "Locked for now",
@@ -132,26 +140,30 @@
       "completed": "Completed"
     },
     "worlds": {
-      "know": { "name": "Know", "description": "Knowledge and information" },
-      "feel": { "name": "Feel", "description": "Wellbeing and belonging" },
-      "develop": { "name": "Develop", "description": "Growth and learning" },
-      "participate": { "name": "Participate", "description": "Involvement and impact" }
+      "know": { "name": "Knowledge and information", "code": "KNOW", "description": "Stay current with the Ministry" },
+      "feel": { "name": "Wellbeing and belonging", "code": "FEEL", "description": "Connection with the team" },
+      "develop": { "name": "Growth and learning", "code": "DEVELOP", "description": "Build skill in the role" },
+      "participate": { "name": "Involvement and impact", "code": "PARTICIPATE", "description": "Take part in what is happening" }
     },
     "progressTitle": "My progress",
     "stats": {
       "totalXp": "Total",
       "missions": "Missions",
-      "achievements": "Achievements"
+      "achievements": "Achievements",
+      "activeDays": "Active days"
     },
+    "streakHint": "Counted from meaningful activity, not from signing in.",
     "achievementsTitle": "My achievements",
+    "achievementsEmpty": "No achievements yet",
+    "achievementsEmptyHint": "An achievement opens after a real action, not after signing in.",
     "lockedAchievement": "Locked achievement",
     "achievements": {
       "firstStep": { "title": "First step", "description": "Completed your first mission", "hint": "" },
-      "knowledge": { "title": "Curious", "description": "Five activities in Know", "hint": "" },
+      "knowledge": { "title": "Knowledge seeker", "description": "Completed 5 knowledge activities", "hint": "" },
       "growth": { "title": "Growth", "description": "A first activity in Develop", "hint": "" },
-      "consistent": { "title": "Steady", "description": "Active across five days", "hint": "" },
-      "closer": { "title": "Almost", "description": "Two more activities", "hint": "2 more activities to unlock" },
-      "frame": { "title": "Frame", "description": "A special avatar frame", "hint": "Unlocks at level 10" }
+      "consistent": { "title": "Consistent", "description": "Meaningful activity across 5 days", "hint": "" },
+      "closer": { "title": "Knowledge master", "description": "More activities in Know", "hint": "3 more activities to unlock" },
+      "frame": { "title": "Special frame", "description": "A new frame for the avatar", "hint": "Unlocks at level 15" }
     },
     "recognitionTitle": "My recognition",
     "recognitionNote": "Appreciation from colleagues. It does not count as experience.",
@@ -168,31 +180,33 @@
       "guide": { "reason": "For patiently guiding a new colleague in the unit" },
       "day": { "reason": "For helping organize the unit's highlight day" }
     },
-    "departmentTitle": "Together as a unit",
+    "departmentTitle": "The unit's mission",
     "departmentHint": "Shared progress, with no individual ranking",
     "departmentEarned": "collected together",
     "departmentGoal": "to the unit goal",
-    "departmentReached": "The unit reached its goal",
+    "departmentReached": "The unit completed the mission!",
     "departmentMilestone": "Goal",
     "headquarters": "Headquarters",
-    "unlocksTitle": "What's ahead?",
+    "unlocksTitle": "What's waiting?",
+    "unlocksEmpty": "Nothing new is waiting further along just now.",
     "unlocks": {
-      "pin": "A new avatar accessory",
-      "skyline": "A skyline background",
-      "frame": "A special frame"
+      "pin": "A new avatar",
+      "badge": "A special badge",
+      "frame": "A profile frame"
     },
-    "levelUpTitle": "You leveled up",
+    "levelUpTitle": "Level up!",
     "levelUpReached": "You reached level",
     "levelUpContinue": "Continue",
+    "unlockedLabel": "Unlocked",
     "levelUpDetail": {
-      "5": "A new avatar accessory is unlocked",
-      "10": "A new avatar background is unlocked",
-      "15": "A new avatar frame is unlocked",
+      "5": "A new avatar",
+      "10": "A special badge",
+      "15": "A profile frame",
       "default": "Your journey continues"
     },
     "xpLive": "{xp} experience added. Now {current} of {next}.",
     "loading": "Loading your world",
-    "errorTitle": "We couldn't load your world",
+    "errorTitle": "We couldn't load your progress",
     "errorHint": "Try again in a moment.",
     "retry": "Try again"
   },

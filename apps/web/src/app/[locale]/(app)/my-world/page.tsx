@@ -11,7 +11,7 @@ export default async function MyWorldPage({ params }: { params: Promise<{ locale
   const user = await serverFetchOrLogin<CurrentUser>("/auth/me", locale);
 
   return (
-    <div className="min-w-0 overflow-x-clip px-4 pb-8 pt-6 sm:px-6">
+    <div className="min-w-0 overflow-x-clip px-4 pb-8 pt-4 sm:px-6">
       <MyWorldExperience initial={loadMyWorld(user, locale, t)} />
     </div>
   );

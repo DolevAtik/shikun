@@ -37,6 +37,7 @@ export function XpProgress({ xp, gain }: XpProgressProps) {
         label={t("xpLabel")}
         hideLabel
         hideValue
+        size="lg"
         value={xp.current}
         max={xp.next}
         valueText={xpRatio(xp.current, xp.next, locale)}

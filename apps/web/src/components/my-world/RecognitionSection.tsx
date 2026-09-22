@@ -13,7 +13,7 @@ export function RecognitionSection({ items }: { items: Recognition[] }) {
 
   return (
     <section>
-      <SectionHeader title={t("recognitionTitle")} />
+      <SectionHeader title={t("recognitionTitle")} titleClassName="text-lg" />
       <p className="-mt-1 mb-3 px-1 text-sm text-content-muted">{t("recognitionNote")}</p>
       {items.length === 0 ? (
         <div className="flex flex-col items-center gap-2 rounded-xl border border-line bg-surface px-6 py-8 text-center shadow-sm">

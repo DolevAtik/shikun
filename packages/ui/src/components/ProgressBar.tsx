@@ -13,6 +13,8 @@ export interface ProgressBarProps {
   /** Replaces the brand fill, e.g. a world accent. */
   indicatorClassName?: string;
   className?: string;
+  /** `lg` is the identity bar. Everything else stays the compact track. */
+  size?: "md" | "lg";
 }
 
 /**
@@ -28,6 +30,7 @@ export function ProgressBar({
   hideValue,
   indicatorClassName,
   className,
+  size = "md",
 }: ProgressBarProps) {
   const safeMax = max > 0 ? max : 1;
   const clamped = Math.min(safeMax, Math.max(0, value));
@@ -54,7 +57,7 @@ export function ProgressBar({
         aria-valuenow={Math.round(clamped)}
         aria-valuetext={shown}
         aria-label={label}
-        className="h-2 overflow-hidden rounded-full bg-surface-sunken"
+        className={cn("overflow-hidden rounded-full bg-surface-sunken", size === "lg" ? "h-3" : "h-2")}
       >
         <div
           className={cn(

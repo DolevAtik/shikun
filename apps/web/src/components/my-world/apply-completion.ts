@@ -66,6 +66,8 @@ function addToJourney(journey: Journey, mission: Mission): Journey {
     ...journey,
     xp,
     completedActivities: journey.completedActivities + 1,
+    activitiesUntilBadge:
+      journey.activitiesUntilBadge == null ? null : Math.max(0, journey.activitiesUntilBadge - 1),
     status: done ? "completed" : "active",
   };
 }
