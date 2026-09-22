@@ -13,16 +13,19 @@
  */
 
 :root {
-  /* Brand — the gov.il blues */
-  --brand-navy: #0a3a70;
-  --brand-blue: #0b57a4;
-  --brand-blue-hover: #094a8d;
-  --brand-blue-soft: #e7f0fa;
+  /* Brand — clay and timber, the colors of a building site, not a gov.il header. */
+  --brand-navy: #3d2918;
+  --brand-blue: #7a3412;
+  --brand-blue-hover: #63290e;
+  --brand-blue-soft: #f6e4d2;
+
+  /* A wash of sunset behind the skyline. Decorative; text never sits on it alone. */
+  --sky-glow: #f6c98a;
 
   /* Accents — the colored houses in the Ministry logo. These are what keep the
      app from being a wall of government blue. */
-  --accent-red: #b93b25;
-  --accent-green: #1f7a51;
+  --accent-red: #a8331e;
+  --accent-green: #146b42;
   --accent-amber: #8a5d0c;
   --accent-blue: #0e5f7a;
   --accent-teal: #0e6b80;
@@ -39,36 +42,35 @@
   --district-jerusalem: #7a5309;
   --district-south: #553ba0;
 
-  /* Surfaces */
-  --bg: #f4f7fb;
-  --surface: #ffffff;
-  --surface-raised: #ffffff;
-  --surface-tint: #eaf2fb;
-  --surface-sunken: #e8eef6;
+  /* Surfaces — warm plaster, not office gray. */
+  --bg: #f3e6d4;
+  --surface: #fff8f0;
+  --surface-raised: #fff8f0;
+  --surface-tint: #f6e7d4;
+  --surface-sunken: #ead9c4;
 
   /* The header is a brand-colored *surface*, which is a different job from
      `--brand-navy` as a *text* color. They were the same token once; in dark
      mode the text color inverts to a light blue, and the header quietly became
      white-on-pale-blue at 1.94:1. Two jobs, two tokens. */
-  --surface-brand: #0a3a70;
-  --on-surface-brand: #ffffff;
+  --surface-brand: #2c2118;
+  --on-surface-brand: #fff8f0;
 
-  /* The one hero card on Home ("This week at the Ministry"). It is a brand
-     surface too, so it stays dark in dark mode rather than glowing. */
-  --hero-from: #0a3a70;
-  --hero-to: #0b57a4;
+  /* Dusk behind the header skyline. Dark enough that the light label still clears. */
+  --hero-from: #2c2118;
+  --hero-to: #5c3a22;
 
   /* Text */
-  --text: #14212e;
-  --text-muted: #5a6b7d;
-  --text-inverse: #ffffff;
-  --text-on-brand: #ffffff;
+  --text: #24180f;
+  --text-muted: #5e4a38;
+  --text-inverse: #fff8f0;
+  --text-on-brand: #fff8f0;
 
   /* Lines. `--border` is decorative and may be faint; `--border-strong` marks a
      real component boundary (an input, a control) and must clear 3:1 — WCAG
      1.4.11. It is noticeably darker than it "wants" to be for that reason. */
-  --border: #d8e0ea;
-  --border-strong: #74839a;
+  --border: #e0d0bc;
+  --border-strong: #7a6552;
 
   /* Feedback. `--danger` is danger as *text*; `--danger-on` is the label printed
      on top of danger as a *surface* (a destructive button). They are not the
@@ -103,10 +105,12 @@
 }
 
 .dark {
-  --brand-navy: #7fb3e8;
-  --brand-blue: #64a4e6;
-  --brand-blue-hover: #8bbdee;
-  --brand-blue-soft: #16283d;
+  --brand-navy: #f0c9a0;
+  --brand-blue: #f0a36a;
+  --brand-blue-hover: #f6c09a;
+  --brand-blue-soft: #3a2a20;
+
+  --sky-glow: #4a3020;
 
   /* Lightened so they still clear 4.5:1 against the dark surface. */
   --accent-red: #f08a72;
@@ -122,26 +126,26 @@
   --district-jerusalem: #dfae54;
   --district-south: #a693e8;
 
-  --bg: #0d151f;
-  --surface: #151f2b;
-  --surface-raised: #1b2734;
-  --surface-tint: #16232f;
-  --surface-sunken: #101923;
+  --bg: #1a1410;
+  --surface: #261c16;
+  --surface-raised: #2e241c;
+  --surface-tint: #32261c;
+  --surface-sunken: #140f0c;
 
   /* Stays a dark surface in dark mode — it is a surface, not a text color. */
-  --surface-brand: #102336;
-  --on-surface-brand: #e9eff5;
+  --surface-brand: #140f0c;
+  --on-surface-brand: #f6efe6;
 
-  --hero-from: #10243a;
-  --hero-to: #1a3e63;
+  --hero-from: #140f0c;
+  --hero-to: #3a2418;
 
-  --text: #e9eff5;
-  --text-muted: #9fb0c1;
-  --text-inverse: #0d151f;
-  --text-on-brand: #06121f;
+  --text: #f6efe6;
+  --text-muted: #cbb8a4;
+  --text-inverse: #1a1410;
+  --text-on-brand: #2a160c;
 
-  --border: #29384a;
-  --border-strong: #7d8fa6;
+  --border: #4a3a2c;
+  --border-strong: #b89a80;
 
   --danger: #f2988f;
   --danger-on: #2a0f0d;

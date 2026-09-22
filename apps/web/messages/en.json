@@ -7,8 +7,8 @@
   "nav": {
     "home": "Home",
     "feed": "Feed",
-    "jobs": "Jobs",
     "services": "Services",
+    "myWorld": "My World",
     "profile": "Profile",
     "primary": "Primary navigation",
     "skipToContent": "Skip to main content"
@@ -79,10 +79,122 @@
   },
   "services": {
     "title": "Services",
-    "quickActions": "Quick actions",
-    "quickLinks": "Quick links",
+    "jobsCategory": "Jobs and opportunities",
+    "jobsCategoryHint": "Open positions you are eligible for",
+    "quickActions": "Employee services",
+    "quickLinks": "Systems and information",
     "opensInNewWindow": "(opens in a new window)",
     "empty": "No services available right now."
+  },
+  "myWorld": {
+    "title": "My World",
+    "greeting": "Hello, {name}",
+    "levelLabel": "Level",
+    "journeyLine": {
+      "starter": "Starting out at the Ministry",
+      "partner": "An active partner at the Ministry",
+      "leader": "Leading the way at the Ministry",
+      "veteran": "A long-standing part of the Ministry"
+    },
+    "xpLabel": "Experience",
+    "untilPrefix": "",
+    "untilLevel": "to level",
+    "levelReady": "The next level is ready",
+    "nextMission": "What's my next mission?",
+    "explore": "See what's new",
+    "missionsTitle": "Your missions",
+    "complete": "Complete mission",
+    "view": "View",
+    "completed": "Completed",
+    "missionsEmptyTitle": "All quiet for now",
+    "missionsEmpty": "You have no open missions.",
+    "missionsEmptyHint": "New missions will show up here when they are available.",
+    "missionsDone": "You've finished the open missions.",
+    "missions": {
+      "weekly": {
+        "title": "This week's update",
+        "description": "Stay current with what is happening at the Ministry."
+      },
+      "training": {
+        "title": "A new training is waiting",
+        "description": "Finish the training and collect experience."
+      },
+      "briefing": {
+        "title": "A short update from your unit",
+        "description": "Read the short brief and mark it done."
+      }
+    },
+    "journeyTitle": "My journey",
+    "activities": "{count, plural, one {1 activity completed} other {# activities completed}}",
+    "journeyStatus": {
+      "locked": "Locked for now",
+      "active": "Active",
+      "completed": "Completed"
+    },
+    "worlds": {
+      "know": { "name": "Know", "description": "Knowledge and information" },
+      "feel": { "name": "Feel", "description": "Wellbeing and belonging" },
+      "develop": { "name": "Develop", "description": "Growth and learning" },
+      "participate": { "name": "Participate", "description": "Involvement and impact" }
+    },
+    "progressTitle": "My progress",
+    "stats": {
+      "totalXp": "Total",
+      "missions": "Missions",
+      "achievements": "Achievements"
+    },
+    "achievementsTitle": "My achievements",
+    "lockedAchievement": "Locked achievement",
+    "achievements": {
+      "firstStep": { "title": "First step", "description": "Completed your first mission", "hint": "" },
+      "knowledge": { "title": "Curious", "description": "Five activities in Know", "hint": "" },
+      "growth": { "title": "Growth", "description": "A first activity in Develop", "hint": "" },
+      "consistent": { "title": "Steady", "description": "Active across five days", "hint": "" },
+      "closer": { "title": "Almost", "description": "Two more activities", "hint": "2 more activities to unlock" },
+      "frame": { "title": "Frame", "description": "A special avatar frame", "hint": "Unlocks at level 10" }
+    },
+    "recognitionTitle": "My recognition",
+    "recognitionNote": "Appreciation from colleagues. It does not count as experience.",
+    "recognitionFrom": "From {name}",
+    "recognitionEmpty": "No recognition yet",
+    "recognitionEmptyHint": "When a colleague thanks you, it will show up here.",
+    "recognitionBadges": {
+      "knowledge": "Knowledge Sharer",
+      "mentor": "Mentor",
+      "community": "Community Contributor"
+    },
+    "recognitions": {
+      "collab": { "reason": "For excellent collaboration on the weekly summary" },
+      "guide": { "reason": "For patiently guiding a new colleague in the unit" },
+      "day": { "reason": "For helping organize the unit's highlight day" }
+    },
+    "departmentTitle": "Together as a unit",
+    "departmentHint": "Shared progress, with no individual ranking",
+    "departmentEarned": "collected together",
+    "departmentGoal": "to the unit goal",
+    "departmentReached": "The unit reached its goal",
+    "departmentMilestone": "Goal",
+    "headquarters": "Headquarters",
+    "unlocksTitle": "What's ahead?",
+    "unlocks": {
+      "pin": "A new avatar accessory",
+      "skyline": "A skyline background",
+      "frame": "A special frame"
+    },
+    "levelUpTitle": "You leveled up",
+    "levelUpReached": "You reached level",
+    "levelUpContinue": "Continue",
+    "levelUpDetail": {
+      "5": "A new avatar accessory is unlocked",
+      "10": "A new avatar background is unlocked",
+      "15": "A new avatar frame is unlocked",
+      "default": "Your journey continues"
+    },
+    "xpLive": "{xp} experience added. Now {current} of {next}.",
+    "loading": "Loading your world",
+    "errorTitle": "We couldn't load your world",
+    "errorHint": "Try again in a moment.",
+    "retry": "Try again"
   },
   "jobs": {
     "title": "Job board",

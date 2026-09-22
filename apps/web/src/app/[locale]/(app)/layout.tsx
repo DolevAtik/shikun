@@ -2,6 +2,8 @@ import type { CurrentUser } from "@moch/contracts";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { AppHeader } from "@/components/AppHeader";
 import { BottomNav } from "@/components/BottomNav";
+import { CityBackdrop } from "@/components/CityBackdrop";
+import { SideNav } from "@/components/SideNav";
 import { TelemetryBeacon } from "@/components/TelemetryBeacon";
 import { serverFetchOrLogin } from "@/lib/api";
 
@@ -19,7 +21,9 @@ export default async function AppLayout({
   const user = await serverFetchOrLogin<CurrentUser>("/auth/me", locale);
 
   return (
-    <div className="min-h-dvh">
+    <div className="relative min-h-dvh lg:ps-56">
+      <CityBackdrop />
+      <SideNav />
       {/* The first thing a keyboard user hits. WCAG 2.4.1. */}
       <a
         href="#main"
@@ -30,7 +34,7 @@ export default async function AppLayout({
 
       <AppHeader name={user.fullName} initials={user.initials} avatarUrl={user.avatarUrl} />
 
-      <main id="main" className="mx-auto max-w-2xl pb-24">
+      <main id="main" className="relative z-10 mx-auto w-full max-w-5xl overflow-x-clip pb-28 lg:pb-10">
         {children}
       </main>
 

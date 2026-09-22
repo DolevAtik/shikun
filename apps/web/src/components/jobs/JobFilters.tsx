@@ -34,7 +34,7 @@ export async function JobFilters({ active, items }: { active: JobScope; items: J
         return (
           <Link
             key={scope}
-            href={scope === "all" ? "/jobs" : `/jobs?scope=${scope}`}
+            href={scope === "all" ? "/services/jobs" : `/services/jobs?scope=${scope}`}
             aria-current={isActive ? "true" : undefined}
             className={cn(
               "flex min-h-9 items-center gap-1.5 rounded-full border px-3.5",

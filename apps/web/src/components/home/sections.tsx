@@ -408,7 +408,7 @@ export async function HomeSectionView({ section, locale, firstName, greeting }: 
             title={title}
             className="px-4"
             action={
-              <Link href="/jobs" className="text-sm font-medium text-brand hover:underline">
+              <Link href="/services/jobs" className="text-sm font-medium text-brand hover:underline">
                 {tJobs("seeAll")}
               </Link>
             }

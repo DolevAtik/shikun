@@ -14,5 +14,9 @@ export default async function FeedRoute({ params }: { params: Promise<{ locale: 
     serverFetchOrLogin<FeedPage>("/feed/posts?limit=10", locale),
   ]);
 
-  return <FeedClient locale={locale} channels={channels} initialPage={firstPage} />;
+  return (
+    <div className="mx-auto w-full max-w-2xl">
+      <FeedClient locale={locale} channels={channels} initialPage={firstPage} />
+    </div>
+  );
 }

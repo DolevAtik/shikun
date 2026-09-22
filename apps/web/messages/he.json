@@ -7,8 +7,8 @@
   "nav": {
     "home": "בית",
     "feed": "עדכונים",
-    "jobs": "משרות",
     "services": "שירותים",
+    "myWorld": "העולם שלי",
     "profile": "פרופיל",
     "primary": "ניווט ראשי",
     "skipToContent": "דילוג לתוכן הראשי"
@@ -79,10 +79,122 @@
   },
   "services": {
     "title": "שירותים",
-    "quickActions": "פעולות מהירות",
-    "quickLinks": "קישורים מהירים",
+    "jobsCategory": "משרות והזדמנויות",
+    "jobsCategoryHint": "המשרות הפתוחות שרלוונטיות לך",
+    "quickActions": "שירותים לעובד",
+    "quickLinks": "מערכות ומידע",
     "opensInNewWindow": "(נפתח בחלון חדש)",
     "empty": "אין שירותים זמינים כרגע."
+  },
+  "myWorld": {
+    "title": "העולם שלי",
+    "greeting": "שלום, {name}",
+    "levelLabel": "רמה",
+    "journeyLine": {
+      "starter": "בתחילת הדרך במשרד",
+      "partner": "שותף/ה פעיל/ה במשרד",
+      "leader": "מוביל/ה בדרך במשרד",
+      "veteran": "ותיק/ה בדרך במשרד"
+    },
+    "xpLabel": "נקודות ניסיון",
+    "untilPrefix": "עוד",
+    "untilLevel": "לרמה",
+    "levelReady": "הרמה הבאה מוכנה",
+    "nextMission": "מה המשימה הבאה שלי?",
+    "explore": "גלו מה חדש במשרד",
+    "missionsTitle": "המשימות שלך",
+    "complete": "השלמת משימה",
+    "view": "לצפייה",
+    "completed": "הושלם",
+    "missionsEmptyTitle": "הכול רגוע כרגע",
+    "missionsEmpty": "אין לך משימות פתוחות.",
+    "missionsEmptyHint": "משימות חדשות יופיעו כאן כשיהיו זמינות.",
+    "missionsDone": "סיימת את המשימות הפתוחות.",
+    "missions": {
+      "weekly": {
+        "title": "עדכון השבוע",
+        "description": "כדאי להישאר מעודכנים במה שקורה במשרד."
+      },
+      "training": {
+        "title": "הדרכה חדשה",
+        "description": "השלימו את ההדרכה וקבלו נקודות ניסיון."
+      },
+      "briefing": {
+        "title": "עדכון קצר מהמחלקה",
+        "description": "עברו על הסיכום הקצר וסמנו שהגעתם אליו."
+      }
+    },
+    "journeyTitle": "המסע שלי",
+    "activities": "{count, plural, one {פעילות אחת הושלמה} two {שתי פעילויות הושלמו} other {# פעילויות הושלמו}}",
+    "journeyStatus": {
+      "locked": "נעול כרגע",
+      "active": "פעיל",
+      "completed": "הושלם"
+    },
+    "worlds": {
+      "know": { "name": "ידע", "description": "ידע ומידע" },
+      "feel": { "name": "חיבור", "description": "רווחה וחיבור" },
+      "develop": { "name": "צמיחה", "description": "התפתחות וצמיחה" },
+      "participate": { "name": "מעורבות", "description": "מעורבות והשפעה" }
+    },
+    "progressTitle": "ההתקדמות שלי",
+    "stats": {
+      "totalXp": "סה״כ",
+      "missions": "משימות",
+      "achievements": "הישגים"
+    },
+    "achievementsTitle": "ההישגים שלי",
+    "lockedAchievement": "הישג נעול",
+    "achievements": {
+      "firstStep": { "title": "צעד ראשון", "description": "השלמת המשימה הראשונה", "hint": "" },
+      "knowledge": { "title": "סקרן/ית", "description": "חמש פעילויות בתחום הידע", "hint": "" },
+      "growth": { "title": "צמיחה", "description": "פעילות ראשונה בתחום ההתפתחות", "hint": "" },
+      "consistent": { "title": "רצף", "description": "פעילות במשך חמישה ימים", "hint": "" },
+      "closer": { "title": "עוד קצת", "description": "עוד שתי פעילויות", "hint": "עוד שתי פעילויות לפתיחה" },
+      "frame": { "title": "מסגרת", "description": "מסגרת מיוחדת לאווטאר", "hint": "נפתח ברמה 10" }
+    },
+    "recognitionTitle": "ההוקרות שלי",
+    "recognitionNote": "הוקרה מעמיתים. היא לא נספרת כנקודות ניסיון.",
+    "recognitionFrom": "מאת {name}",
+    "recognitionEmpty": "עדיין לא קיבלת הוקרה",
+    "recognitionEmptyHint": "כשעמית מודה לך, זה יופיע כאן.",
+    "recognitionBadges": {
+      "knowledge": "משתף/ת ידע",
+      "mentor": "מנטור/ית",
+      "community": "תורם/ת לקהילה"
+    },
+    "recognitions": {
+      "collab": { "reason": "על שיתוף פעולה מצוין בהכנת הסיכום השבועי" },
+      "guide": { "reason": "ליווי עובד חדש באגף בסבלנות ובבהירות" },
+      "day": { "reason": "עזרה בארגון יום השיא של האגף" }
+    },
+    "departmentTitle": "יחד כמחלקה",
+    "departmentHint": "ההתקדמות המשותפת, בלי דירוג אישי",
+    "departmentEarned": "שנצברו יחד",
+    "departmentGoal": "ליעד המחלקתי",
+    "departmentReached": "המחלקה הגיעה ליעד",
+    "departmentMilestone": "יעד",
+    "headquarters": "המטה",
+    "unlocksTitle": "מה מחכה לי בהמשך?",
+    "unlocks": {
+      "pin": "אביזר חדש לאווטאר",
+      "skyline": "רקע של קו הרקיע",
+      "frame": "מסגרת מיוחדת"
+    },
+    "levelUpTitle": "עלית רמה",
+    "levelUpReached": "הגעת לרמה",
+    "levelUpContinue": "המשך",
+    "levelUpDetail": {
+      "5": "נפתח אביזר חדש לאווטאר",
+      "10": "נפתח רקע חדש לאווטאר",
+      "15": "נפתחה מסגרת חדשה לאווטאר",
+      "default": "המסע שלך ממשיך"
+    },
+    "xpLive": "נוספו {xp} נקודות ניסיון. כעת {current} מתוך {next}.",
+    "loading": "טוען את העולם שלך",
+    "errorTitle": "לא הצלחנו לטעון את העולם שלך",
+    "errorHint": "נסו שוב בעוד רגע.",
+    "retry": "ניסיון נוסף"
   },
   "jobs": {
     "title": "לוח משרות",

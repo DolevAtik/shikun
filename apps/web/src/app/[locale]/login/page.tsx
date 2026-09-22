@@ -1,4 +1,5 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { CityBackdrop } from "@/components/CityBackdrop";
 import { LoginForm } from "./LoginForm";
 
 export default async function LoginPage({ params }: { params: Promise<{ locale: string }> }) {
@@ -7,7 +8,8 @@ export default async function LoginPage({ params }: { params: Promise<{ locale: 
   const t = await getTranslations("auth");
 
   return (
-    <div className="grid min-h-dvh place-items-center bg-gradient-to-b from-surface-tint to-bg px-4 py-10">
+    <div className="relative grid min-h-dvh place-items-center px-4 py-10">
+      <CityBackdrop />
       <div className="w-full max-w-sm">
         <div className="mb-8 flex flex-col items-center text-center">
           <img src="/ministry-logo.svg" alt="" className="mb-4 size-20" />

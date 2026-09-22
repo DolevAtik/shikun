@@ -15,11 +15,13 @@ test.describe("accessibility — IS 5568 / WCAG 2.0 AA", () => {
     await expectNoA11yViolations(page, "home (he, dark)");
   });
 
-  test("home is clean in English (LTR)", async ({ page }) => {
+  test("an English address opens the Hebrew home", async ({ page }) => {
     await login(page, "haifa.employee@moch.gov.il");
     await page.goto("/en");
-    await expect(page.locator("html")).toHaveAttribute("dir", "ltr");
-    await expectNoA11yViolations(page, "home (en, light)");
+    await expect(page).toHaveURL(/\/he\/?$/);
+    await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
+    await expect(page.locator("html")).toHaveAttribute("lang", "he");
+    await expectNoA11yViolations(page, "home (he, via en)");
   });
 
   test("feed is clean", async ({ page }) => {
@@ -38,14 +40,15 @@ test.describe("accessibility — IS 5568 / WCAG 2.0 AA", () => {
 });
 
 test.describe("direction", () => {
-  test("Hebrew renders RTL and English renders LTR", async ({ page }) => {
+  test("the app stays in Hebrew, including an English address", async ({ page }) => {
     await page.goto("/he/login");
     await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
     await expect(page.locator("html")).toHaveAttribute("lang", "he");
 
     await page.goto("/en/login");
-    await expect(page.locator("html")).toHaveAttribute("dir", "ltr");
-    await expect(page.locator("html")).toHaveAttribute("lang", "en");
+    await expect(page).toHaveURL(/\/he\/login/);
+    await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
+    await expect(page.locator("html")).toHaveAttribute("lang", "he");
   });
 });
 
@@ -142,8 +145,9 @@ test.describe("job board", () => {
   test("is reachable from the bottom nav and leads with the closest deadline", async ({ page }) => {
     await login(page, "employee@moch.gov.il");
 
-    await page.getByRole("navigation", { name: "ניווט ראשי" }).getByRole("link", { name: "משרות" }).click();
-    await page.waitForURL("**/he/jobs");
+    await page.getByRole("navigation", { name: "ניווט ראשי" }).getByRole("link", { name: "שירותים" }).click();
+    await page.getByRole("link", { name: "לוח משרות" }).click();
+    await page.waitForURL("**/he/services/jobs");
 
     // Seeded to close in two days — a board that does not sort by deadline is a
     // list, and this assertion is the difference.
@@ -160,7 +164,7 @@ test.describe("job board", () => {
     await page.goto("/he/jobs");
 
     await page.getByRole("link", { name: /מכרזים פומביים/ }).click();
-    await page.waitForURL("**/he/jobs?scope=external");
+    await page.waitForURL("**/he/services/jobs?scope=external");
 
     // The two public tenders, and neither of the internal roles.
     await expect(positions(page)).toHaveCount(2);

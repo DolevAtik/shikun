@@ -18,14 +18,14 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
   if (home.sections.length === 0) {
     return (
-      <div className="p-4 pt-8">
+      <div className="mx-auto w-full max-w-2xl p-4 pt-8">
         <EmptyState title={t("empty")} />
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col">
+    <div className="mx-auto flex w-full max-w-2xl flex-col">
       {home.sections.map((section) => (
         <HomeSectionView
           key={section.id}

@@ -84,12 +84,19 @@ module.exports = {
           from: { opacity: "0", transform: "translateY(8px)" },
           to: { opacity: "1", transform: "translateY(0)" },
         },
+        "xp-float": {
+          "0%": { opacity: "0", transform: "translateY(6px)" },
+          "18%": { opacity: "1", transform: "translateY(0)" },
+          "72%": { opacity: "1", transform: "translateY(-4px)" },
+          "100%": { opacity: "0", transform: "translateY(-12px)" },
+        },
         shimmer: {
           "100%": { transform: "translateX(100%)" },
         },
       },
       animation: {
         "fade-up": "fade-up var(--duration) var(--ease) both",
+        "xp-float": "xp-float 1.5s var(--ease) both",
       },
     },
   },

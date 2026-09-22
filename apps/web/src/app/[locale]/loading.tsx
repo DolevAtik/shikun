@@ -1,6 +1,8 @@
 import { Skeleton } from "@moch/ui";
 import { BottomNav } from "@/components/BottomNav";
+import { CityBackdrop, HeaderSkyline } from "@/components/CityBackdrop";
 import { PageSkeleton } from "@/components/PageSkeleton";
+import { SideNav } from "@/components/SideNav";
 
 /**
  * The app shell, shown while the screen beneath it resolves.
@@ -17,8 +19,10 @@ import { PageSkeleton } from "@/components/PageSkeleton";
  */
 export default function LocaleLoading() {
   return (
-    <div className="min-h-dvh">
-      <header className="sticky top-0 z-30 border-b border-line bg-surface-brand">
+    <div className="relative min-h-dvh lg:ps-56">
+      <CityBackdrop />
+      <SideNav />
+      <header className="sticky top-0 z-30 bg-gradient-to-b from-[var(--hero-to)] to-surface-brand">
         <div className="mx-auto flex h-14 max-w-2xl items-center gap-3 px-4">
           {/* The emblem is not data. It is the one thing here that can be real,
               so it is — the shell reads as the Ministry's from the first frame. */}
@@ -33,9 +37,10 @@ export default function LocaleLoading() {
 
           <Skeleton className="size-9 shrink-0 rounded-full bg-white/25" />
         </div>
+        <HeaderSkyline />
       </header>
 
-      <main className="mx-auto max-w-2xl pb-24">
+      <main className="relative z-10 mx-auto max-w-2xl pb-28 lg:pb-10">
         <PageSkeleton />
       </main>
 

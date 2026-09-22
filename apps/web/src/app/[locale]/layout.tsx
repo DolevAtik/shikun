@@ -30,7 +30,7 @@ export const viewport: Viewport = {
   // One colour, because the app no longer follows the OS: it is light unless the
   // person chose dark, so a `prefers-color-scheme` split would tint the browser
   // chrome dark around a light page.
-  themeColor: "#0a3a70",
+  themeColor: "#2c2118",
   // No maximum-scale: pinch-zoom must never be disabled — WCAG 1.4.4.
   width: "device-width",
   initialScale: 1,

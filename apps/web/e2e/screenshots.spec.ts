@@ -30,9 +30,9 @@ test.describe("screenshots", () => {
     await page.waitForTimeout(400);
     await page.screenshot({ path: "screenshots/05-feed-he-light.png", fullPage: true });
 
-    await page.goto("/en");
+    await page.goto("/he/my-world");
     await page.waitForTimeout(800);
-    await page.screenshot({ path: "screenshots/06-home-en-ltr.png", fullPage: true });
+    await page.screenshot({ path: "screenshots/06-my-world.png", fullPage: true });
 
     await page.goto("/he/profile");
     await page.waitForTimeout(500);

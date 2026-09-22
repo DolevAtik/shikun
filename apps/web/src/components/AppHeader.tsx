@@ -14,8 +14,8 @@ export function AppHeader({ name, initials, avatarUrl }: AppHeaderProps) {
   const t = useTranslations();
 
   return (
-    <header className="sticky top-0 z-30 border-b border-line bg-surface-brand text-content-onsurfacebrand">
-      <div className="mx-auto flex h-14 max-w-2xl items-center gap-3 px-4">
+    <header className="sticky top-0 z-30 border-b border-white/10 bg-surface-brand text-content-onsurfacebrand">
+      <div className="mx-auto flex h-14 max-w-5xl items-center gap-3 px-4 sm:px-6">
         {/* The Ministry's own mark, on its own white plate — a government emblem
             should never sit directly on a colored field. */}
         <span className="grid size-9 shrink-0 place-items-center rounded-full bg-white p-1">

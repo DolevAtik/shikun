@@ -1,17 +1,9 @@
 "use client";
 
-import { Home, Newspaper, Briefcase, LayoutGrid, User } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/routing";
 import { cn } from "@moch/ui";
-
-const TABS = [
-  { href: "/", key: "home", Icon: Home },
-  { href: "/feed", key: "feed", Icon: Newspaper },
-  { href: "/jobs", key: "jobs", Icon: Briefcase },
-  { href: "/services", key: "services", Icon: LayoutGrid },
-  { href: "/profile", key: "profile", Icon: User },
-] as const;
+import { isNavActive, NAV_ITEMS } from "@/components/nav-items";
 
 export function BottomNav() {
   const t = useTranslations("nav");
@@ -23,14 +15,14 @@ export function BottomNav() {
       className={cn(
         // Solid, not translucent: content scrolling underneath was showing
         // through the bar and muddying the labels.
-        "fixed inset-x-0 bottom-0 z-40 border-t border-line bg-surface shadow-lg",
+        "fixed inset-x-3 bottom-3 z-40 rounded-full border border-line bg-surface shadow-lg lg:hidden",
         // Clears the iPhone home indicator without hardcoding a magic number.
         "pb-[env(safe-area-inset-bottom)]",
       )}
     >
       <ul className="mx-auto flex max-w-2xl items-stretch justify-around">
-        {TABS.map(({ href, key, Icon }) => {
-          const isActive = href === "/" ? pathname === "/" : pathname.startsWith(href);
+        {NAV_ITEMS.map(({ href, key, Icon }) => {
+          const isActive = isNavActive(pathname, href);
 
           return (
             <li key={key} className="flex-1">

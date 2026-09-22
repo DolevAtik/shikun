@@ -25,7 +25,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ locale
   const user = await serverFetchOrLogin<CurrentUser>("/auth/me", locale);
 
   return (
-    <div className="flex flex-col gap-4 p-4 pt-6">
+    <div className="mx-auto flex w-full max-w-2xl flex-col gap-4 p-4 pt-6">
       <h1 className="sr-only">{t("profile")}</h1>
 
       <Card className="flex flex-col items-center gap-3 p-6 text-center">

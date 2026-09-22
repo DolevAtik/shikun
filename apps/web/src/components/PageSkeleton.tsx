@@ -10,7 +10,7 @@ import { Skeleton } from "@moch/ui";
  */
 export function PageSkeleton() {
   return (
-    <div className="flex flex-col gap-6 p-4 pt-6">
+    <div className="mx-auto flex w-full max-w-2xl flex-col gap-6 p-4 pt-6">
       {/* The greeting line. */}
       <div className="flex flex-col gap-2">
         <Skeleton className="h-6 w-48" />

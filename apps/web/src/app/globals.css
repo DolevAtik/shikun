@@ -13,6 +13,8 @@
 
   body {
     background-color: var(--bg);
+    background-image: radial-gradient(ellipse 100% 45% at 50% -8%, var(--sky-glow), transparent 60%);
+    background-attachment: fixed;
     color: var(--text);
     font-family: var(--font-hebrew), "Assistant", "Heebo", system-ui, sans-serif;
     /* Hebrew sits differently on the line than Latin does; a touch more leading
