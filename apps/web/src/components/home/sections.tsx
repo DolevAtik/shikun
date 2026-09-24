@@ -143,7 +143,8 @@ export async function HomeSectionView({ section, locale, firstName, greeting }: 
             interactive
             className="relative overflow-hidden border-0 bg-gradient-to-bl from-[--hero-from] to-[--hero-to] text-content-onsurfacebrand"
           >
-            <div className="relative z-10 p-5 pb-8">
+            {/* Extra bottom padding clears the roof strip so highlights stay legible. */}
+            <div className="relative z-10 p-5 pb-16">
               <p className="text-xs font-medium uppercase tracking-wide opacity-80">
                 {formatDate(summary.weekOf, locale)}
               </p>
@@ -159,7 +160,7 @@ export async function HomeSectionView({ section, locale, firstName, greeting }: 
                 ))}
               </ul>
             </div>
-            <SkylineStrip className="h-12 text-black/35 dark:text-white/15" />
+            <SkylineStrip className="h-11 text-black/25 dark:text-white/10" />
           </Card>
         </section>
       );
