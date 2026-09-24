@@ -13,6 +13,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { getTranslations } from "next-intl/server";
+import { BuildingCoverArt, SkylineStrip } from "@/components/CityBackdrop";
 import { VideoOfWeekCard } from "@/components/home/VideoOfWeekCard";
 import { MediaImage } from "@/components/MediaImage";
 import { ICONS } from "@/components/icons";
@@ -43,11 +44,14 @@ export async function HomeSectionView({ section, locale, firstName, greeting }: 
   switch (section.type) {
     case "GREETING":
       return (
-        <section className="px-4 pb-2 pt-6">
-          <h1 className="text-2xl font-bold tracking-tight text-content">
-            {t(`greeting.${greeting}` as never, { name: firstName })}
-          </h1>
-          <p className="mt-1 text-content-muted">{t("greetingSub")}</p>
+        <section className="relative overflow-hidden px-4 pb-6 pt-6">
+          <div className="relative z-10">
+            <h1 className="text-2xl font-bold tracking-tight text-content">
+              {t(`greeting.${greeting}` as never, { name: firstName })}
+            </h1>
+            <p className="mt-1 text-content-muted">{t("greetingSub")}</p>
+          </div>
+          <SkylineStrip className="h-12 text-brand/20 dark:text-brand/30" />
         </section>
       );
 
@@ -137,9 +141,9 @@ export async function HomeSectionView({ section, locale, firstName, greeting }: 
         <section className="px-4 py-3">
           <Card
             interactive
-            className="overflow-hidden border-0 bg-gradient-to-bl from-[--hero-from] to-[--hero-to] text-content-onsurfacebrand"
+            className="relative overflow-hidden border-0 bg-gradient-to-bl from-[--hero-from] to-[--hero-to] text-content-onsurfacebrand"
           >
-            <div className="p-5">
+            <div className="relative z-10 p-5 pb-8">
               <p className="text-xs font-medium uppercase tracking-wide opacity-80">
                 {formatDate(summary.weekOf, locale)}
               </p>
@@ -155,6 +159,7 @@ export async function HomeSectionView({ section, locale, firstName, greeting }: 
                 ))}
               </ul>
             </div>
+            <SkylineStrip className="h-12 text-black/35 dark:text-white/15" />
           </Card>
         </section>
       );
@@ -290,7 +295,7 @@ export async function HomeSectionView({ section, locale, firstName, greeting }: 
             {section.data.items.map((project) => (
               <li key={project.id} className="w-64">
                 <Card interactive className="flex h-full flex-col overflow-hidden">
-                  <CardCover src={project.imageUrl} Icon={Building2} />
+                  <CardCover src={project.imageUrl} Icon={Building2} buildingFallback />
 
                   <div className="p-4">
                     <div className="flex items-center gap-1.5">
@@ -517,8 +522,20 @@ export async function HomeSectionView({ section, locale, firstName, greeting }: 
  * editor skipped one makes the rail look broken. So the fallback keeps the same
  * height and shows the section's own icon.
  */
-function CardCover({ src, Icon }: { src: string | null; Icon: LucideIcon }) {
+function CardCover({
+  src,
+  Icon,
+  buildingFallback = false,
+}: {
+  src: string | null;
+  Icon: LucideIcon;
+  buildingFallback?: boolean;
+}) {
   if (!src) {
+    if (buildingFallback) {
+      return <BuildingCoverArt />;
+    }
+
     return (
       <div className="grid h-28 shrink-0 place-items-center bg-gradient-to-bl from-surface-tint to-surface-sunken">
         <Icon aria-hidden="true" className="size-7 text-content-muted" />

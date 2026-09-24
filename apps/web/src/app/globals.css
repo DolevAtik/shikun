@@ -65,3 +65,27 @@
     flex: 0 0 auto;
   }
 }
+
+/* Soft window glow on the skyline. Decorative — text never sits on it alone.
+   Motion is opt-in via motion-safe; prefers-reduced-motion keeps windows lit. */
+@keyframes skyline-window-glow {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 0.95;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .skyline-window {
+    animation: skyline-window-glow 4.5s ease-in-out infinite;
+  }
+  .skyline-window--delay {
+    animation-delay: 1.4s;
+  }
+  .skyline-window--delay-2 {
+    animation-delay: 2.8s;
+  }
+}

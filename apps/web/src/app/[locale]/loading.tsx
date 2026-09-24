@@ -23,10 +23,10 @@ export default function LocaleLoading() {
       <CityBackdrop />
       <SideNav />
       <header className="sticky top-0 z-30 bg-gradient-to-b from-[var(--hero-to)] to-surface-brand">
-        <div className="mx-auto flex h-14 max-w-2xl items-center gap-3 px-4">
+        <div className="mx-auto flex h-12 max-w-5xl items-center gap-2.5 px-4 sm:px-6">
           {/* The emblem is not data. It is the one thing here that can be real,
               so it is — the shell reads as the Ministry's from the first frame. */}
-          <span className="grid size-9 shrink-0 place-items-center rounded-full bg-white p-1">
+          <span className="grid size-8 shrink-0 place-items-center rounded-full bg-white p-1">
             <img src="/ministry-logo.svg" alt="" className="size-full object-contain" />
           </span>
 
@@ -35,7 +35,7 @@ export default function LocaleLoading() {
             <Skeleton className="h-2.5 w-28 bg-white/15" />
           </div>
 
-          <Skeleton className="size-9 shrink-0 rounded-full bg-white/25" />
+          <Skeleton className="size-8 shrink-0 rounded-full bg-white/25" />
         </div>
         <HeaderSkyline />
       </header>

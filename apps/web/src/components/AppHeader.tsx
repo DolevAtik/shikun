@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
 import { Avatar } from "@moch/ui";
+import { HeaderSkyline } from "@/components/CityBackdrop";
 
 interface AppHeaderProps {
   name: string;
@@ -14,7 +15,7 @@ export function AppHeader({ name, initials, avatarUrl }: AppHeaderProps) {
   const t = useTranslations();
 
   return (
-    <header className="sticky top-0 z-30 border-b border-white/10 bg-surface-brand text-content-onsurfacebrand">
+    <header className="sticky top-0 z-30 bg-gradient-to-b from-[var(--hero-to)] to-surface-brand text-content-onsurfacebrand">
       <div className="mx-auto flex h-12 max-w-5xl items-center gap-2.5 px-4 sm:px-6">
         {/* The Ministry's own mark, on its own white plate — a government emblem
             should never sit directly on a colored field. */}
@@ -43,6 +44,7 @@ export function AppHeader({ name, initials, avatarUrl }: AppHeaderProps) {
           />
         </Link>
       </div>
+      <HeaderSkyline />
     </header>
   );
 }

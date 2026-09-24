@@ -3,6 +3,7 @@
 import { IllustratedAvatar } from "@moch/ui";
 import { Lock } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { SkylineStrip } from "@/components/CityBackdrop";
 import { AvatarCard } from "./AvatarCard";
 import { FirstWeek } from "./FirstWeek";
 import { Numeric } from "./Numeric";
@@ -37,12 +38,12 @@ export function MyWorldHero({
   const meta = [profile.title, profile.departmentName].filter(Boolean).join(" · ");
 
   return (
-    <section className="relative overflow-hidden rounded-xl border border-line bg-surface px-5 py-7 shadow-lg motion-safe:animate-fade-up sm:px-8 sm:py-8">
+    <section className="relative overflow-hidden rounded-xl border border-line bg-surface px-5 py-7 pb-10 shadow-lg motion-safe:animate-fade-up sm:px-8 sm:py-8 sm:pb-12">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,var(--sky-glow),transparent_58%)]"
       />
-      <div className="relative grid grid-cols-1 justify-items-center gap-4 text-center md:grid-cols-[auto_minmax(0,1fr)] md:items-center md:justify-items-stretch md:gap-x-8 md:text-start">
+      <div className="relative z-10 grid grid-cols-1 justify-items-center gap-4 text-center md:grid-cols-[auto_minmax(0,1fr)] md:items-center md:justify-items-stretch md:gap-x-8 md:text-start">
         <div className="md:col-start-2 md:row-start-1 md:self-end">
           {change ? <p className="mb-2 text-sm font-semibold text-brand">{t(`change.${change}`)}</p> : null}
           <h1 className="text-3xl font-bold tracking-tight text-content">
@@ -81,6 +82,7 @@ export function MyWorldHero({
           ) : null}
         </div>
       </div>
+      <SkylineStrip />
     </section>
   );
 }
