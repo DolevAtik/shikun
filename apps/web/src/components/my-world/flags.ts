@@ -10,11 +10,15 @@ import type { MyWorldFlags } from "./types";
 export function getMyWorldFlags(): MyWorldFlags {
   return {
     showMissions: true,
+    showDailyStep: true,
+    showWeeklyCard: true,
+    showFocus: true,
     showJourney: true,
     showOverallProgress: true,
     showAchievements: true,
     showRecognition: true,
     showDepartmentProgress: true,
+    showDistrictLeaderboard: true,
     showUnlocks: true,
   };
 }

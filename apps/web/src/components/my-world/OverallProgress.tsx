@@ -8,7 +8,7 @@ import { Numeric } from "./Numeric";
 import { formatXp } from "./progress";
 import type { OverallStats } from "./types";
 
-export function OverallProgress({ stats }: { stats: OverallStats }) {
+export function OverallProgress({ stats, graceAvailable }: { stats: OverallStats; graceAvailable: boolean }) {
   const t = useTranslations("myWorld");
   const locale = useLocale();
 
@@ -43,6 +43,7 @@ export function OverallProgress({ stats }: { stats: OverallStats }) {
         ))}
       </ul>
       <p className="mt-2 px-1 text-xs text-content-muted">{t("streakHint")}</p>
+      {graceAvailable ? <p className="px-1 text-xs font-medium text-content">{t("graceAvailable")}</p> : null}
     </section>
   );
 }

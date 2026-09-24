@@ -42,7 +42,7 @@ export const DEMO_MISSIONS: {
   cta: MissionCta;
   href: string | null;
 }[] = [
-  { id: "weekly", world: "know", xp: 20, minutes: 2, action: "complete", cta: "start", href: null },
+  { id: "weekly", world: "know", xp: 20, minutes: 2, action: "view", cta: "start", href: "/feed" },
   { id: "training", world: "develop", xp: 40, minutes: 10, action: "view", cta: "start", href: "/services" },
   { id: "activity", world: "participate", xp: 50, minutes: null, action: "view", cta: "details", href: "/feed" },
 ];
@@ -86,11 +86,29 @@ export const DEMO_RECOGNITIONS: {
   { id: "day", giverName: "אמיר פרידמן", badge: "community", awardedAt: "2026-08-27T08:00:00.000Z" },
 ];
 
-/** Collective totals only. No employee names and no rank. */
+/** Collective totals only. No employee names and no personal rank. */
 export const DEMO_DEPARTMENT = {
   earned: 1640,
   target: 2000,
 } as const;
+
+/**
+ * The five districts, ranked by shared activity. No employee names.
+ * Names match the org chart. A future API replaces the XP column.
+ */
+export const DEMO_DISTRICTS: {
+  code: "NORTH" | "HAIFA" | "CENTER" | "JERUSALEM" | "SOUTH";
+  nameHe: string;
+  nameEn: string;
+  color: string;
+  xp: number;
+}[] = [
+  { code: "CENTER", nameHe: "מחוז מרכז", nameEn: "Center District", color: "var(--district-center)", xp: 18400 },
+  { code: "HAIFA", nameHe: "מחוז חיפה", nameEn: "Haifa District", color: "var(--district-haifa)", xp: 16240 },
+  { code: "JERUSALEM", nameHe: "מחוז ירושלים", nameEn: "Jerusalem District", color: "var(--district-jerusalem)", xp: 14110 },
+  { code: "NORTH", nameHe: "מחוז צפון", nameEn: "North District", color: "var(--district-north)", xp: 12880 },
+  { code: "SOUTH", nameHe: "מחוז דרום", nameEn: "South District", color: "var(--district-south)", xp: 10950 },
+];
 
 export const DEMO_UNLOCKS: { id: "pin" | "badge" | "frame"; level: number }[] = [
   { id: "pin", level: 5 },

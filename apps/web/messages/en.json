@@ -153,6 +153,25 @@
       "activeDays": "Active days"
     },
     "streakHint": "Counted from meaningful activity, not from signing in.",
+    "graceAvailable": "You have a flexible day",
+    "thisWeek": "this week",
+    "stampsFilled": "{filled} of {total} stamps filled",
+    "endowed": "We started one for you",
+    "focusTitle": "This week I'm focusing on…",
+    "focusHint": "You can skip this. The choice only decides which mission comes first.",
+    "previewLabel": "The figure at the next stage",
+    "firstWeekTitle": "The first week",
+    "firstWeekSteps": {
+      "read": "Read one ministry update",
+      "service": "Open a service you will actually use",
+      "achievement": "The first-step achievement"
+    },
+    "change": {
+      "badge": "One activity left to a badge",
+      "department": "Your unit moved forward",
+      "step": "Today's step is still open"
+    },
+    "departmentMoved": "Your unit moved forward",
     "achievementsTitle": "My achievements",
     "achievementsEmpty": "No achievements yet",
     "achievementsEmptyHint": "An achievement opens after a real action, not after signing in.",
@@ -187,6 +206,13 @@
     "departmentReached": "The unit completed the mission!",
     "departmentMilestone": "Goal",
     "headquarters": "Headquarters",
+    "districtsTitle": "District leaderboard",
+    "districtsHint": "Ranked by each district's shared activity. No employee names.",
+    "districtsEmpty": "The leaderboard will show up here when there is something to rank.",
+    "districtsHeadquarters": "Headquarters watches the race. The districts are the ones competing.",
+    "myDistrict": "My district",
+    "districtLeader": "Leading",
+    "districtPlace": "Place {place}",
     "unlocksTitle": "What's waiting?",
     "unlocksEmpty": "Nothing new is waiting further along just now.",
     "unlocks": {

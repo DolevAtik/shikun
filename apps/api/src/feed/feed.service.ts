@@ -15,6 +15,7 @@ import type {
 import type { InteractionType, Prisma } from "@prisma/client";
 import { audienceWhere } from "../audience/audience";
 import { PrismaService } from "../common/prisma/prisma.service";
+import { WorldService } from "../world/world.service";
 import { TtlCache } from "../common/ttl-cache";
 import { toUserSummary, USER_INCLUDE } from "../users/user.mapper";
 
@@ -34,7 +35,10 @@ const MANDATORY_CHANNELS_TTL_MS = 60_000;
 export class FeedService {
   private readonly mandatoryChannelIds = new TtlCache<string[]>(MANDATORY_CHANNELS_TTL_MS);
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly world: WorldService,
+  ) {}
 
   async listChannels(viewer: ViewerScope): Promise<Channel[]> {
     const channels = await this.prisma.channel.findMany({
@@ -271,6 +275,8 @@ export class FeedService {
     // A post the viewer's audience excludes is not "forbidden", it is absent.
     // Saying otherwise confirms the content exists, which is itself a leak.
     if (!row?.feedPost) throw new NotFoundException("הפוסט לא נמצא");
+
+    await this.world.noteRead(viewer.userId, row.id);
 
     const interactions = await this.interactionsFor(viewer, [row.id]);
     const likeCount = await this.prisma.interaction.count({

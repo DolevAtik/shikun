@@ -197,6 +197,7 @@ model User {
   auditLogs       AuditLog[]
   analyticsEvents AnalyticsEvent[]
   reads           ContentRead[]
+  world           EmployeeWorld?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -641,6 +642,22 @@ model AnalyticsEvent {
 
 /// Per-user read receipts. One small table that answers "unread announcements"
 /// on the Dashboard, and earns the employee app a "new" badge for free.
+/// The personal loop: chosen week, streak, grace day, and this week's stamps.
+/// Level, recognition, and the district race do not live here.
+model EmployeeWorld {
+  userId         String    @id
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  chosenWorld    String?
+  streakDays     Int       @default(3)
+  graceAvailable Boolean   @default(true)
+  weeklyFilled   Int       @default(2)
+  weekStart      DateTime
+  lastActOn      DateTime?
+  bonusXp        Int       @default(0)
+  pulsePending   Boolean   @default(false)
+  updatedAt      DateTime  @updatedAt
+}
+
 model ContentRead {
   id            String   @id @default(cuid())
   userId        String

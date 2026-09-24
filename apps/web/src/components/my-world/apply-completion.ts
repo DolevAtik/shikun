@@ -1,5 +1,5 @@
 import { tierForLevel } from "./progress";
-import type { DepartmentProgress, Journey, Mission, ProgressSnapshot, XpProgress } from "./types";
+import type { DepartmentProgress, DistrictStanding, Journey, Mission, ProgressSnapshot, XpProgress } from "./types";
 
 export interface CompletionResult {
   snapshot: ProgressSnapshot;
@@ -38,6 +38,7 @@ export function applyMissionCompletion(
         missionsCompleted: snapshot.stats.missionsCompleted + 1,
       },
       department: addToDepartment(snapshot.department, mission.xp),
+      districts: addToMyDistrict(snapshot.districts, mission.xp),
     },
   };
 }
@@ -70,6 +71,10 @@ function addToJourney(journey: Journey, mission: Mission): Journey {
       journey.activitiesUntilBadge == null ? null : Math.max(0, journey.activitiesUntilBadge - 1),
     status: done ? "completed" : "active",
   };
+}
+
+function addToMyDistrict(districts: DistrictStanding[], amount: number): DistrictStanding[] {
+  return districts.map((district) => (district.isMine ? { ...district, xp: district.xp + amount } : district));
 }
 
 function addToDepartment(

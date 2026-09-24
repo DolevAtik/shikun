@@ -27,6 +27,14 @@ export function percentOf(value: number, max: number): number {
   return Math.round((Math.min(max, Math.max(0, value)) / max) * 100);
 }
 
+/** The next cosmetic cut, or null when the current figure is the last one. */
+export function nextAvatarLevel(level: number): number | null {
+  if (level < AVATAR_UPGRADE) return AVATAR_UPGRADE;
+  if (level < AVATAR_BADGE) return AVATAR_BADGE;
+  if (level < AVATAR_FRAME) return AVATAR_FRAME;
+  return null;
+}
+
 export function avatarProgress(level: number): AvatarProgress {
   const stage =
     level >= AVATAR_FRAME ? "frame" : level >= AVATAR_BADGE ? "badge" : level >= AVATAR_UPGRADE ? "upgrade" : "base";

@@ -153,6 +153,25 @@
       "activeDays": "ימים פעילים"
     },
     "streakHint": "נצבר מפעילות משמעותית, לא מכניסה למערכת.",
+    "graceAvailable": "יש לך יום גמיש",
+    "thisWeek": "השבוע",
+    "stampsFilled": "{filled} מתוך {total} חותמות מלאות",
+    "endowed": "התחלנו בשבילך",
+    "focusTitle": "השבוע אני מתמקד ב…",
+    "focusHint": "אפשר לדלג. הבחירה רק קובעת איזו משימה תוצג ראשונה.",
+    "previewLabel": "הדמות בשלב הבא",
+    "firstWeekTitle": "השבוע הראשון",
+    "firstWeekSteps": {
+      "read": "קראו עדכון אחד של המשרד",
+      "service": "פתחו שירות שתשתמשו בו",
+      "achievement": "ההישג צעד ראשון"
+    },
+    "change": {
+      "badge": "נשארה פעולה אחת להישג",
+      "department": "המחלקה התקדמה",
+      "step": "הצעד של היום עדיין פתוח"
+    },
+    "departmentMoved": "המחלקה התקדמה",
     "achievementsTitle": "ההישגים שלי",
     "achievementsEmpty": "עדיין אין הישגים",
     "achievementsEmptyHint": "הישג נפתח אחרי פעולה אמיתית, לא אחרי כניסה.",
@@ -187,6 +206,13 @@
     "departmentReached": "המחלקה השלימה את המשימה!",
     "departmentMilestone": "יעד",
     "headquarters": "המטה",
+    "districtsTitle": "התחרות בין המחוזות",
+    "districtsHint": "דירוג לפי פעילות משותפת של כל מחוז. בלי שמות של עובדים.",
+    "districtsEmpty": "התחרות תופיע כאן כשיהיו נתונים.",
+    "districtsHeadquarters": "עובדי המטה צופים בתחרות. המחוזות הם שמתחרים.",
+    "myDistrict": "המחוז שלי",
+    "districtLeader": "מוביל",
+    "districtPlace": "מקום {place}",
     "unlocksTitle": "מה מחכה לי?",
     "unlocksEmpty": "אין כרגע פתיחות חדשות בהמשך הדרך.",
     "unlocks": {

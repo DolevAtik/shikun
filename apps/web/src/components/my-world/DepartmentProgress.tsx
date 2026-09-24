@@ -7,7 +7,13 @@ import { Numeric } from "./Numeric";
 import { formatXp, xpRatio } from "./progress";
 import type { DepartmentProgress as DepartmentModel } from "./types";
 
-export function DepartmentProgress({ department }: { department: DepartmentModel }) {
+export function DepartmentProgress({
+  department,
+  moved,
+}: {
+  department: DepartmentModel;
+  moved: boolean;
+}) {
   const t = useTranslations("myWorld");
   const locale = useLocale();
   const remaining = Math.max(0, department.target - department.earned);
@@ -24,6 +30,7 @@ export function DepartmentProgress({ department }: { department: DepartmentModel
           <div className="min-w-0">
             <h3 className="font-semibold text-content">{department.name}</h3>
             <p className="text-sm text-content-muted">{t("departmentHint")}</p>
+            {moved ? <p className="text-sm font-semibold text-content">{t("departmentMoved")}</p> : null}
           </div>
         </div>
 

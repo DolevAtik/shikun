@@ -14,6 +14,7 @@ import { JobsModule } from "./jobs/jobs.module";
 import { MediaModule } from "./media/media.module";
 import { OrgModule } from "./org/org.module";
 import { ServicesModule } from "./services/services.module";
+import { WorldModule } from "./world/world.module";
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { ServicesModule } from "./services/services.module";
     AuthModule,
     HomeModule,
     ServicesModule,
+    WorldModule,
     JobsModule,
     FeedModule,
     OrgModule,

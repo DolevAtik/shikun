@@ -3,11 +3,15 @@ import type { WorldId } from "@moch/ui";
 /** Switches an admin can later turn on and off without rewriting the screen. */
 export interface MyWorldFlags {
   showMissions: boolean;
+  showDailyStep: boolean;
+  showWeeklyCard: boolean;
+  showFocus: boolean;
   showJourney: boolean;
   showOverallProgress: boolean;
   showAchievements: boolean;
   showRecognition: boolean;
   showDepartmentProgress: boolean;
+  showDistrictLeaderboard: boolean;
   showUnlocks: boolean;
 }
 
@@ -61,6 +65,16 @@ export interface Journey {
   status: JourneyStatus;
 }
 
+export type WorldChange = "badge" | "department" | "step";
+
+/** Three stamps. Close enough to pull a person back this week. */
+export interface WeeklyCard {
+  filled: number;
+  total: number;
+  /** The first stamp was given, and the screen says so. */
+  endowed: boolean;
+}
+
 export interface OverallStats {
   totalXp: number;
   missionsCompleted: number;
@@ -94,6 +108,19 @@ export interface DepartmentProgress {
   name: string;
   earned: number;
   target: number;
+}
+
+/**
+ * One district in the race. Collective XP only — never an employee name.
+ * `isMine` is the signed-in person's district. Headquarters has none.
+ */
+export interface DistrictStanding {
+  code: "NORTH" | "HAIFA" | "CENTER" | "JERUSALEM" | "SOUTH";
+  name: string;
+  /** A theme token, e.g. var(--district-haifa). */
+  color: string;
+  xp: number;
+  isMine: boolean;
 }
 
 export interface Unlock {
@@ -132,7 +159,17 @@ export interface EmployeeGamification {
   achievements: Achievement[];
   recognitions: Recognition[];
   department: DepartmentProgress | null;
+  districts: DistrictStanding[];
   unlocks: Unlock[];
+  weekly: WeeklyCard;
+  /** Null when nothing moved and nothing is waiting. No invented urgency. */
+  change: WorldChange | null;
+  graceAvailable: boolean;
+  chosenWorld: WorldId | null;
+  /** The three-step first week replaces the stamp card. */
+  firstWeek: boolean;
+  /** Level the next figure is drawn at. Null when nothing cosmetic remains. */
+  nextAvatarLevel: number | null;
 }
 
 /** The slice a mission completion is allowed to change. */
@@ -142,4 +179,5 @@ export interface ProgressSnapshot {
   journeys: Journey[];
   stats: OverallStats;
   department: DepartmentProgress | null;
+  districts: DistrictStanding[];
 }

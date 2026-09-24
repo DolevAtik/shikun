@@ -6,5 +6,6 @@ export * from "./home";
 export * from "./services";
 export * from "./jobs";
 export * from "./feed";
+export * from "./world";
 export * from "./list";
 export * from "./admin";
