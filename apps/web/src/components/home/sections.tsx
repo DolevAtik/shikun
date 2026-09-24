@@ -44,14 +44,12 @@ export async function HomeSectionView({ section, locale, firstName, greeting }: 
   switch (section.type) {
     case "GREETING":
       return (
-        <section className="relative overflow-hidden px-4 pb-6 pt-6">
-          <div className="relative z-10">
-            <h1 className="text-2xl font-bold tracking-tight text-content">
-              {t(`greeting.${greeting}` as never, { name: firstName })}
-            </h1>
-            <p className="mt-1 text-content-muted">{t("greetingSub")}</p>
-          </div>
-          <SkylineStrip className="h-12 text-brand/20 dark:text-brand/30" />
+        <section className="overflow-hidden px-4 pt-6">
+          <h1 className="text-2xl font-bold tracking-tight text-content">
+            {t(`greeting.${greeting}` as never, { name: firstName })}
+          </h1>
+          <p className="mt-1 text-content-muted">{t("greetingSub")}</p>
+          <SkylineStrip className="mt-3 h-10 text-brand/20 dark:text-brand/30" />
         </section>
       );
 
@@ -143,8 +141,7 @@ export async function HomeSectionView({ section, locale, firstName, greeting }: 
             interactive
             className="relative overflow-hidden border-0 bg-gradient-to-bl from-[--hero-from] to-[--hero-to] text-content-onsurfacebrand"
           >
-            {/* Extra bottom padding clears the roof strip so highlights stay legible. */}
-            <div className="relative z-10 p-5 pb-16">
+            <div className="p-5 pb-2">
               <p className="text-xs font-medium uppercase tracking-wide opacity-80">
                 {formatDate(summary.weekOf, locale)}
               </p>
@@ -160,7 +157,7 @@ export async function HomeSectionView({ section, locale, firstName, greeting }: 
                 ))}
               </ul>
             </div>
-            <SkylineStrip className="h-11 text-black/25 dark:text-white/10" />
+            <SkylineStrip className="h-9 text-black/25 dark:text-white/15" />
           </Card>
         </section>
       );

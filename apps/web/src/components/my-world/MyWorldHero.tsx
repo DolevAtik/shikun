@@ -38,7 +38,7 @@ export function MyWorldHero({
   const meta = [profile.title, profile.departmentName].filter(Boolean).join(" · ");
 
   return (
-    <section className="relative overflow-hidden rounded-xl border border-line bg-surface px-5 py-7 pb-10 shadow-lg motion-safe:animate-fade-up sm:px-8 sm:py-8 sm:pb-12">
+    <section className="relative overflow-hidden rounded-xl border border-line bg-surface px-5 pt-7 shadow-lg motion-safe:animate-fade-up sm:px-8 sm:pt-8">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,var(--sky-glow),transparent_58%)]"
@@ -82,7 +82,7 @@ export function MyWorldHero({
           ) : null}
         </div>
       </div>
-      <SkylineStrip />
+      <SkylineStrip className="mt-4 h-10" />
     </section>
   );
 }

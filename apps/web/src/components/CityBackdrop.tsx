@@ -53,8 +53,8 @@ export function SkylineStrip({ className }: { className?: string }) {
       viewBox="0 0 360 56"
       preserveAspectRatio="xMidYMax slice"
       className={cn(
-        // z-0 keeps roofs behind any sibling with z-10 — text must never sit under windows.
-        "pointer-events-none absolute inset-x-0 bottom-0 z-0 h-14 w-full overflow-hidden text-brand/25 dark:text-brand/35 rtl:-scale-x-100",
+        // In normal flow, under the text. An absolute strip covered the last line.
+        "pointer-events-none relative block h-12 w-full overflow-hidden text-brand/25 dark:text-brand/35 rtl:-scale-x-100",
         className,
       )}
     >
