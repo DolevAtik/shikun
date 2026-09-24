@@ -310,6 +310,9 @@
   },
   "common": {
     "comingSoon": "Coming soon",
-    "comingSoonHint": "This module is planned for the next round."
+    "comingSoonHint": "This module is planned for the next round.",
+    "loadErrorTitle": "We couldn't load this page",
+    "loadErrorHint": "The server is waking up. Try again in a moment.",
+    "retry": "Try again"
   }
 }

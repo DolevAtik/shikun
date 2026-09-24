@@ -310,6 +310,9 @@
   },
   "common": {
     "comingSoon": "בקרוב",
-    "comingSoonHint": "המודול הזה מתוכנן לסבב הבא."
+    "comingSoonHint": "המודול הזה מתוכנן לסבב הבא.",
+    "loadErrorTitle": "לא הצלחנו לטעון את העמוד",
+    "loadErrorHint": "השרת מתעורר. נסו שוב בעוד רגע.",
+    "retry": "ניסיון נוסף"
   }
 }
