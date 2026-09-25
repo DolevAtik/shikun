@@ -1,24 +1,24 @@
 "use client";
 
+import type { Level } from "@moch/contracts";
 import { ProgressBar } from "@moch/ui";
 import { useLocale, useTranslations } from "next-intl";
 import { Numeric } from "./Numeric";
 import { useAnimatedNumber, usePrefersReducedMotion } from "./motion";
-import { formatXp, xpRatio } from "./progress";
-import type { XpProgress as XpProgressModel } from "./types";
+import { formatXp, xpText } from "./progress";
 
 interface XpProgressProps {
-  xp: XpProgressModel;
-  /** The grant just applied, so the counter can show where the points landed. */
+  level: Level;
+  /** XP that just landed, so the counter can show where the points came from. */
   gain: number | null;
 }
 
-export function XpProgress({ xp, gain }: XpProgressProps) {
+export function XpProgress({ level, gain }: XpProgressProps) {
   const t = useTranslations("myWorld");
   const locale = useLocale();
   const reduced = usePrefersReducedMotion();
-  const shown = useAnimatedNumber(xp.current, reduced);
-  const remaining = Math.max(0, xp.next - shown);
+  const shown = useAnimatedNumber(level.current, reduced);
+  const ratio = `${formatXp(shown, locale)} / ${formatXp(level.next, locale)} XP`;
 
   return (
     <div className="mt-4">
@@ -30,7 +30,7 @@ export function XpProgress({ xp, gain }: XpProgressProps) {
               <Numeric>+{formatXp(gain, locale)} XP</Numeric>
             </span>
           ) : null}
-          <Numeric className="text-sm font-semibold text-content">{xpRatio(shown, xp.next, locale)}</Numeric>
+          <Numeric className="text-sm font-semibold text-content">{ratio}</Numeric>
         </span>
       </div>
       <ProgressBar
@@ -38,20 +38,12 @@ export function XpProgress({ xp, gain }: XpProgressProps) {
         hideLabel
         hideValue
         size="lg"
-        value={xp.current}
-        max={xp.next}
-        valueText={xpRatio(xp.current, xp.next, locale)}
+        value={level.current}
+        max={level.next}
+        valueText={`${formatXp(level.current, locale)} / ${formatXp(level.next, locale)} XP`}
       />
       <p className="mt-2 text-sm text-content-muted">
-        {remaining === 0 ? (
-          t("levelReady")
-        ) : (
-          <>
-            {t("untilPrefix") ? <>{t("untilPrefix")} </> : null}
-            <Numeric>{formatXp(remaining, locale)} XP</Numeric> {t("untilLevel")}{" "}
-            <Numeric>{xp.level + 1}</Numeric>
-          </>
-        )}
+        {t("untilLevel", { xp: xpText(Math.max(0, level.next - shown), locale), level: level.level + 1 })}
       </p>
     </div>
   );

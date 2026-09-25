@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { WorldFocusSchema } from "./world";
 import { AudienceSchema } from "./audience";
 import { UserSummarySchema } from "./user";
 
@@ -111,6 +112,11 @@ export const FeedPostSchema = z.object({
   commentCount: z.number(),
   isLiked: z.boolean(),
   isBookmarked: z.boolean(),
+  /**
+   * Set only on `GET /feed/posts/:id`, and only on the viewer's first full
+   * read of this post — the XP that read just earned.
+   */
+  reward: z.object({ xp: z.number().int(), world: WorldFocusSchema }).nullable().optional(),
 });
 export type FeedPost = z.infer<typeof FeedPostSchema>;
 

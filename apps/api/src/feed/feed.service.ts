@@ -15,6 +15,7 @@ import type {
 import type { InteractionType, Prisma } from "@prisma/client";
 import { audienceWhere } from "../audience/audience";
 import { PrismaService } from "../common/prisma/prisma.service";
+import { RULES, worldForChannel } from "../progression/rules";
 import { WorldService } from "../world/world.service";
 import { TtlCache } from "../common/ttl-cache";
 import { toUserSummary, USER_INCLUDE } from "../users/user.mapper";
@@ -276,14 +277,17 @@ export class FeedService {
     // Saying otherwise confirms the content exists, which is itself a leak.
     if (!row?.feedPost) throw new NotFoundException("הפוסט לא נמצא");
 
-    await this.world.noteRead(viewer.userId, row.id);
+    const firstRead = await this.world.noteRead(viewer.userId, row.id);
 
     const interactions = await this.interactionsFor(viewer, [row.id]);
     const likeCount = await this.prisma.interaction.count({
       where: { contentItemId: row.id, type: "LIKE" },
     });
 
-    return this.toFeedPost({ ...row, likeCount }, interactions, { truncateBody: false });
+    return {
+      ...this.toFeedPost({ ...row, likeCount }, interactions, { truncateBody: false }),
+      reward: firstRead ? { xp: RULES.xp.read, world: worldForChannel(row.feedPost.channel.slug) } : null,
+    };
   }
 
   async toggleInteraction(

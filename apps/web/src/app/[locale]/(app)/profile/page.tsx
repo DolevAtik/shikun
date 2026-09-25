@@ -1,9 +1,11 @@
-import type { CurrentUser } from "@moch/contracts";
-import { Avatar, Card, Chip, SectionHeader } from "@moch/ui";
-import { Building2, Mail, MapPin, Phone } from "lucide-react";
+import type { CurrentUser, EmployeeProgress } from "@moch/contracts";
+import { Avatar, Card, Chip, IllustratedAvatar, ProgressBar, SectionHeader } from "@moch/ui";
+import { Award, Building2, ChevronLeft, Mail, MapPin, Medal, Phone } from "lucide-react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ProfileActions } from "@/components/ProfileActions";
+import { Link } from "@/i18n/routing";
 import { serverFetchOrLogin } from "@/lib/api";
+import { xpText } from "@/components/my-world/progress";
 import { formatDate } from "@/lib/format";
 
 const ROLE_LABELS: Record<string, string> = {
@@ -22,7 +24,13 @@ export default async function ProfilePage({ params }: { params: Promise<{ locale
 
   const t = await getTranslations("nav");
   const tSettings = await getTranslations("settings");
-  const user = await serverFetchOrLogin<CurrentUser>("/auth/me", locale);
+  const tProfile = await getTranslations("profile");
+  const tWorld = await getTranslations("myWorld");
+  const [user, progress] = await Promise.all([
+    serverFetchOrLogin<CurrentUser>("/auth/me", locale),
+    serverFetchOrLogin<EmployeeProgress>("/me/progress", locale),
+  ]);
+  const unlocked = progress.achievements.filter((achievement) => achievement.unlockedAt !== null);
 
   return (
     <div className="mx-auto flex w-full max-w-2xl flex-col gap-4 p-4 pt-6">
@@ -43,6 +51,36 @@ export default async function ProfilePage({ params }: { params: Promise<{ locale
           ))}
         </div>
       </Card>
+
+      <section>
+        <SectionHeader title={tProfile("progressTitle")} />
+        <Link
+          href="/my-world"
+          className="block rounded-lg focus-visible:outline-none focus-visible:shadow-focus"
+          aria-label={`${tProfile("openWorld")} · ${tProfile("levelXp", { level: progress.level.level, xp: xpText(progress.level.total, locale) })}`}
+        >
+          <Card interactive className="flex items-center gap-4 p-4">
+            <span className="size-14 shrink-0 overflow-hidden rounded-full bg-brand-soft ring-2 ring-line">
+              <IllustratedAvatar level={progress.level.level} />
+            </span>
+            <span className="min-w-0 flex-1">
+              <span className="block font-semibold text-content">
+                {tProfile("levelXp", { level: progress.level.level, xp: xpText(progress.level.total, locale) })}
+              </span>
+              <ProgressBar
+                className="mt-2"
+                label={tWorld("xpLabel")}
+                hideLabel
+                hideValue
+                value={progress.level.current}
+                max={progress.level.next}
+                valueText={`${progress.level.current} / ${progress.level.next} XP`}
+              />
+            </span>
+            <ChevronLeft aria-hidden="true" className="size-4 shrink-0 text-content-muted ltr:rotate-180" />
+          </Card>
+        </Link>
+      </section>
 
       <section>
         <SectionHeader title="פרטים" />
@@ -71,11 +109,49 @@ export default async function ProfilePage({ params }: { params: Promise<{ locale
         </p>
       ) : null}
 
-      {/* Skills, badges, activity and posts land with the full Profile module.
-          Saying so beats faking an empty tab. */}
-      <p className="px-1 text-xs text-content-muted">
-        כישורים, תגים, פעילות ופוסטים — בסבב הבא.
-      </p>
+      <section>
+        <SectionHeader title={tProfile("achievements")} />
+        {unlocked.length === 0 ? (
+          <p className="px-1 text-sm text-content-muted">{tProfile("achievementsEmpty")}</p>
+        ) : (
+          <ul className="flex flex-wrap gap-2">
+            {unlocked.map((achievement) => (
+              <li key={achievement.id}>
+                <Chip className="gap-1.5 bg-warning-soft text-content">
+                  <Award aria-hidden="true" className="size-3.5 text-accent-amber" />
+                  {tWorld(`achievements.items.${achievement.id}.title`)}
+                </Chip>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+
+      <section>
+        <SectionHeader title={tProfile("recognition")} />
+        {progress.recognitions.length === 0 ? (
+          <p className="px-1 text-sm text-content-muted">{tProfile("recognitionEmpty")}</p>
+        ) : (
+          <ul className="flex flex-col gap-2">
+            {progress.recognitions.slice(0, 3).map((recognition) => (
+              <li key={recognition.id}>
+                <Card className="flex items-start gap-3 p-4">
+                  <Medal aria-hidden="true" className="mt-0.5 size-4 shrink-0" style={{ color: recognition.badgeColor }} />
+                  <div className="min-w-0 text-sm">
+                    <p className="font-semibold text-content">
+                      {locale === "en" ? recognition.badgeNameEn : recognition.badgeNameHe}
+                    </p>
+                    <p className="text-content">{recognition.reason}</p>
+                    {recognition.giverName ? (
+                      <p className="mt-1 text-xs text-content-muted">{tProfile("from", { name: recognition.giverName })}</p>
+                    ) : null}
+                  </div>
+                </Card>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
     </div>
   );
 }

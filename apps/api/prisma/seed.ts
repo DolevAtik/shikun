@@ -130,6 +130,7 @@ async function main() {
   await seedWeeklySummary();
   await seedRecognition(users);
   await seedContent({ users, districts, departments, channels });
+  await seedProgress(users);
 
   console.log("\nSeed complete.\n");
   printLogins();
@@ -441,6 +442,78 @@ async function seedRecognition(users: User[]) {
       { recipientId: pick(12).id, badge: "KNOWLEDGE_SHARER", reason: "העבירה סדנה על תכנון סטטוטורי לכל רכזי התכנון במחוזות", awardedAt: daysAgo(2) },
       { recipientId: pick(19).id, badge: "DISTRICT_AMBASSADOR", reason: "חיבר בין מחוז דרום למטה בפרויקט נווה מדבר", awardedAt: daysAgo(5) },
       { recipientId: pick(27).id, badge: "INNOVATION_CHAMPION", reason: "יזם את אוטומציית דוחות הפיקוח שחסכה כ-30 שעות עבודה בחודש", awardedAt: daysAgo(9) },
+    ],
+  });
+}
+
+/**
+ * History for העולם שלי, written into the same tables the product writes:
+ * `ContentRead` (a full read of a post) and `Registration`. Nothing here is a
+ * score — XP, level, streak and achievements are computed from these rows.
+ *
+ * נועה (employee@) has read five posts across three worlds on recent days and
+ * registered for one training, so she opens on level 2 with the newest posts,
+ * one training and the events still open as missions. Her department
+ * colleagues have read a little this month, so the department bar has a real
+ * total without naming anyone.
+ */
+async function seedProgress(users: User[]) {
+  const noa = users.find((u) => u.email === "employee@moch.gov.il")!;
+  const hr = users.find((u) => u.email === "hr@moch.gov.il")!;
+  const manager = users.find((u) => u.email === "manager@moch.gov.il")!;
+
+  const posts = await prisma.contentItem.findMany({
+    where: { kind: "FEED_POST" },
+    select: { id: true, feedPost: { select: { channel: { select: { slug: true } } } } },
+    orderBy: { publishedAt: "desc" },
+  });
+  const bySlug = (slug: string) => posts.find((post) => post.feedPost?.channel.slug === slug)?.id;
+  const history: { slug: string; daysAgo: number }[] = [
+    { slug: "projects", daysAgo: 7 },
+    { slug: "innovation", daysAgo: 6 },
+    { slug: "people", daysAgo: 3 },
+    { slug: "learning", daysAgo: 2 },
+    { slug: "success-stories", daysAgo: 1 },
+  ];
+  for (const read of history) {
+    const contentItemId = bySlug(read.slug);
+    if (!contentItemId) continue;
+    await prisma.contentRead.create({ data: { userId: noa.id, contentItemId, readAt: daysAgo(read.daysAgo) } });
+  }
+
+  const writing = await prisma.contentItem.findFirst({
+    where: { kind: "TRAINING", title: { contains: "כתיבה" } },
+    select: { id: true },
+  });
+  if (writing) {
+    await prisma.registration.create({ data: { userId: noa.id, contentItemId: writing.id, createdAt: daysAgo(1) } });
+  }
+
+  const colleagues = users.filter((u) => u.departmentId === noa.departmentId && u.id !== noa.id);
+  for (const [index, colleague] of colleagues.entries()) {
+    for (const post of posts.slice(index, index + 2 + (index % 3))) {
+      await prisma.contentRead.create({
+        data: { userId: colleague.id, contentItemId: post.id, readAt: daysAgo((index % 4) + 1) },
+      });
+    }
+  }
+
+  await prisma.recognition.createMany({
+    data: [
+      {
+        recipientId: noa.id,
+        giverId: manager.id,
+        badge: "KNOWLEDGE_SHARER",
+        reason: "בנתה לצוות תבנית אחידה לבקשות תקציב, וחסכה לכולנו סבב תיקונים שלם",
+        awardedAt: daysAgo(4),
+      },
+      {
+        recipientId: noa.id,
+        giverId: hr.id,
+        badge: "COMMUNITY_CONTRIBUTOR",
+        reason: "ליוותה שלושה עובדים חדשים בשבועות הראשונים שלהם באגף",
+        awardedAt: daysAgo(18),
+      },
     ],
   });
 }

@@ -1,136 +1,148 @@
 "use client";
 
-import type { EmployeeWorld, WorldFocus } from "@moch/contracts";
-import type { WorldId } from "@moch/ui";
+import type { EmployeeProgress, EmployeeWorld, Mission, WorldFocus } from "@moch/contracts";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 import { clientFetch } from "@/lib/client-api";
-import { AchievementsSection } from "./AchievementsSection";
-import { applyMissionCompletion } from "./apply-completion";
-import { DepartmentProgress } from "./DepartmentProgress";
-import { DistrictLeaderboard } from "./DistrictLeaderboard";
+import { AchievementSection } from "./AchievementSection";
+import { DepartmentQuest } from "./DepartmentQuest";
+import { DetailSheet } from "./DetailSheet";
+import { getMyWorldFlags } from "./flags";
 import { JourneySection } from "./JourneySection";
 import { LevelUpDialog } from "./LevelUpDialog";
-import { MissionSection } from "./MissionSection";
+import { MissionSection, type RegisteredNotice } from "./MissionSection";
 import { MyWorldHero } from "./MyWorldHero";
 import { OverallProgress } from "./OverallProgress";
-import { usePrefersReducedMotion } from "./motion";
+import { orderMissions } from "./progress";
 import { RecognitionSection } from "./RecognitionSection";
-import type { EmployeeGamification, ProgressSnapshot } from "./types";
-import { UnlocksSection } from "./UnlocksSection";
+import { RegisterSheet } from "./RegisterSheet";
+import type { Detail, MyWorldProfile } from "./types";
+import { UnlockSection } from "./UnlockSection";
 
-export function MyWorldExperience({ initial }: { initial: EmployeeGamification }) {
+/** What this browser last saw, so a return visit can show what moved. Best effort only. */
+const SEEN_KEY = "moch:my-world:seen";
+
+interface Seen {
+  total: number;
+  level: number;
+}
+
+function readSeen(): Seen | null {
+  try {
+    const raw = window.localStorage.getItem(SEEN_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as Partial<Seen>;
+    return typeof parsed.total === "number" && typeof parsed.level === "number" ? { total: parsed.total, level: parsed.level } : null;
+  } catch {
+    return null;
+  }
+}
+
+function writeSeen(progress: EmployeeProgress) {
+  try {
+    window.localStorage.setItem(SEEN_KEY, JSON.stringify({ total: progress.level.total, level: progress.level.level }));
+  } catch {
+    // Private mode or blocked storage: the screen works the same, it just can't say "since last visit".
+  }
+}
+
+export function MyWorldExperience({ profile, initial }: { profile: MyWorldProfile; initial: EmployeeProgress }) {
   const t = useTranslations("myWorld");
-  const reduced = usePrefersReducedMotion();
-  const [snapshot, setSnapshot] = useState<ProgressSnapshot>({
-    xp: initial.xp,
-    missions: initial.missions,
-    journeys: initial.journeys,
-    stats: initial.stats,
-    department: initial.department,
-    districts: initial.districts,
-  });
-  const [gain, setGain] = useState<{ id: string; amount: number } | null>(null);
+  const flags = getMyWorldFlags();
+  const [progress, setProgress] = useState(initial);
+  const [chosen, setChosen] = useState<WorldFocus | null>(initial.chosenWorld);
+  const [focusError, setFocusError] = useState(false);
+  const [detail, setDetail] = useState<Detail | null>(null);
+  const [gain, setGain] = useState<number | null>(null);
+  const [sinceLastVisit, setSinceLastVisit] = useState<number | null>(null);
   const [celebration, setCelebration] = useState<number | null>(null);
+  const [notice, setNotice] = useState<RegisteredNotice | null>(null);
   const [announcement, setAnnouncement] = useState("");
-  const [chosenWorld, setChosenWorld] = useState<WorldId | null>(initial.chosenWorld);
   const gainTimer = useRef<number | null>(null);
 
+  // A return after reading a post elsewhere: say what moved, and celebrate a level crossed while away.
   useEffect(() => {
-    if (!initial.change || initial.change !== "department") return;
-    clientFetch<EmployeeWorld>("/me/world", {
-      method: "PATCH",
-      body: JSON.stringify({ pulseSeen: true }),
-    }).catch(() => undefined);
-  }, [initial.change]);
+    const seen = readSeen();
+    if (seen && initial.level.total > seen.total) {
+      setSinceLastVisit(initial.level.total - seen.total);
+      if (initial.level.level > seen.level) setCelebration(initial.level.level);
+    }
+    writeSeen(initial);
+  }, [initial]);
 
-  useEffect(() => {
-    return () => {
+  useEffect(
+    () => () => {
       if (gainTimer.current) window.clearTimeout(gainTimer.current);
-    };
-  }, []);
+    },
+    [],
+  );
 
-  const complete = (id: string) => {
-    const result = applyMissionCompletion(snapshot, id);
-    if (!result) return;
-    setSnapshot(result.snapshot);
-    setGain({ id, amount: result.xpGained });
-    setAnnouncement(
-      t("xpLive", {
-        xp: result.xpGained,
-        current: result.snapshot.xp.current,
-        next: result.snapshot.xp.next,
-      }),
-    );
-    if (result.leveledUpTo) setCelebration(result.leveledUpTo);
-    if (gainTimer.current) window.clearTimeout(gainTimer.current);
-    gainTimer.current = window.setTimeout(() => setGain(null), 1600);
+  const onRegistered = (next: EmployeeProgress, mission: Mission) => {
+    const gained = next.level.total - progress.level.total;
+    setProgress(next);
+    setDetail(null);
+    writeSeen(next);
+    setNotice({ title: mission.title, xp: gained > 0 ? gained : mission.xp, world: mission.world });
+    if (gained > 0) {
+      setGain(gained);
+      setAnnouncement(t("xpLive", { xp: gained, current: next.level.current, next: next.level.next, level: next.level.level }));
+      if (gainTimer.current) window.clearTimeout(gainTimer.current);
+      gainTimer.current = window.setTimeout(() => setGain(null), 1600);
+    }
+    if (next.level.level > progress.level.level) setCelebration(next.level.level);
   };
 
-  const choose = (world: WorldId | null) => {
-    setChosenWorld(world);
-    const chosenWorld: WorldFocus | null = world;
-    clientFetch<EmployeeWorld>("/me/world", {
-      method: "PATCH",
-      body: JSON.stringify({ chosenWorld }),
-    }).catch(() => setChosenWorld(initial.chosenWorld));
+  const choose = (world: WorldFocus | null) => {
+    const previous = chosen;
+    setChosen(world);
+    setFocusError(false);
+    clientFetch<EmployeeWorld>("/me/world", { method: "PATCH", body: JSON.stringify({ chosenWorld: world }) }).catch(() => {
+      setChosen(previous);
+      setFocusError(true);
+    });
   };
 
-  const missions = [...snapshot.missions].sort((a, b) => {
-    if (!chosenWorld) return 0;
-    const rank = (world: WorldId, completed: boolean) => (world === chosenWorld && !completed ? 0 : 1);
-    return rank(a.world, a.completed) - rank(b.world, b.completed);
-  });
-
-  const { flags } = initial;
-  const upcoming = initial.unlocks.filter((unlock) => unlock.level > snapshot.xp.level).slice(0, 4);
-  const nextUnlock = upcoming[0] ?? null;
+  const openRegister = (mission: Mission) => setDetail({ kind: "register", mission });
+  const missions = orderMissions(progress.missions, chosen);
+  const celebrated = celebration === null ? null : (progress.unlocks.find((unlock) => unlock.level === celebration) ?? null);
 
   return (
     <div className="flex min-w-0 flex-col gap-10">
       <MyWorldHero
-        profile={initial.profile}
-        xp={snapshot.xp}
-        gain={gain?.amount ?? null}
-        nextUnlock={nextUnlock}
-        change={flags.showWeeklyCard ? initial.change : null}
-        weekly={flags.showWeeklyCard && !initial.firstWeek ? initial.weekly : null}
-        firstWeek={flags.showWeeklyCard && initial.firstWeek}
-        readDone={initial.missions.some((mission) => mission.id === "weekly" && mission.completed)}
-        nextAvatarLevel={initial.nextAvatarLevel}
+        profile={profile}
+        progress={progress}
+        gain={gain}
+        sinceLastVisit={sinceLastVisit}
+        onOpen={setDetail}
+        onRegister={openRegister}
       />
-
-      {flags.showOverallProgress ? (
-        <OverallProgress stats={snapshot.stats} graceAvailable={initial.graceAvailable} />
-      ) : null}
-      {flags.showMissions && flags.showDailyStep && !initial.firstWeek ? (
-        <MissionSection
-          missions={missions}
-          gainId={gain?.id ?? null}
-          reducedMotion={reduced}
-          onComplete={complete}
-        />
-      ) : null}
+      {flags.showStats ? <OverallProgress progress={progress} /> : null}
+      {flags.showMissions ? <MissionSection missions={missions} notice={notice} onRegister={openRegister} /> : null}
       {flags.showJourney ? (
         <JourneySection
-          journeys={snapshot.journeys}
-          chosenWorld={chosenWorld}
+          progress={progress}
+          chosen={chosen}
           showFocus={flags.showFocus}
+          focusError={focusError}
           onChoose={choose}
+          onOpen={setDetail}
         />
       ) : null}
-      {flags.showAchievements ? <AchievementsSection items={initial.achievements} /> : null}
-      {flags.showRecognition ? <RecognitionSection items={initial.recognitions} /> : null}
-      {flags.showDepartmentProgress && snapshot.department ? (
-        <DepartmentProgress department={snapshot.department} moved={initial.change === "department"} />
-      ) : null}
-      {flags.showDistrictLeaderboard ? <DistrictLeaderboard districts={snapshot.districts} /> : null}
-      {flags.showUnlocks ? <UnlocksSection items={upcoming} /> : null}
+      {flags.showAchievements ? <AchievementSection items={progress.achievements} onOpen={setDetail} /> : null}
+      {flags.showRecognition ? <RecognitionSection items={progress.recognitions} onOpen={setDetail} /> : null}
+      {flags.showDepartment ? <DepartmentQuest department={progress.department} onOpen={setDetail} /> : null}
+      {flags.showUnlocks ? <UnlockSection items={progress.unlocks} total={progress.level.total} onOpen={setDetail} /> : null}
 
       <p aria-live="polite" className="sr-only">
         {announcement}
       </p>
-      <LevelUpDialog level={celebration} onClose={() => setCelebration(null)} />
+      <DetailSheet detail={detail} progress={progress} onClose={() => setDetail(null)} />
+      <RegisterSheet
+        mission={detail?.kind === "register" ? detail.mission : null}
+        onClose={() => setDetail(null)}
+        onRegistered={onRegistered}
+      />
+      <LevelUpDialog level={celebration} unlock={celebrated} onClose={() => setCelebration(null)} />
     </div>
   );
 }

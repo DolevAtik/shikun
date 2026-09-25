@@ -13,6 +13,7 @@ import { HomeModule } from "./home/home.module";
 import { JobsModule } from "./jobs/jobs.module";
 import { MediaModule } from "./media/media.module";
 import { OrgModule } from "./org/org.module";
+import { ProgressionModule } from "./progression/progression.module";
 import { ServicesModule } from "./services/services.module";
 import { WorldModule } from "./world/world.module";
 
@@ -26,6 +27,7 @@ import { WorldModule } from "./world/world.module";
     HomeModule,
     ServicesModule,
     WorldModule,
+    ProgressionModule,
     JobsModule,
     FeedModule,
     OrgModule,

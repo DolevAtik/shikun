@@ -91,151 +91,279 @@
     "title": "העולם שלי",
     "greeting": "שלום, {name}",
     "levelLabel": "רמה",
-    "journeyLine": {
-      "starter": "בתחילת הדרך במשרד",
-      "partner": "שותף/ה פעיל/ה במשרד",
-      "leader": "מוביל/ה בדרך במשרד",
-      "veteran": "ותיק/ה בדרך במשרד"
+    "tier": {
+      "starter": "בתחילת הדרך",
+      "partner": "שותף/ה פעיל/ה",
+      "leader": "מוביל/ה",
+      "veteran": "ותיק/ה במסע"
     },
+    "tierLine": "{tier} · רמה {level}",
     "xpLabel": "נקודות ניסיון",
-    "untilPrefix": "עוד",
-    "untilLevel": "לרמה",
-    "levelReady": "הרמה הבאה מוכנה",
-    "nextMission": "מה המשימה הבאה שלי?",
-    "explore": "גלו מה חדש במשרד",
-    "missionsTitle": "המשימה הבאה שלך",
-    "moreMissions": "עוד משימות",
-    "start": "התחל",
-    "details": "לפרטים",
-    "completed": "הושלם",
-    "duration": "{count, plural, one {דקה} two {שתי דקות} other {# דקות}}",
-    "missionsEmptyTitle": "הכול רגוע כרגע",
-    "missionsEmpty": "אין לך משימות פתוחות.",
-    "missionsEmptyHint": "משימות חדשות יופיעו כאן כשיהיו זמינות.",
-    "missionsDone": "סיימת את המשימות הפתוחות.",
-    "missions": {
-      "weekly": {
-        "title": "קראו את עדכון השבוע",
-        "description": "הישארו מעודכנים במה שקורה במשרד."
-      },
-      "training": {
-        "title": "השלימו הדרכה",
-        "description": "הדרכה קצרה בתחום ההתפתחות. הנקודות נספרות רק אחרי השלמה."
-      },
-      "activity": {
-        "title": "השתתפו בפעילות",
-        "description": "פעילות של המשרד. ההרשמה עצמה היא מה שמזכה בנקודות."
-      }
+    "untilLevel": "עוד {xp} לרמה {level}",
+    "sinceLastVisit": "{xp} מאז הביקור הקודם",
+    "openAvatar": "הדמות שלי ומה נפתח בכל שלב",
+    "howXp": "איך צוברים XP?",
+    "nextUnlockChip": "רמה {level}: {title}",
+    "nearAchievement": "עוד פעולה אחת להישג \"{title}\"",
+    "weekly": {
+      "title": "השבוע",
+      "count": "{ratio} פעולות",
+      "label": "{filled} מתוך {total} פעולות משמעותיות השבוע",
+      "done": "השלמת את היעד השבועי",
+      "hint": "מתחדש בכל יום ראשון. שבוע שקט לא מוריד כלום."
     },
-    "journeyTitle": "המסע שלי",
-    "journeyHint": "אפשר להתקדם בכל תחום בנפרד. המסלול רק מראה את המסע.",
-    "journeyStart": "התחלה",
-    "journeyEmpty": "המסע יופיע כאן כשיהיו פעילויות.",
-    "continueJourney": "המשך מסע",
-    "activitiesDoneLabel": "פעילויות הושלמו",
-    "untilBadge": "{count, plural, one {עוד פעילות אחת לפתיחת הישג} two {עוד שתי פעילויות לפתיחת הישג} other {עוד # פעילויות לפתיחת הישג}}",
-    "activities": "{count, plural, one {פעילות אחת הושלמה} two {שתי פעילויות הושלמו} other {# פעילויות הושלמו}}",
-    "journeyStatus": {
-      "locked": "נעול כרגע",
-      "active": "פעיל",
-      "completed": "הושלם"
+    "firstWeek": {
+      "title": "הצעדים הראשונים שלך",
+      "read": "קריאת עדכון אחד מהמשרד",
+      "register": "הרשמה להדרכה או לאירוע",
+      "achievement": "פתיחת ההישג \"צעד ראשון\""
+    },
+    "stats": {
+      "title": "ההתקדמות שלי",
+      "xp": "XP מצטבר",
+      "acts": "פעולות",
+      "achievements": "הישגים",
+      "streak": "ימים ברצף",
+      "streakHint": "רצף נספר רק מפעולה משמעותית. יום אחד שקט נסלח.",
+      "graceUsed": "היום הגמיש שלך שומר כרגע על הרצף."
+    },
+    "missions": {
+      "title": "המשימה הבאה שלי",
+      "more": "עוד משימות פתוחות",
+      "read": "קריאה",
+      "register": "הרשמה",
+      "start": "להתחיל",
+      "details": "לפרטים ולהרשמה",
+      "readTitle": "לקרוא: {title}",
+      "trainingTitle": "להירשם להדרכה: {title}",
+      "eventTitle": "להירשם לאירוע: {title}",
+      "readBody": "קריאה מלאה של העדכון מזכה ב-XP בפעם הראשונה.",
+      "trainingBody": "ההרשמה עצמה מזכה ב-XP. אפשר לבטל עד תחילת ההדרכה.",
+      "eventBody": "ההרשמה עצמה מזכה ב-XP. אפשר לבטל עד תחילת האירוע.",
+      "duration": "{count, plural, one {דקה} two {שתי דקות} other {# דקות}}",
+      "emptyTitle": "הכול רגוע כרגע",
+      "emptyBody": "קראת את כל העדכונים ונרשמת לכל מה שפתוח. משימות חדשות יופיעו כאן.",
+      "emptyCta": "מה חדש בפיד",
+      "registeredNotice": "נרשמת ל\"{title}\" · {xp}",
+      "viewInWorld": "לעולם {world}"
+    },
+    "journey": {
+      "title": "המסע שלי",
+      "hint": "ארבעה עולמות, כל אחד מתקדם בנפרד. בחירה בעולם לשבוע קובעת איזו משימה תוצג ראשונה.",
+      "start": "התחלה",
+      "startDetail": "{count, plural, =0 {עוד לא נרשמה פעולה} one {פעולה אחת עד עכשיו} other {# פעולות עד עכשיו}}",
+      "milestone": "{ratio} פעולות לאבן הדרך הבאה",
+      "open": "לעולם {world}",
+      "nextLevel": "רמה {level}",
+      "nextLevelDetail": "עוד {xp}",
+      "nextUnlock": "הפתיחה הבאה",
+      "nextUnlockDetail": "{title} · רמה {level}",
+      "focusTitle": "השבוע אני מתמקד/ת ב…",
+      "focusHint": "אפשר לדלג. הבחירה לא נועלת את שאר העולמות.",
+      "focusSaveError": "הבחירה לא נשמרה. נסו שוב."
     },
     "worlds": {
-      "know": { "name": "ידע ומידע", "code": "KNOW", "description": "להישאר מעודכנים במה שקורה במשרד" },
-      "feel": { "name": "רווחה וחיבור", "code": "FEEL", "description": "חיבור לצוות ולרווחה האישית" },
-      "develop": { "name": "התפתחות וצמיחה", "code": "DEVELOP", "description": "לצמוח בתפקיד ולבנות מיומנות" },
-      "participate": { "name": "מעורבות והשפעה", "code": "PARTICIPATE", "description": "להשפיע ולהיות חלק ממה שקורה" }
+      "know": {
+        "name": "ידע ומידע",
+        "code": "KNOW",
+        "description": "להישאר מעודכנים במה שקורה במשרד",
+        "counts": "קריאת עדכונים בפיד: פרויקטים, מחוזות, חדשנות, הנהלה וסרטונים."
+      },
+      "feel": {
+        "name": "רווחה וחיבור",
+        "code": "FEEL",
+        "description": "חיבור לאנשים ולצוות",
+        "counts": "קריאת עדכונים בערוצי אנשים וסיפורי הצלחה."
+      },
+      "develop": {
+        "name": "התפתחות וצמיחה",
+        "code": "DEVELOP",
+        "description": "לצמוח בתפקיד ולבנות מיומנות",
+        "counts": "הרשמה להדרכות, וקריאת עדכונים בערוץ הלמידה."
+      },
+      "participate": {
+        "name": "מעורבות והשפעה",
+        "code": "PARTICIPATE",
+        "description": "להיות חלק ממה שקורה",
+        "counts": "הרשמה לאירועים, ימי עיון ומפגשים של המשרד."
+      }
     },
-    "progressTitle": "ההתקדמות שלי",
-    "stats": {
-      "totalXp": "סה״כ",
-      "missions": "משימות",
-      "achievements": "הישגים",
-      "activeDays": "ימים פעילים"
+    "world": {
+      "back": "חזרה לעולם שלי",
+      "whatCounts": "מה נחשב כאן",
+      "xpInWorld": "XP בעולם הזה",
+      "acts": "פעולות",
+      "history": "מה עשיתי כאן",
+      "historyEmpty": "עדיין אין פעולות בעולם הזה. ההזדמנות הראשונה מחכה למטה.",
+      "opportunities": "מה אפשר לעשות עכשיו",
+      "opportunitiesEmpty": "אין כרגע הזדמנויות פתוחות בעולם הזה.",
+      "opportunitiesCta": "מה חדש בפיד",
+      "readOn": "נקרא {date}",
+      "registeredOn": "נרשמת {date}",
+      "startsOn": "מתקיים {date}",
+      "cancel": "ביטול הרשמה",
+      "cancelling": "מבטל…",
+      "cancelError": "הביטול לא הצליח. נסו שוב.",
+      "cancelHint": "ביטול מוריד את ה-XP של ההרשמה."
     },
-    "streakHint": "נצבר מפעילות משמעותית, לא מכניסה למערכת.",
-    "graceAvailable": "יש לך יום גמיש",
-    "thisWeek": "השבוע",
-    "stampsFilled": "{filled} מתוך {total} חותמות מלאות",
-    "endowed": "התחלנו בשבילך",
-    "focusTitle": "השבוע אני מתמקד ב…",
-    "focusHint": "אפשר לדלג. הבחירה רק קובעת איזו משימה תוצג ראשונה.",
-    "previewLabel": "הדמות בשלב הבא",
-    "firstWeekTitle": "השבוע הראשון",
-    "firstWeekSteps": {
-      "read": "קראו עדכון אחד של המשרד",
-      "service": "פתחו שירות שתשתמשו בו",
-      "achievement": "ההישג צעד ראשון"
+    "act": {
+      "read": "קריאה",
+      "training": "הדרכה",
+      "event": "אירוע"
     },
-    "change": {
-      "badge": "נשארה פעולה אחת להישג",
-      "department": "המחלקה התקדמה",
-      "step": "הצעד של היום עדיין פתוח"
-    },
-    "departmentMoved": "המחלקה התקדמה",
-    "achievementsTitle": "ההישגים שלי",
-    "achievementsEmpty": "עדיין אין הישגים",
-    "achievementsEmptyHint": "הישג נפתח אחרי פעולה אמיתית, לא אחרי כניסה.",
-    "lockedAchievement": "הישג נעול",
     "achievements": {
-      "firstStep": { "title": "צעד ראשון", "description": "השלמתם את המשימה הראשונה", "hint": "" },
-      "knowledge": { "title": "סקרנות", "description": "השלמתם 5 פעילויות ידע", "hint": "" },
-      "growth": { "title": "צמיחה", "description": "השלמתם פעילות ראשונה בתחום ההתפתחות", "hint": "" },
-      "consistent": { "title": "עקביות", "description": "פעילות משמעותית במשך 5 ימים", "hint": "" },
-      "closer": { "title": "מומחה לידע", "description": "עוד פעילויות בתחום הידע", "hint": "עוד 3 פעילויות לפתיחה" },
-      "frame": { "title": "מסגרת מיוחדת", "description": "מסגרת חדשה לאווטאר", "hint": "נפתח ברמה 15" }
+      "title": "ההישגים שלי",
+      "summary": "{unlocked} מתוך {total} נפתחו",
+      "locked": "נעול",
+      "unlocked": "נפתח",
+      "progress": "{current} / {target}",
+      "remaining": "{count, plural, one {עוד פעולה אחת} other {עוד # פעולות}}",
+      "remainingLevel": "עוד {count} רמות",
+      "unlockedOn": "נפתח ב-{date}",
+      "howTo": "איך פותחים",
+      "relatedWorld": "לעולם {world}",
+      "items": {
+        "firstStep": {
+          "title": "צעד ראשון",
+          "condition": "פעולה משמעותית ראשונה: קריאה או הרשמה."
+        },
+        "reader": {
+          "title": "סקרנות",
+          "condition": "קריאה מלאה של 5 עדכונים בפיד."
+        },
+        "learner": {
+          "title": "צמיחה",
+          "condition": "הרשמה להדרכה אחת."
+        },
+        "participant": {
+          "title": "חלק מהקהילה",
+          "condition": "הרשמה לשני אירועים של המשרד."
+        },
+        "explorer": {
+          "title": "מגלה עולמות",
+          "condition": "פעולה אחת לפחות בכל אחד מארבעת העולמות."
+        },
+        "consistent": {
+          "title": "עקביות",
+          "condition": "5 ימים ברצף עם פעולה משמעותית. יום שקט אחד נסלח."
+        },
+        "level5": {
+          "title": "שותפות",
+          "condition": "הגעה לרמה 5."
+        }
+      }
     },
-    "recognitionTitle": "ההוקרות שלי",
-    "recognitionNote": "הוקרה מעמיתים. היא לא נספרת כנקודות ניסיון.",
-    "recognitionFrom": "מאת {name}",
-    "recognitionEmpty": "עדיין לא קיבלת הוקרה",
-    "recognitionEmptyHint": "כשעמית מודה לך, זה יופיע כאן.",
-    "recognitionBadges": {
-      "knowledge": "משתף/ת ידע",
-      "mentor": "מנטור/ית",
-      "community": "תורם/ת לקהילה"
+    "recognition": {
+      "title": "ההוקרות שלי",
+      "note": "הוקרה היא תודה מעמית. היא לא נספרת כ-XP ולא כהישג.",
+      "from": "מאת {name}",
+      "fromUnknown": "מאת עמית/ה",
+      "showAll": "{count, plural, other {הצגת כל # ההוקרות}}",
+      "showLess": "הצגת פחות",
+      "emptyTitle": "עדיין אין הוקרות",
+      "emptyBody": "כשעמית/ה יודה לך על משהו שעשית, זה יופיע כאן.",
+      "dialogNote": "הוקרה נשארת שלך. היא לא ממירה לנקודות ולא משפיעה על הרמה."
     },
-    "recognitions": {
-      "collab": { "reason": "על שיתוף פעולה מצוין בהכנת הסיכום השבועי" },
-      "guide": { "reason": "ליווי עובד חדש באגף בסבלנות ובבהירות" },
-      "day": { "reason": "עזרה בארגון יום השיא של האגף" }
+    "department": {
+      "title": "המשימה של המחלקה",
+      "hint": "יעד חודשי משותף. בלי שמות ובלי דירוג.",
+      "ratio": "{earned} / {target} XP",
+      "remaining": "עוד {xp} ליעד",
+      "reached": "המחלקה השלימה את יעד החודש",
+      "daysLeft": "{count, plural, one {נשאר יום אחד} other {נשארו # ימים}}",
+      "details": "פרטים",
+      "none": "המשימה המחלקתית מוצגת לעובדים שמשויכים לאגף. כרגע אין לך שיוך לאגף.",
+      "members": "{count} עובדים באגף",
+      "target": "היעד: {xp} לכל עובד/ת בחודש",
+      "breakdown": "מה קידם את המחלקה החודש",
+      "reads": "קריאות",
+      "trainings": "הרשמות להדרכות",
+      "events": "הרשמות לאירועים",
+      "mine": "התרומה שלך החודש: {xp}",
+      "privacy": "רק סכומים. אף אחד לא רואה מי תרם כמה."
     },
-    "departmentTitle": "המשימה של המחלקה",
-    "departmentHint": "התקדמות משותפת, בלי דירוג אישי",
-    "departmentEarned": "שנצברו יחד",
-    "departmentGoal": "ליעד המחלקתי",
-    "departmentReached": "המחלקה השלימה את המשימה!",
-    "departmentMilestone": "יעד",
-    "headquarters": "המטה",
-    "districtsTitle": "התחרות בין המחוזות",
-    "districtsHint": "דירוג לפי פעילות משותפת של כל מחוז. בלי שמות של עובדים.",
-    "districtsEmpty": "התחרות תופיע כאן כשיהיו נתונים.",
-    "districtsHeadquarters": "עובדי המטה צופים בתחרות. המחוזות הם שמתחרים.",
-    "myDistrict": "המחוז שלי",
-    "districtLeader": "מוביל",
-    "districtPlace": "מקום {place}",
-    "unlocksTitle": "מה מחכה לי?",
-    "unlocksEmpty": "אין כרגע פתיחות חדשות בהמשך הדרך.",
     "unlocks": {
-      "pin": "אווטאר חדש",
-      "badge": "תג מיוחד",
-      "frame": "מסגרת לפרופיל"
+      "title": "מה מחכה לי",
+      "items": {
+        "pin": {
+          "title": "אווטאר חדש",
+          "body": "סיכה על הדש של הדמות שלך."
+        },
+        "badge": {
+          "title": "תג מיוחד",
+          "body": "תג על החזה במקום הסיכה."
+        },
+        "frame": {
+          "title": "מסגרת לפרופיל",
+          "body": "מסגרת זהב סביב הדמות."
+        }
+      },
+      "atLevel": "ברמה {level}",
+      "open": "נפתח",
+      "remaining": "עוד {xp}",
+      "whatOpens": "מה נפתח",
+      "howFar": "כמה נשאר",
+      "how": "צוברים XP מקריאה והרשמות. המשימה הבאה שלך היא הדרך הקצרה."
     },
-    "levelUpTitle": "עלית רמה!",
-    "levelUpReached": "הגעת לרמה",
-    "levelUpContinue": "המשך",
-    "unlockedLabel": "נפתח",
-    "levelUpDetail": {
-      "5": "אווטאר חדש",
-      "10": "תג מיוחד",
-      "15": "מסגרת לפרופיל",
-      "default": "המסע שלך ממשיך"
+    "avatar": {
+      "title": "הדמות שלי",
+      "body": "הדמות מתפתחת עם הרמה. כל שלב נשאר שלך.",
+      "stageBase": "הדמות הבסיסית",
+      "stageLevel": "רמה {level}",
+      "current": "השלב הנוכחי",
+      "reached": "נפתח",
+      "locked": "עוד {xp}"
     },
-    "xpLive": "נוספו {xp} נקודות ניסיון. כעת {current} מתוך {next}.",
+    "rules": {
+      "title": "איך צוברים XP",
+      "earns": "מה מזכה ב-XP",
+      "read": "קריאה מלאה של עדכון בפיד (פעם אחת לכל עדכון)",
+      "training": "הרשמה להדרכה",
+      "event": "הרשמה לאירוע",
+      "notEarns": "מה לא מזכה",
+      "notList": "כניסה לאפליקציה, לייק, תגובה, או צפייה במסך.",
+      "why": "מה XP עושה",
+      "whyBody": "XP מעלה רמה. רמות 5, 10 ו-15 פותחות שלבים חדשים לדמות. XP גם מקדם את היעד החודשי של המחלקה.",
+      "recognition": "הוקרה מעמיתים לא נספרת כ-XP."
+    },
+    "register": {
+      "title": "הרשמה",
+      "when": "מתי",
+      "where": "איפה",
+      "format": "מתכונת",
+      "seats": "{count, plural, one {מקום אחד פנוי} other {# מקומות פנויים}}",
+      "online": "מקוון",
+      "reward": "ההרשמה מזכה ב-{xp} בעולם {world}",
+      "confirm": "הרשמה",
+      "registering": "נרשם/ת…",
+      "error": "ההרשמה לא הצליחה: {message}",
+      "retry": "ניסיון נוסף",
+      "cancelNote": "אפשר לבטל בעמוד העולם עד שהמפגש מתחיל.",
+      "seatsLabel": "מקומות"
+    },
+    "trainingFormat": {
+      "ONLINE": "מקוון",
+      "IN_PERSON": "פרונטלי",
+      "HYBRID": "משולב"
+    },
+    "reward": {
+      "title": "{xp} · המשימה הושלמה",
+      "body": "הקריאה נוספה לעולם {world}.",
+      "back": "לעולם שלי"
+    },
+    "levelUp": {
+      "title": "עלית רמה!",
+      "reached": "הגעת לרמה {level}",
+      "unlocked": "נפתח: {title}",
+      "default": "המסע ממשיך. הפתיחה הבאה מחכה ב\"מה מחכה לי\".",
+      "continue": "המשך"
+    },
+    "close": "סגירה",
+    "xpLive": "נוספו {xp} XP. כעת {current} מתוך {next} ברמה {level}.",
     "loading": "טוען את העולם שלך",
-    "errorTitle": "לא הצלחנו לטעון את ההתקדמות שלך",
-    "errorHint": "נסו שוב בעוד רגע.",
-    "retry": "ניסיון נוסף"
+    "errorTitle": "לא הצלחנו לטעון את הנתונים",
+    "errorHint": "השרת אולי מתעורר. נסו שוב בעוד רגע.",
+    "retry": "נסה שוב"
   },
   "jobs": {
     "title": "לוח משרות",
@@ -287,7 +415,8 @@
     "empty": "אין פוסטים להצגה",
     "emptyHint": "נסו לשנות את הסינון, או לעקוב אחרי ערוצים נוספים.",
     "emptyBookmarks": "לא שמרתם עדיין אף פוסט",
-    "emptyBookmarksHint": "סמנו פוסט בסימנייה כדי לחזור אליו מאוחר יותר."
+    "emptyBookmarksHint": "סמנו פוסט בסימנייה כדי לחזור אליו מאוחר יותר.",
+    "backToFeed": "חזרה לפיד"
   },
   "time": {
     "now": "עכשיו",
@@ -314,6 +443,19 @@
     "comingSoonHint": "המודול הזה מתוכנן לסבב הבא.",
     "loadErrorTitle": "לא הצלחנו לטעון את העמוד",
     "loadErrorHint": "השרת מתעורר. נסו שוב בעוד רגע.",
-    "retry": "ניסיון נוסף"
+    "retry": "ניסיון נוסף",
+    "notFoundTitle": "הדף לא נמצא",
+    "notFoundHint": "ייתכן שהפריט הוסר, או שהוא לא מיועד לך.",
+    "notFoundCta": "חזרה לבית"
+  },
+  "profile": {
+    "progressTitle": "העולם שלי",
+    "levelXp": "רמה {level} · {xp}",
+    "openWorld": "לעולם שלי",
+    "achievements": "הישגים שנפתחו",
+    "achievementsEmpty": "עדיין לא נפתחו הישגים.",
+    "recognition": "הוקרות שקיבלת",
+    "recognitionEmpty": "עדיין אין הוקרות.",
+    "from": "מאת {name}"
   }
 }

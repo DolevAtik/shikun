@@ -6,6 +6,9 @@ export const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000
 
 export class UnauthorizedError extends Error {}
 
+/** The API answered 404 — the item is absent, or outside the viewer's audience. Pages turn this into notFound(). */
+export class NotFoundError extends Error {}
+
 /**
  * Server-side fetch against the API, with the viewer's token attached.
  *
@@ -52,6 +55,7 @@ export const serverFetch = cache(async function serverFetch<T>(path: string): Pr
     throw networkError instanceof Error ? networkError : new Error(`API unreachable on ${path}`);
   }
   if (response.status === 401) throw new UnauthorizedError();
+  if (response.status === 404) throw new NotFoundError(`API 404 on ${path}`);
   if (!response.ok) {
     throw new Error(`API ${response.status} on ${path}: ${await response.text()}`);
   }

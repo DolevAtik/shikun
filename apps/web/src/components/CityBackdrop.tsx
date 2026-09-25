@@ -26,17 +26,24 @@ export function CityBackdrop() {
   );
 }
 
-/** The same silhouette, cropped into the header so roofs fill the strip. */
+/**
+ * The header strip. The frame sits on a floor of windows, not on the solid
+ * bases — otherwise the bar reads as blocks. A few extra lights on the far
+ * row are spaced across the width so each mass reads as a building.
+ */
 export function HeaderSkyline({ className }: { className?: string }) {
   return (
     <svg
       aria-hidden="true"
-      viewBox="0 0 360 56"
-      preserveAspectRatio="xMidYMax slice"
-      className={cn("block h-9 w-full text-black/30 dark:text-white/20 rtl:-scale-x-100", className)}
+      viewBox="0 0 360 34"
+      preserveAspectRatio="xMidYMid slice"
+      className={cn("block h-9 w-full text-black/35 dark:text-white/25 rtl:-scale-x-100", className)}
     >
-      <g transform="translate(0 -64)">
+      <g transform="translate(0 -46)">
         <Skyline />
+        {/* Faces that had no light in this floor, spaced apart from the towers. */}
+        <Window x={188} y={74} w={6} h={6} delay="delay" />
+        <Window x={342} y={76} w={5} h={6} delay="delay-2" />
       </g>
     </svg>
   );

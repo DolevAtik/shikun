@@ -1,36 +1,30 @@
 "use client";
 
-import { SectionHeader, type WorldId } from "@moch/ui";
+import type { EmployeeProgress, WorldFocus } from "@moch/contracts";
+import { SectionHeader } from "@moch/ui";
 import { useTranslations } from "next-intl";
 import { JourneyPath } from "./JourneyPath";
-import type { Journey } from "./types";
+import type { OpenDetail } from "./types";
 import { WeeklyFocus } from "./WeeklyFocus";
 
-export function JourneySection({
-  journeys,
-  chosenWorld,
-  showFocus,
-  onChoose,
-}: {
-  journeys: Journey[];
-  chosenWorld: WorldId | null;
+interface JourneySectionProps {
+  progress: EmployeeProgress;
+  chosen: WorldFocus | null;
   showFocus: boolean;
-  onChoose: (world: WorldId | null) => void;
-}) {
+  focusError: boolean;
+  onChoose: (world: WorldFocus | null) => void;
+  onOpen: OpenDetail;
+}
+
+export function JourneySection({ progress, chosen, showFocus, focusError, onChoose, onOpen }: JourneySectionProps) {
   const t = useTranslations("myWorld");
 
   return (
-    <section>
-      <SectionHeader title={t("journeyTitle")} titleClassName="text-lg" />
-      <p className="-mt-1 mb-4 px-1 text-sm text-content-muted">{t("journeyHint")}</p>
-      {showFocus ? <WeeklyFocus chosen={chosenWorld} onChoose={onChoose} /> : null}
-      {journeys.length === 0 ? (
-        <p className="rounded-xl border border-line bg-surface px-5 py-6 text-center text-sm text-content-muted shadow-sm">
-          {t("journeyEmpty")}
-        </p>
-      ) : (
-        <JourneyPath journeys={journeys} />
-      )}
+    <section id="journey" className="scroll-mt-20">
+      <SectionHeader title={t("journey.title")} titleClassName="text-lg" />
+      <p className="-mt-1 mb-4 px-1 text-sm text-content-muted">{t("journey.hint")}</p>
+      {showFocus ? <WeeklyFocus chosen={chosen} error={focusError} onChoose={onChoose} /> : null}
+      <JourneyPath progress={progress} chosen={chosen} onOpen={onOpen} />
     </section>
   );
 }

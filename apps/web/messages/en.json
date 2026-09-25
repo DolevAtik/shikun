@@ -91,150 +91,278 @@
     "title": "My World",
     "greeting": "Hello, {name}",
     "levelLabel": "Level",
-    "journeyLine": {
-      "starter": "Starting out at the Ministry",
-      "partner": "An active partner at the Ministry",
-      "leader": "Leading the way at the Ministry",
-      "veteran": "A long-standing part of the Ministry"
+    "tier": {
+      "starter": "Getting started",
+      "partner": "Active partner",
+      "leader": "Leading the way",
+      "veteran": "Veteran"
     },
-    "xpLabel": "Experience",
-    "untilPrefix": "",
-    "untilLevel": "to level",
-    "levelReady": "The next level is ready",
-    "nextMission": "What's my next mission?",
-    "explore": "See what's new",
-    "missionsTitle": "Your next mission",
-    "moreMissions": "Also waiting",
-    "start": "Start",
-    "details": "Details",
-    "completed": "Completed",
-    "duration": "{count, plural, one {1 minute} other {# minutes}}",
-    "missionsEmptyTitle": "All quiet for now",
-    "missionsEmpty": "You have no open missions.",
-    "missionsEmptyHint": "New missions will show up here when they are available.",
-    "missionsDone": "You've finished the open missions.",
+    "tierLine": "{tier} · Level {level}",
+    "xpLabel": "Experience points",
+    "untilLevel": "{xp} to level {level}",
+    "sinceLastVisit": "{xp} since your last visit",
+    "openAvatar": "My figure and what each stage unlocks",
+    "howXp": "How do I earn XP?",
+    "nextUnlockChip": "Level {level}: {title}",
+    "nearAchievement": "One more action to \"{title}\"",
+    "weekly": {
+      "title": "This week",
+      "count": "{ratio} actions",
+      "label": "{filled} of {total} meaningful actions this week",
+      "done": "Weekly goal complete",
+      "hint": "Resets every Sunday. A quiet week takes nothing away."
+    },
+    "firstWeek": {
+      "title": "Your first steps",
+      "read": "Read one Ministry update",
+      "register": "Register for a training or event",
+      "achievement": "Unlock \"First step\""
+    },
+    "stats": {
+      "title": "My progress",
+      "xp": "Total XP",
+      "acts": "Actions",
+      "achievements": "Achievements",
+      "streak": "Day streak",
+      "streakHint": "Only meaningful actions count. One quiet day is forgiven.",
+      "graceUsed": "Your grace day is holding the streak right now."
+    },
     "missions": {
-      "weekly": {
-        "title": "Read this week's update",
-        "description": "Stay current with what is happening at the Ministry."
-      },
-      "training": {
-        "title": "Complete a training",
-        "description": "A short training in Develop. Experience counts only after you finish it."
-      },
-      "activity": {
-        "title": "Join an activity",
-        "description": "A Ministry activity. Registering is what earns the experience."
-      }
+      "title": "My next mission",
+      "more": "More open missions",
+      "read": "Read",
+      "register": "Register",
+      "start": "Start",
+      "details": "Details and registration",
+      "readTitle": "Read: {title}",
+      "trainingTitle": "Register for training: {title}",
+      "eventTitle": "Register for event: {title}",
+      "readBody": "A full read earns XP the first time.",
+      "trainingBody": "Registering earns XP. You can cancel until it starts.",
+      "eventBody": "Registering earns XP. You can cancel until it starts.",
+      "duration": "{count, plural, one {# minute} other {# minutes}}",
+      "emptyTitle": "All calm right now",
+      "emptyBody": "You've read every update and registered for everything open. New missions will appear here.",
+      "emptyCta": "What's new in the feed",
+      "registeredNotice": "Registered for \"{title}\" · {xp}",
+      "viewInWorld": "Open {world}"
     },
-    "journeyTitle": "My journey",
-    "journeyHint": "Each area stands on its own. The path is only there so it feels like a journey.",
-    "journeyStart": "Start",
-    "journeyEmpty": "Your journey will show up here when there are activities.",
-    "continueJourney": "Continue",
-    "activitiesDoneLabel": "activities completed",
-    "untilBadge": "{count, plural, one {1 more activity to unlock a badge} other {# more activities to unlock a badge}}",
-    "activities": "{count, plural, one {1 activity completed} other {# activities completed}}",
-    "journeyStatus": {
-      "locked": "Locked for now",
-      "active": "Active",
-      "completed": "Completed"
+    "journey": {
+      "title": "My journey",
+      "hint": "Four worlds, each moving on its own. Choosing a focus decides which mission comes first.",
+      "start": "Start",
+      "startDetail": "{count, plural, =0 {No actions yet} one {One action so far} other {# actions so far}}",
+      "milestone": "{ratio} actions to the next milestone",
+      "open": "Open {world}",
+      "nextLevel": "Level {level}",
+      "nextLevelDetail": "{xp} to go",
+      "nextUnlock": "Next unlock",
+      "nextUnlockDetail": "{title} · level {level}",
+      "focusTitle": "This week I'm focusing on…",
+      "focusHint": "Optional. It never locks the other worlds.",
+      "focusSaveError": "Your choice wasn't saved. Try again."
     },
     "worlds": {
-      "know": { "name": "Knowledge and information", "code": "KNOW", "description": "Stay current with the Ministry" },
-      "feel": { "name": "Wellbeing and belonging", "code": "FEEL", "description": "Connection with the team" },
-      "develop": { "name": "Growth and learning", "code": "DEVELOP", "description": "Build skill in the role" },
-      "participate": { "name": "Involvement and impact", "code": "PARTICIPATE", "description": "Take part in what is happening" }
+      "know": {
+        "name": "Knowledge",
+        "code": "KNOW",
+        "description": "Stay current with the Ministry",
+        "counts": "Reading feed updates: projects, districts, innovation, leadership and videos."
+      },
+      "feel": {
+        "name": "Belonging",
+        "code": "FEEL",
+        "description": "Connection with people and the team",
+        "counts": "Reading updates in the People and Success stories channels."
+      },
+      "develop": {
+        "name": "Growth",
+        "code": "DEVELOP",
+        "description": "Grow in the role",
+        "counts": "Registering for training, and reading the Learning channel."
+      },
+      "participate": {
+        "name": "Involvement",
+        "code": "PARTICIPATE",
+        "description": "Be part of what's happening",
+        "counts": "Registering for Ministry events and meetups."
+      }
     },
-    "progressTitle": "My progress",
-    "stats": {
-      "totalXp": "Total",
-      "missions": "Missions",
-      "achievements": "Achievements",
-      "activeDays": "Active days"
+    "world": {
+      "back": "Back to My World",
+      "whatCounts": "What counts here",
+      "xpInWorld": "XP in this world",
+      "acts": "Actions",
+      "history": "What I did here",
+      "historyEmpty": "No actions in this world yet. The first opportunity is below.",
+      "opportunities": "What I can do now",
+      "opportunitiesEmpty": "No open opportunities in this world right now.",
+      "opportunitiesCta": "What's new in the feed",
+      "readOn": "Read {date}",
+      "registeredOn": "Registered {date}",
+      "startsOn": "Takes place {date}",
+      "cancel": "Cancel registration",
+      "cancelling": "Cancelling…",
+      "cancelError": "Cancelling failed. Try again.",
+      "cancelHint": "Cancelling removes that registration's XP."
     },
-    "streakHint": "Counted from meaningful activity, not from signing in.",
-    "graceAvailable": "You have a flexible day",
-    "thisWeek": "this week",
-    "stampsFilled": "{filled} of {total} stamps filled",
-    "endowed": "We started one for you",
-    "focusTitle": "This week I'm focusing on…",
-    "focusHint": "You can skip this. The choice only decides which mission comes first.",
-    "previewLabel": "The figure at the next stage",
-    "firstWeekTitle": "The first week",
-    "firstWeekSteps": {
-      "read": "Read one ministry update",
-      "service": "Open a service you will actually use",
-      "achievement": "The first-step achievement"
+    "act": {
+      "read": "Read",
+      "training": "Training",
+      "event": "Event"
     },
-    "change": {
-      "badge": "One activity left to a badge",
-      "department": "Your unit moved forward",
-      "step": "Today's step is still open"
-    },
-    "departmentMoved": "Your unit moved forward",
-    "achievementsTitle": "My achievements",
-    "achievementsEmpty": "No achievements yet",
-    "achievementsEmptyHint": "An achievement opens after a real action, not after signing in.",
-    "lockedAchievement": "Locked achievement",
     "achievements": {
-      "firstStep": { "title": "First step", "description": "Completed your first mission", "hint": "" },
-      "knowledge": { "title": "Knowledge seeker", "description": "Completed 5 knowledge activities", "hint": "" },
-      "growth": { "title": "Growth", "description": "A first activity in Develop", "hint": "" },
-      "consistent": { "title": "Consistent", "description": "Meaningful activity across 5 days", "hint": "" },
-      "closer": { "title": "Knowledge master", "description": "More activities in Know", "hint": "3 more activities to unlock" },
-      "frame": { "title": "Special frame", "description": "A new frame for the avatar", "hint": "Unlocks at level 15" }
+      "title": "My achievements",
+      "summary": "{unlocked} of {total} unlocked",
+      "locked": "Locked",
+      "unlocked": "Unlocked",
+      "progress": "{current} / {target}",
+      "remaining": "{count, plural, one {One more action} other {# more actions}}",
+      "remainingLevel": "{count} more levels",
+      "unlockedOn": "Unlocked {date}",
+      "howTo": "How to unlock",
+      "relatedWorld": "Open {world}",
+      "items": {
+        "firstStep": {
+          "title": "First step",
+          "condition": "Your first meaningful action: a read or a registration."
+        },
+        "reader": {
+          "title": "Curious",
+          "condition": "Read 5 feed updates in full."
+        },
+        "learner": {
+          "title": "Growth",
+          "condition": "Register for one training."
+        },
+        "participant": {
+          "title": "Part of the community",
+          "condition": "Register for two Ministry events."
+        },
+        "explorer": {
+          "title": "Explorer",
+          "condition": "At least one action in each of the four worlds."
+        },
+        "consistent": {
+          "title": "Consistency",
+          "condition": "5 days in a row with a meaningful action. One quiet day is forgiven."
+        },
+        "level5": {
+          "title": "Partnership",
+          "condition": "Reach level 5."
+        }
+      }
     },
-    "recognitionTitle": "My recognition",
-    "recognitionNote": "Appreciation from colleagues. It does not count as experience.",
-    "recognitionFrom": "From {name}",
-    "recognitionEmpty": "No recognition yet",
-    "recognitionEmptyHint": "When a colleague thanks you, it will show up here.",
-    "recognitionBadges": {
-      "knowledge": "Knowledge Sharer",
-      "mentor": "Mentor",
-      "community": "Community Contributor"
+    "recognition": {
+      "title": "My recognition",
+      "note": "Recognition is thanks from a colleague. It isn't XP and it isn't an achievement.",
+      "from": "From {name}",
+      "fromUnknown": "From a colleague",
+      "showAll": "{count, plural, other {Show all #}}",
+      "showLess": "Show less",
+      "emptyTitle": "No recognition yet",
+      "emptyBody": "When a colleague thanks you for something you did, it shows up here.",
+      "dialogNote": "Recognition stays yours. It never turns into points or affects your level."
     },
-    "recognitions": {
-      "collab": { "reason": "For excellent collaboration on the weekly summary" },
-      "guide": { "reason": "For patiently guiding a new colleague in the unit" },
-      "day": { "reason": "For helping organize the unit's highlight day" }
+    "department": {
+      "title": "My department's mission",
+      "hint": "A shared monthly goal. No names, no ranking.",
+      "ratio": "{earned} / {target} XP",
+      "remaining": "{xp} to the goal",
+      "reached": "The department reached this month's goal",
+      "daysLeft": "{count, plural, one {One day left} other {# days left}}",
+      "details": "Details",
+      "none": "The department mission is shown to employees assigned to a division. You aren't assigned to one right now.",
+      "members": "{count} people in the division",
+      "target": "Goal: {xp} per person per month",
+      "breakdown": "What moved the department this month",
+      "reads": "Reads",
+      "trainings": "Training registrations",
+      "events": "Event registrations",
+      "mine": "Your contribution this month: {xp}",
+      "privacy": "Totals only. Nobody sees who contributed what."
     },
-    "departmentTitle": "The unit's mission",
-    "departmentHint": "Shared progress, with no individual ranking",
-    "departmentEarned": "collected together",
-    "departmentGoal": "to the unit goal",
-    "departmentReached": "The unit completed the mission!",
-    "departmentMilestone": "Goal",
-    "headquarters": "Headquarters",
-    "districtsTitle": "District leaderboard",
-    "districtsHint": "Ranked by each district's shared activity. No employee names.",
-    "districtsEmpty": "The leaderboard will show up here when there is something to rank.",
-    "districtsHeadquarters": "Headquarters watches the race. The districts are the ones competing.",
-    "myDistrict": "My district",
-    "districtLeader": "Leading",
-    "districtPlace": "Place {place}",
-    "unlocksTitle": "What's waiting?",
-    "unlocksEmpty": "Nothing new is waiting further along just now.",
     "unlocks": {
-      "pin": "A new avatar",
-      "badge": "A special badge",
-      "frame": "A profile frame"
+      "title": "What's ahead",
+      "items": {
+        "pin": {
+          "title": "New avatar",
+          "body": "A lapel pin on your figure."
+        },
+        "badge": {
+          "title": "Special badge",
+          "body": "A chest badge in place of the pin."
+        },
+        "frame": {
+          "title": "Profile frame",
+          "body": "A gold frame around your figure."
+        }
+      },
+      "atLevel": "At level {level}",
+      "open": "Unlocked",
+      "remaining": "{xp} to go",
+      "whatOpens": "What opens",
+      "howFar": "How far",
+      "how": "You earn XP from reads and registrations. Your next mission is the shortest path."
     },
-    "levelUpTitle": "Level up!",
-    "levelUpReached": "You reached level",
-    "levelUpContinue": "Continue",
-    "unlockedLabel": "Unlocked",
-    "levelUpDetail": {
-      "5": "A new avatar",
-      "10": "A special badge",
-      "15": "A profile frame",
-      "default": "Your journey continues"
+    "avatar": {
+      "title": "My figure",
+      "body": "Your figure grows with your level. Every stage stays yours.",
+      "stageBase": "The base figure",
+      "stageLevel": "Level {level}",
+      "current": "Current stage",
+      "reached": "Unlocked",
+      "locked": "{xp} to go"
     },
-    "xpLive": "{xp} experience added. Now {current} of {next}.",
+    "rules": {
+      "title": "How XP works",
+      "earns": "What earns XP",
+      "read": "A full read of a feed update (once per update)",
+      "training": "Registering for a training",
+      "event": "Registering for an event",
+      "notEarns": "What doesn't",
+      "notList": "Opening the app, a like, a comment, or viewing a screen.",
+      "why": "What XP does",
+      "whyBody": "XP raises your level. Levels 5, 10 and 15 unlock new stages for your figure. XP also moves your department's monthly goal.",
+      "recognition": "Colleague recognition is never XP."
+    },
+    "register": {
+      "title": "Registration",
+      "when": "When",
+      "where": "Where",
+      "format": "Format",
+      "seats": "{count, plural, one {One seat left} other {# seats left}}",
+      "online": "Online",
+      "reward": "Registering earns {xp} in {world}",
+      "confirm": "Register",
+      "registering": "Registering…",
+      "error": "Registration failed: {message}",
+      "retry": "Try again",
+      "cancelNote": "You can cancel from the world page until it starts.",
+      "seatsLabel": "Seats"
+    },
+    "trainingFormat": {
+      "ONLINE": "Online",
+      "IN_PERSON": "In person",
+      "HYBRID": "Hybrid"
+    },
+    "reward": {
+      "title": "{xp} · Mission complete",
+      "body": "This read was added to {world}.",
+      "back": "My World"
+    },
+    "levelUp": {
+      "title": "Level up!",
+      "reached": "You reached level {level}",
+      "unlocked": "Unlocked: {title}",
+      "default": "The journey continues. The next unlock is waiting in \"What's ahead\".",
+      "continue": "Continue"
+    },
+    "close": "Close",
+    "xpLive": "{xp} XP added. Now {current} of {next} at level {level}.",
     "loading": "Loading your world",
-    "errorTitle": "We couldn't load your progress",
-    "errorHint": "Try again in a moment.",
+    "errorTitle": "We couldn't load your data",
+    "errorHint": "The server may be waking up. Try again in a moment.",
     "retry": "Try again"
   },
   "jobs": {
@@ -287,7 +415,8 @@
     "empty": "No posts to show",
     "emptyHint": "Try changing the filter, or follow more channels.",
     "emptyBookmarks": "You haven't saved any posts yet",
-    "emptyBookmarksHint": "Save a post to come back to it later."
+    "emptyBookmarksHint": "Save a post to come back to it later.",
+    "backToFeed": "Back to the feed"
   },
   "time": {
     "now": "now",
@@ -314,6 +443,19 @@
     "comingSoonHint": "This module is planned for the next round.",
     "loadErrorTitle": "We couldn't load this page",
     "loadErrorHint": "The server is waking up. Try again in a moment.",
-    "retry": "Try again"
+    "retry": "Try again",
+    "notFoundTitle": "Page not found",
+    "notFoundHint": "The item may have been removed, or it isn't meant for you.",
+    "notFoundCta": "Back to Home"
+  },
+  "profile": {
+    "progressTitle": "My World",
+    "levelXp": "Level {level} · {xp}",
+    "openWorld": "Open My World",
+    "achievements": "Unlocked achievements",
+    "achievementsEmpty": "No achievements unlocked yet.",
+    "recognition": "Recognition received",
+    "recognitionEmpty": "No recognition yet.",
+    "from": "From {name}"
   }
 }

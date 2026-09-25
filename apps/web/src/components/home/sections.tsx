@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { BuildingCoverArt, SkylineStrip } from "@/components/CityBackdrop";
+import { RegisterButton } from "@/components/home/RegisterButton";
 import { VideoOfWeekCard } from "@/components/home/VideoOfWeekCard";
 import { MediaImage } from "@/components/MediaImage";
 import { ICONS } from "@/components/icons";
@@ -44,12 +45,11 @@ export async function HomeSectionView({ section, locale, firstName, greeting }: 
   switch (section.type) {
     case "GREETING":
       return (
-        <section className="overflow-hidden px-4 pt-6">
+        <section className="px-4 pb-2 pt-6">
           <h1 className="text-2xl font-bold tracking-tight text-content">
             {t(`greeting.${greeting}` as never, { name: firstName })}
           </h1>
           <p className="mt-1 text-content-muted">{t("greetingSub")}</p>
-          <SkylineStrip className="mt-3 h-10 text-brand/20 dark:text-brand/30" />
         </section>
       );
 
@@ -96,7 +96,7 @@ export async function HomeSectionView({ section, locale, firstName, greeting }: 
           <ul className="flex flex-col gap-3 px-4">
             {section.data.items.map((item) => (
               <li key={item.id}>
-                <Card interactive className="overflow-hidden">
+                <Card className="overflow-hidden">
                   <div className="flex gap-3 p-4">
                     <div className="min-w-0 flex-1">
                       <div className="mb-1.5 flex flex-wrap items-center gap-1.5">
@@ -138,7 +138,6 @@ export async function HomeSectionView({ section, locale, firstName, greeting }: 
       return (
         <section className="px-4 py-3">
           <Card
-            interactive
             className="relative overflow-hidden border-0 bg-gradient-to-bl from-[--hero-from] to-[--hero-to] text-content-onsurfacebrand"
           >
             <div className="p-5 pb-2">
@@ -252,7 +251,7 @@ export async function HomeSectionView({ section, locale, firstName, greeting }: 
           <ul className="rail" tabIndex={0} aria-label={title}>
             {section.data.items.map((event) => (
               <li key={event.id} className="w-64">
-                <Card interactive className="flex h-full flex-col overflow-hidden">
+                <Card className="flex h-full flex-col overflow-hidden">
                   <CardCover src={event.imageUrl} Icon={CalendarDays} />
 
                   <div className="flex flex-1 flex-col p-4">
@@ -274,9 +273,19 @@ export async function HomeSectionView({ section, locale, firstName, greeting }: 
                       ) : null}
                     </div>
 
-                    <p className="mt-auto pt-3 text-xs text-content-muted">
-                      {t("attendees", { count: event.attendeeCount })}
-                    </p>
+                    <div className="mt-auto flex items-center justify-between gap-2 pt-3">
+                      <p className="text-xs text-content-muted">{t("attendees", { count: event.attendeeCount })}</p>
+                      {event.isRegistered ? null : (
+                        <RegisterButton
+                          act="event"
+                          contentItemId={event.id}
+                          title={event.title}
+                          startsAt={event.startsAt}
+                          place={event.isOnline ? "ONLINE" : event.location}
+                          seatsLeft={null}
+                        />
+                      )}
+                    </div>
                   </div>
                 </Card>
               </li>
@@ -292,7 +301,7 @@ export async function HomeSectionView({ section, locale, firstName, greeting }: 
           <ul className="rail" tabIndex={0} aria-label={title}>
             {section.data.items.map((project) => (
               <li key={project.id} className="w-64">
-                <Card interactive className="flex h-full flex-col overflow-hidden">
+                <Card className="flex h-full flex-col overflow-hidden">
                   <CardCover src={project.imageUrl} Icon={Building2} buildingFallback />
 
                   <div className="p-4">
@@ -372,7 +381,7 @@ export async function HomeSectionView({ section, locale, firstName, greeting }: 
           <ul className="flex flex-col gap-2 px-4">
             {section.data.items.map((training) => (
               <li key={training.id}>
-                <Card interactive className="flex items-center gap-3 p-4">
+                <Card className="flex flex-wrap items-center gap-3 p-4">
                   <span className="grid size-10 shrink-0 place-items-center rounded-md bg-accent-amber/10 text-accent-amber">
                     <BookIcon aria-hidden="true" className="size-5" />
                   </span>
@@ -392,7 +401,16 @@ export async function HomeSectionView({ section, locale, firstName, greeting }: 
                   </div>
                   {training.isRegistered ? (
                     <Chip className="bg-success-soft text-success">{t("registered")}</Chip>
-                  ) : null}
+                  ) : (
+                    <RegisterButton
+                      act="training"
+                      contentItemId={training.id}
+                      title={training.title}
+                      startsAt={training.startsAt}
+                      place={training.format}
+                      seatsLeft={training.seatsLeft}
+                    />
+                  )}
                 </Card>
               </li>
             ))}
@@ -419,6 +437,7 @@ export async function HomeSectionView({ section, locale, firstName, greeting }: 
           <ul className="flex flex-col gap-2 px-4">
             {section.data.items.map((career) => (
               <li key={career.id}>
+                <Link href="/services/jobs" className="block rounded-lg focus-visible:outline-none focus-visible:shadow-focus">
                 <Card interactive className="flex items-center gap-3 p-4">
                   <div className="min-w-0 flex-1">
                     <h3 className="text-sm font-semibold leading-snug text-content">{career.title}</h3>
@@ -434,6 +453,7 @@ export async function HomeSectionView({ section, locale, firstName, greeting }: 
                   </div>
                   <ArrowIcon locale={locale} />
                 </Card>
+                </Link>
               </li>
             ))}
           </ul>

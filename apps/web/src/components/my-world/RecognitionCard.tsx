@@ -1,43 +1,39 @@
 "use client";
 
-import { Card } from "@moch/ui";
+import type { ReceivedRecognition } from "@moch/contracts";
 import { Medal } from "lucide-react";
-import type { Recognition } from "./types";
+import { useLocale, useTranslations } from "next-intl";
+import { formatRelative } from "@/lib/format";
 
-interface RecognitionCardProps {
-  recognition: Recognition;
-  fromLabel: string;
-  whenLabel: string;
-}
+export function RecognitionCard({ recognition, onOpen }: { recognition: ReceivedRecognition; onOpen: () => void }) {
+  const t = useTranslations("myWorld");
+  const locale = useLocale();
 
-export function RecognitionCard({ recognition, fromLabel, whenLabel }: RecognitionCardProps) {
   return (
-    <Card className="border-s-4 border-s-accent-amber p-4 shadow-sm">
-      <div className="flex items-start gap-3">
-        <span
-          aria-hidden="true"
-          className="grid size-10 shrink-0 place-items-center rounded-full"
-          style={{
-            color: "var(--accent-amber)",
-            backgroundColor: "color-mix(in srgb, var(--accent-amber) 14%, transparent)",
-          }}
-        >
-          <Medal className="size-5" />
+    <button
+      type="button"
+      onClick={onOpen}
+      className="flex w-full items-start gap-3 rounded-lg border border-s-4 border-line bg-surface p-4 text-start shadow-sm transition-shadow hover:shadow-md focus-visible:outline-none focus-visible:shadow-focus"
+      style={{ borderInlineStartColor: recognition.badgeColor }}
+    >
+      <span
+        aria-hidden="true"
+        className="grid size-10 shrink-0 place-items-center rounded-full"
+        style={{ color: recognition.badgeColor, backgroundColor: `color-mix(in srgb, ${recognition.badgeColor} 14%, transparent)` }}
+      >
+        <Medal className="size-5" />
+      </span>
+      <span className="min-w-0 flex-1">
+        <span className="block text-xs font-semibold text-content-muted">
+          {locale === "en" ? recognition.badgeNameEn : recognition.badgeNameHe}
         </span>
-        <div className="min-w-0 flex-1">
-          <p className="text-xs font-semibold text-content-muted">{recognition.badgeName}</p>
-          <blockquote className="mt-1 text-base font-medium leading-relaxed text-content">
-            {recognition.reason}
-          </blockquote>
-          <p className="mt-2 text-sm text-content-muted">
-            {fromLabel}
-            <span className="px-1.5" aria-hidden="true">
-              ·
-            </span>
-            {whenLabel}
-          </p>
-        </div>
-      </div>
-    </Card>
+        <span className="mt-1 line-clamp-2 block text-base font-medium leading-relaxed text-content">{recognition.reason}</span>
+        <span className="mt-2 block text-sm text-content-muted">
+          {recognition.giverName ? t("recognition.from", { name: recognition.giverName }) : t("recognition.fromUnknown")}
+          <span aria-hidden="true"> · </span>
+          {formatRelative(recognition.awardedAt, locale)}
+        </span>
+      </span>
+    </button>
   );
 }

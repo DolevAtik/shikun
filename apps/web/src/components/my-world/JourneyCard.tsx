@@ -1,111 +1,72 @@
 "use client";
 
-import { Card, ProgressBar, cn } from "@moch/ui";
-import { ArrowLeft, BookOpen, GraduationCap, Heart, Lock, Users } from "lucide-react";
+import type { WorldProgress } from "@moch/contracts";
+import { BookOpen, ChevronLeft, GraduationCap, Heart, Users } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
+import { MiniBar } from "./MiniBar";
 import { Numeric } from "./Numeric";
-import { formatXp, percentOf } from "./progress";
-import type { Journey } from "./types";
-import { WORLD_BAR, WORLD_COLOR, worldTint, worldWash } from "./world-tone";
+import { formatXp, milestoneProgress, percentOf, ratioText } from "./progress";
+import { WORLD_COLOR, worldTint, worldWash } from "./world-tone";
 
-const ICONS: Record<Journey["id"], LucideIcon> = {
+export const WORLD_ICONS: Record<WorldProgress["id"], LucideIcon> = {
   know: BookOpen,
   feel: Heart,
   develop: GraduationCap,
   participate: Users,
 };
 
-interface JourneyCardProps {
-  journey: Journey;
-  code: string;
-  activitiesLabel: string;
-  milestoneLabel: string | null;
-  continueLabel: string;
-  statusLabel: string;
-}
-
-export function JourneyCard({
-  journey,
-  code,
-  activitiesLabel,
-  milestoneLabel,
-  continueLabel,
-  statusLabel,
-}: JourneyCardProps) {
+/** The whole card is the link to that world's page: history and what is open now. */
+export function JourneyCard({ world, focused }: { world: WorldProgress; focused: boolean }) {
+  const t = useTranslations("myWorld");
   const locale = useLocale();
-  const Icon = ICONS[journey.id];
-  const locked = journey.status === "locked";
-  const percent = percentOf(journey.xp, journey.target);
+  const Icon = WORLD_ICONS[world.id];
+  const band = milestoneProgress(world.acts, world.milestone);
+  const percent = percentOf(band.done, band.target);
+  const name = t(`worlds.${world.id}.name`);
 
   return (
-    <Card
-      className={cn("flex h-full flex-col gap-3 p-4 shadow-sm", locked && "border-dashed")}
-      style={locked ? undefined : { backgroundColor: worldWash(journey.id) }}
+    <Link
+      href={`/my-world/${world.id}`}
+      aria-label={`${name}. ${t("journey.milestone", { ratio: ratioText(band.done, band.target, locale) })}. ${t("journey.open", { world: name })}`}
+      className="group flex h-full flex-col gap-2 rounded-lg border p-4 shadow-sm transition-shadow hover:shadow-md focus-visible:outline-none focus-visible:shadow-focus"
+      style={{
+        backgroundColor: worldWash(world.id),
+        borderColor: focused ? WORLD_COLOR[world.id] : "transparent",
+      }}
     >
-      <div className="flex items-start gap-3">
-        <span
-          aria-hidden="true"
-          className="grid size-11 shrink-0 place-items-center rounded-full"
-          style={locked ? { color: "var(--text-muted)", backgroundColor: "var(--surface-tint)" } : worldTint(journey.id)}
-        >
-          {locked ? <Lock className="size-4" /> : <Icon className="size-5" />}
+      <span className="flex items-start gap-3">
+        <span aria-hidden="true" className="grid size-11 shrink-0 place-items-center rounded-full" style={worldTint(world.id)}>
+          <Icon className="size-5" />
         </span>
-        <div className="min-w-0 flex-1">
-          <div className="flex items-start justify-between gap-3">
-            <div className="min-w-0">
-              <p className="text-[0.7rem] font-bold tracking-[0.14em]" style={{ color: locked ? "var(--text-muted)" : WORLD_COLOR[journey.id] }}>
-                <span dir="ltr">{code}</span>
-              </p>
-              <h3 className="font-semibold text-content">{journey.name}</h3>
-            </div>
-            {!locked ? (
-              <span className="shrink-0 text-sm font-bold" style={{ color: WORLD_COLOR[journey.id] }}>
-                <Numeric>
-                  {formatXp(journey.xp, locale)} XP
-                </Numeric>
+        <span className="min-w-0 flex-1">
+          <span className="flex items-start justify-between gap-3">
+            <span className="min-w-0">
+              <span dir="ltr" className="block text-[0.7rem] font-bold tracking-[0.14em]" style={{ color: WORLD_COLOR[world.id] }}>
+                {t(`worlds.${world.id}.code`)}
               </span>
-            ) : null}
-          </div>
-          <p className="mt-0.5 text-sm text-content-muted">{journey.description}</p>
-        </div>
-      </div>
-
-      {locked ? (
-        <p className="text-sm font-medium text-content-muted">{statusLabel}</p>
-      ) : (
-        <>
-          <ProgressBar
-            label={journey.name}
-            hideLabel
-            hideValue
-            value={journey.xp}
-            max={journey.target}
-            valueText={`${percent}%`}
-            indicatorClassName={WORLD_BAR[journey.id]}
-          />
-          <p className="text-sm text-content">
-            <Numeric className="font-semibold">{percent}%</Numeric>
-            <span className="px-1.5 text-content-muted" aria-hidden="true">
-              ·
+              <span className="block font-semibold text-content">{name}</span>
             </span>
-            <Numeric>{formatXp(journey.completedActivities, locale)} / {formatXp(journey.activityTarget, locale)}</Numeric>{" "}
-            <span className="text-content-muted">{activitiesLabel}</span>
-          </p>
-          {milestoneLabel ? <p className="text-sm font-medium text-content">{milestoneLabel}</p> : null}
-          {journey.href ? (
-            <Link
-              href={journey.href}
-              className="inline-flex min-h-11 items-center gap-1.5 self-start text-sm font-semibold focus-visible:outline-none focus-visible:shadow-focus"
-              style={{ color: WORLD_COLOR[journey.id] }}
-            >
-              {continueLabel}
-              <ArrowLeft aria-hidden="true" className="size-4 ltr:rotate-180" />
-            </Link>
-          ) : null}
-        </>
-      )}
-    </Card>
+            <Numeric className="shrink-0 text-lg font-bold" >
+              <span style={{ color: WORLD_COLOR[world.id] }}>{percent}%</span>
+            </Numeric>
+          </span>
+          <span className="mt-0.5 block text-sm text-content-muted">{t(`worlds.${world.id}.description`)}</span>
+        </span>
+      </span>
+      <MiniBar value={band.done} max={band.target} color={WORLD_COLOR[world.id]} className="h-2" />
+      <span className="flex items-center justify-between gap-2 text-sm">
+        <span className="text-content-muted">
+          {t("journey.milestone", { ratio: ratioText(band.done, band.target, locale) })}
+          <span aria-hidden="true"> · </span>
+          <Numeric>{formatXp(world.xp, locale)} XP</Numeric>
+        </span>
+        <ChevronLeft
+          aria-hidden="true"
+          className="size-4 shrink-0 text-content-muted transition-transform group-hover:-translate-x-0.5 ltr:rotate-180 ltr:group-hover:translate-x-0.5"
+        />
+      </span>
+    </Link>
   );
 }

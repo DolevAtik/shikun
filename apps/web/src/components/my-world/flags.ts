@@ -3,22 +3,18 @@ import type { MyWorldFlags } from "./types";
 /**
  * Section switches for העולם שלי.
  *
- * Every section already checks its flag, so an admin config can replace this
- * function later and the components stay as they are. Nothing is hard-off:
- * the presentation shows the full personal space.
+ * Every section checks its flag, so an admin config can replace this function
+ * later and the components stay as they are.
  */
 export function getMyWorldFlags(): MyWorldFlags {
   return {
+    showStats: true,
     showMissions: true,
-    showDailyStep: true,
-    showWeeklyCard: true,
-    showFocus: true,
     showJourney: true,
-    showOverallProgress: true,
+    showFocus: true,
     showAchievements: true,
     showRecognition: true,
-    showDepartmentProgress: true,
-    showDistrictLeaderboard: true,
+    showDepartment: true,
     showUnlocks: true,
   };
 }
