@@ -2,10 +2,18 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { CityBackdrop } from "@/components/CityBackdrop";
 import { LoginForm } from "./LoginForm";
 
-export default async function LoginPage({ params }: { params: Promise<{ locale: string }> }) {
+export default async function LoginPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ locale: string }>;
+  searchParams: Promise<{ error?: string }>;
+}) {
   const { locale } = await params;
+  const { error } = await searchParams;
   setRequestLocale(locale);
   const t = await getTranslations("auth");
+  const loginError = error === "credentials" || error === "unavailable" ? error : null;
 
   return (
     <div className="relative grid min-h-dvh place-items-center px-4 py-10">
@@ -17,7 +25,7 @@ export default async function LoginPage({ params }: { params: Promise<{ locale: 
           <p className="mt-1 text-sm text-content-muted">{t("loginSubtitle")}</p>
         </div>
 
-        <LoginForm locale={locale} />
+        <LoginForm locale={locale} error={loginError} />
       </div>
     </div>
   );

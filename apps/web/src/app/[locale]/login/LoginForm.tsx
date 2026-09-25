@@ -1,9 +1,6 @@
-"use client";
-
 import { Button, Card } from "@moch/ui";
 import { AlertCircle } from "lucide-react";
-import { useTranslations } from "next-intl";
-import { useState } from "react";
+import { getTranslations } from "next-intl/server";
 
 const DEMO_ACCOUNTS = [
   { email: "employee@moch.gov.il", label: "עובד/ת — מטה" },
@@ -15,65 +12,34 @@ const DEMO_ACCOUNTS = [
 
 const DEMO_PASSWORD = "Moch2026!";
 
-export function LoginForm({ locale }: { locale: string }) {
-  const t = useTranslations("auth");
-
-  const [email, setEmail] = useState("employee@moch.gov.il");
-  const [password, setPassword] = useState(DEMO_PASSWORD);
-  const [error, setError] = useState<string | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  async function onSubmit(event: React.FormEvent) {
-    event.preventDefault();
-    setError(null);
-    setIsSubmitting(true);
-
-    const response = await fetch("/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
-
-    if (!response.ok) {
-      setError(t("error"));
-      setIsSubmitting(false);
-      return;
-    }
-
-    // A document navigation, not `router.push`. This is measured, not stylistic.
-    //
-    // On a soft navigation the client router fetches the RSC payload for Home
-    // and commits it in one piece, so nothing is drawn until the whole server
-    // render is done — the login button just sits on "מתחבר…" for the duration.
-    // A `loading.tsx` does not help there: its fallback only becomes an *instant*
-    // state for a route whose shell is already prefetched, and Home cannot be
-    // prefetched from here because we are not signed in yet.
-    //
-    // A document request streams. Next flushes the app shell and the loading
-    // skeleton in the first chunk and streams Home in behind it, so the viewer is
-    // out of the login form in a few hundred milliseconds and watching the app
-    // arrive, instead of watching a spinner and wondering.
-    //
-    // Signing in is also the right moment to pay for a full load: it is a new
-    // session, and it leaves nothing of the last one in the router cache.
-    window.location.assign(`/${locale}`);
-  }
+export async function LoginForm({
+  locale,
+  error,
+}: {
+  locale: string;
+  error: "credentials" | "unavailable" | null;
+}) {
+  const t = await getTranslations("auth");
 
   return (
     <>
       <Card className="p-6">
-        <form onSubmit={onSubmit} className="flex flex-col gap-4" noValidate>
+        {/* A document POST, so a click before hydration still reaches the API.
+            The old client-only handler let the browser reload /login? instead. */}
+        <form method="post" action="/api/auth/login" className="flex flex-col gap-4" noValidate>
+          <input type="hidden" name="locale" value={locale} />
+
           <div className="flex flex-col gap-1.5">
             <label htmlFor="email" className="text-sm font-medium text-content">
               {t("email")}
             </label>
             <input
               id="email"
+              name="email"
               type="email"
               autoComplete="username"
               required
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
+              defaultValue="employee@moch.gov.il"
               className="h-11 rounded-md border border-line-strong bg-surface px-3 text-content"
             />
           </div>
@@ -84,28 +50,26 @@ export function LoginForm({ locale }: { locale: string }) {
             </label>
             <input
               id="password"
+              name="password"
               type="password"
               autoComplete="current-password"
               required
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
+              defaultValue={DEMO_PASSWORD}
               className="h-11 rounded-md border border-line-strong bg-surface px-3 text-content"
             />
           </div>
 
-          {/* An assertive live region: a failed login must be announced, not
-              just drawn. WCAG 3.3.1. */}
           <div role="alert" aria-live="assertive">
             {error ? (
               <p className="flex items-center gap-2 rounded-md bg-danger-soft px-3 py-2 text-sm font-medium text-danger">
                 <AlertCircle aria-hidden="true" className="size-4 shrink-0" />
-                {error}
+                {error === "unavailable" ? t("unavailable") : t("error")}
               </p>
             ) : null}
           </div>
 
-          <Button type="submit" size="lg" isLoading={isSubmitting} className="mt-1 w-full">
-            {isSubmitting ? t("submitting") : t("submit")}
+          <Button type="submit" size="lg" className="mt-1 w-full">
+            {t("submit")}
           </Button>
         </form>
       </Card>
@@ -116,17 +80,18 @@ export function LoginForm({ locale }: { locale: string }) {
         <ul className="flex flex-col gap-1">
           {DEMO_ACCOUNTS.map((account) => (
             <li key={account.email}>
-              <button
-                type="button"
-                onClick={() => {
-                  setEmail(account.email);
-                  setPassword(DEMO_PASSWORD);
-                }}
-                className="flex w-full items-center justify-between gap-2 rounded-md px-2 py-2 text-start text-xs transition-colors hover:bg-surface"
-              >
-                <span className="font-medium text-content">{account.label}</span>
-                <span className="text-content-muted">{account.email}</span>
-              </button>
+              <form method="post" action="/api/auth/login">
+                <input type="hidden" name="locale" value={locale} />
+                <input type="hidden" name="email" value={account.email} />
+                <input type="hidden" name="password" value={DEMO_PASSWORD} />
+                <button
+                  type="submit"
+                  className="flex w-full items-center justify-between gap-2 rounded-md px-2 py-2 text-start text-xs transition-colors hover:bg-surface"
+                >
+                  <span className="font-medium text-content">{account.label}</span>
+                  <span className="text-content-muted">{account.email}</span>
+                </button>
+              </form>
             </li>
           ))}
         </ul>

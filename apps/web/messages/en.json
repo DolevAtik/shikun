@@ -21,6 +21,7 @@
     "submit": "Sign in",
     "submitting": "Signing in…",
     "error": "Incorrect email or password",
+    "unavailable": "The server is unavailable right now. Try again in a moment.",
     "demoTitle": "Demo accounts",
     "demoHint": "Password for all accounts: {password}",
     "logout": "Sign out"
