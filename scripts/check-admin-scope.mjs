@@ -19,6 +19,9 @@ const ALLOW = [
   "admin/districts.service.ts",
   "feed/",
   "home/",
+  // Employee progress: missions and registration read through audienceWhere,
+  // the same viewer-scoped path the feed uses.
+  "progression/",
   "media/",
   "jobs/",
   "services/",
