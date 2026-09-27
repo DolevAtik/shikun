@@ -24,7 +24,8 @@
     "unavailable": "The server is unavailable right now. Try again in a moment.",
     "demoTitle": "Demo accounts",
     "demoHint": "Password for all accounts: {password}",
-    "logout": "Sign out"
+    "logout": "Sign out",
+    "waking": "The server is waking up after a quiet spell. This can take up to a minute — no need to press again."
   },
   "home": {
     "greeting": {

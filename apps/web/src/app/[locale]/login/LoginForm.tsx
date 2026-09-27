@@ -1,6 +1,7 @@
 import { Button, Card } from "@moch/ui";
 import { AlertCircle } from "lucide-react";
 import { getTranslations } from "next-intl/server";
+import { WakeNotice } from "./WakeNotice";
 
 const DEMO_ACCOUNTS = [
   { email: "employee@moch.gov.il", label: "עובד/ת — מטה" },
@@ -67,6 +68,8 @@ export async function LoginForm({
               </p>
             ) : null}
           </div>
+
+          <WakeNotice submitting={t("submitting")} waking={t("waking")} />
 
           <Button type="submit" size="lg" className="mt-1 w-full">
             {t("submit")}

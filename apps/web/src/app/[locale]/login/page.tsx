@@ -1,4 +1,6 @@
+import { after } from "next/server";
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { API_URL } from "@/lib/api";
 import { CityBackdrop } from "@/components/CityBackdrop";
 import { LoginForm } from "./LoginForm";
 
@@ -14,6 +16,15 @@ export default async function LoginPage({
   setRequestLocale(locale);
   const t = await getTranslations("auth");
   const loginError = error === "credentials" || error === "unavailable" ? error : null;
+
+  // Render's free API sleeps when idle and needs ~20–60s to wake. Start waking it
+  // the moment the login screen is served, so it is usually up before the person
+  // (typing on a phone) presses the button. Failures are irrelevant here.
+  after(() =>
+    fetch(`${API_URL}/api/health`, { cache: "no-store", signal: AbortSignal.timeout(55_000) }).catch(
+      () => undefined,
+    ),
+  );
 
   return (
     <div className="relative grid min-h-dvh place-items-center px-4 py-10">
