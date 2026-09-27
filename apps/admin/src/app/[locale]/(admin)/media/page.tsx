@@ -1,3 +1,8 @@
-import { createSectionPage } from "@/components/data/SectionPage";
+import { setRequestLocale } from "next-intl/server";
+import { MediaUploader } from "@/components/media/MediaUploader";
 
-export default createSectionPage("media");
+export default async function MediaPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+  return <MediaUploader />;
+}

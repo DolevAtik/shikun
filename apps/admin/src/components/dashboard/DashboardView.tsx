@@ -65,7 +65,7 @@ export function DashboardView({
         </div>
       </div>
 
-      <section aria-label={t("stats")} className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+      <section aria-label={t("statsLabel")} className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
         {data.stats.map((stat) => (
           <StatCard key={stat.key} statKey={stat.key} value={stat.value} changePct={stat.changePct} collectingSince={stat.collectingSince} />
         ))}
@@ -194,13 +194,22 @@ export function DashboardView({
         </CardHeader>
         <CardContent className="flex flex-wrap gap-2">
           <Button asChild>
-            <Link href="/content">{t("actions.newContent")}</Link>
+            <Link href="/content/new?kind=ANNOUNCEMENT">{t("actions.newAnnouncement")}</Link>
+          </Button>
+          <Button asChild variant="outline">
+            <Link href="/content/new?kind=FEED_POST">{t("actions.newPost")}</Link>
+          </Button>
+          <Button asChild variant="outline">
+            <Link href="/content/new?kind=ALERT">{t("actions.newAlert")}</Link>
+          </Button>
+          <Button asChild variant="outline">
+            <Link href="/content/new?kind=EVENT">{t("actions.newEvent")}</Link>
+          </Button>
+          <Button asChild variant="outline">
+            <Link href="/home-screen">{t("actions.homeLayout")}</Link>
           </Button>
           <Button asChild variant="outline">
             <Link href="/employees">{t("actions.employees")}</Link>
-          </Button>
-          <Button asChild variant="outline">
-            <Link href="/settings">{t("actions.homeLayout")}</Link>
           </Button>
           <Button asChild variant="outline">
             <Link href="/analytics">{t("actions.analytics")}</Link>

@@ -55,6 +55,14 @@ export class AdminHomeService {
             isEnabled: section.isEnabled,
             ...(section.title !== undefined ? { title: section.title } : {}),
             ...(section.maxItems !== undefined ? { maxItems: section.maxItems } : {}),
+            ...(section.audience
+              ? {
+                  audDepartmentIds: section.audience.departmentIds,
+                  audDistrictIds: section.audience.districtIds,
+                  audOrganizationIds: section.audience.organizationIds,
+                  audRoles: section.audience.roles,
+                }
+              : {}),
           },
         }),
       ),

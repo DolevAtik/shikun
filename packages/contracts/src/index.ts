@@ -9,4 +9,5 @@ export * from "./feed";
 export * from "./world";
 export * from "./list";
 export * from "./admin";
+export * from "./admin-manage";
 export * from "./progress";

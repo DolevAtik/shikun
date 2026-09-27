@@ -6,6 +6,35 @@ date rather than released version.
 
 ## [Unreleased]
 
+### Added — the console runs the platform
+- **Home screen** (`/home-screen`, replaces Settings): per section a custom title, how many
+  items, and who sees it (audience picker with a live "reaches N of M employees"), plus a
+  link to where that section's content is managed. Tabs edit the rows behind the three
+  sections that are not content: key numbers, projects, and the weekly summary.
+- **Every content kind from the editor**: announcements, community posts (any channel),
+  events, trainings, positions, CEO messages, videos, and emergency alerts, each with its
+  own fields (dates, seats, location, severity and expiry, video of the week…), an
+  image upload, the audience picker, pinning, and scheduling — a future publish date keeps
+  the item hidden until then. The list marks scheduled and pinned items.
+- **Events and Learning**: upcoming/past sessions with sign-ups against capacity, who said
+  they came, a registrant list per session and a CSV export.
+- **Careers**: the content table fixed to positions.
+- **Services**: add, edit, reorder and remove the quick actions and system links employees
+  see; icons limited to the ones the app can draw, addresses to `/…`, `https://`, `mailto:`, `tel:`.
+- **Community**: moderate comments and colleague thank-yous (removal needs a reason; the
+  audit entry keeps the removed text), and channel stats.
+- **Employees**: edit title, unit, district, roles, and deactivate/reactivate. Nobody changes
+  their own roles or deactivates themselves; only an ADMIN grants ADMIN or touches one.
+  Deactivating revokes refresh tokens.
+- **Permissions**: the role × permission matrix, read from the same `ROLE_PERMISSIONS` the
+  API enforces, with a head count per role.
+- **Media library**: upload files (drag and drop) and copy their addresses.
+- Every new write is recorded in the audit log.
+
+### Fixed
+- The content detail no longer reports an alert's link as its image.
+- Selects in console forms kept losing their value when their options loaded after it.
+
 ### Added — העולם שלי grows
 - **Thank a colleague.** `POST /me/recognitions` with a colleague picker
   (`GET /me/colleagues`): a badge and a reason, 3 per week, one per colleague per week.

@@ -1,8 +1,10 @@
-import { Controller, Get, Query } from "@nestjs/common";
-import type { AdminDashboard, SearchResponse } from "@moch/contracts";
-import { DashboardRangeSchema } from "@moch/contracts";
+import { Controller, Get, HttpCode, Post, Query } from "@nestjs/common";
+import type { AdminDashboard, Audience, AudienceEstimate, SearchResponse } from "@moch/contracts";
+import { AudienceEstimateRequestSchema, DashboardRangeSchema } from "@moch/contracts";
 import { CurrentUser, RequirePermissions } from "../auth/decorators";
 import type { AuthenticatedUser } from "../auth/types";
+import { PrismaService } from "../common/prisma/prisma.service";
+import { ZodBody } from "../common/zod-body.decorator";
 import { DashboardService } from "./dashboard.service";
 import { SearchService } from "./search.service";
 
@@ -23,6 +25,7 @@ export class AdminController {
   constructor(
     private readonly dashboard: DashboardService,
     private readonly search: SearchService,
+    private readonly prisma: PrismaService,
   ) {}
 
   @Get("dashboard")
@@ -37,5 +40,32 @@ export class AdminController {
     @Query("q") term?: string,
   ): Promise<SearchResponse> {
     return this.search.search(user, term ?? "");
+  }
+
+  /**
+   * "This will reach about N employees" under the audience picker. The same
+   * rule `audienceMatches` applies — empty dimension = no constraint, dimensions
+   * ANDed — compiled against User rather than against content.
+   */
+  @Post("audience/estimate")
+  @HttpCode(200)
+  async estimateAudience(
+    @ZodBody(AudienceEstimateRequestSchema) audience: Audience,
+  ): Promise<AudienceEstimate> {
+    const [count, total] = await Promise.all([
+      this.prisma.user.count({
+        where: {
+          isActive: true,
+          ...(audience.departmentIds.length ? { departmentId: { in: audience.departmentIds } } : {}),
+          ...(audience.districtIds.length ? { districtId: { in: audience.districtIds } } : {}),
+          ...(audience.organizationIds.length
+            ? { organizationId: { in: audience.organizationIds } }
+            : {}),
+          ...(audience.roles.length ? { roles: { hasSome: audience.roles } } : {}),
+        },
+      }),
+      this.prisma.user.count({ where: { isActive: true } }),
+    ]);
+    return { count, total };
   }
 }

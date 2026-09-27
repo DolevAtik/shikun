@@ -5,6 +5,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { keepPreviousData } from "@tanstack/react-query";
 import type { ColumnDef, RowSelectionState } from "@tanstack/react-table";
+import { Pin } from "lucide-react";
 import { toast } from "sonner";
 import type {
   AdminContentListItem,
@@ -45,12 +46,28 @@ const KINDS: ContentKind[] = [
 
 const STATUSES: ContentStatus[] = ["DRAFT", "PENDING", "PUBLISHED", "ARCHIVED"];
 
-export function ContentList({ initial }: { initial?: AdminContentPage }) {
+/**
+ * The content table. `fixedKind` turns it into one kind's screen (Careers);
+ * `initialKind` only pre-selects the filter (links from the Home screen editor).
+ */
+export function ContentList({
+  initial,
+  initialKind,
+  fixedKind,
+  title,
+  subtitle,
+}: {
+  initial?: AdminContentPage;
+  initialKind?: ContentKind;
+  fixedKind?: ContentKind;
+  title?: string;
+  subtitle?: string;
+}) {
   const t = useTranslations("content");
   const tCommon = useTranslations("common");
   const queryClient = useQueryClient();
   const [params, setParams] = useListQuery();
-  const [kind, setKind] = React.useState<string>("all");
+  const [kind, setKind] = React.useState<string>(fixedKind ?? initialKind ?? "all");
   const [status, setStatus] = React.useState<string>("all");
   const [selection, setSelection] = React.useState<RowSelectionState>({});
   const [confirmArchive, setConfirmArchive] = React.useState(false);
@@ -77,7 +94,9 @@ export function ContentList({ initial }: { initial?: AdminContentPage }) {
       api.get<AdminContentPage>(`/admin/content?${toSearchParams(listQuery)}`),
     placeholderData: keepPreviousData,
     initialData:
-      kind === "all" && status === "all" && params.page === 1 && !params.q ? initial : undefined,
+      kind === (fixedKind ?? initialKind ?? "all") && status === "all" && params.page === 1 && !params.q
+        ? initial
+        : undefined,
   });
 
   const bulk = useMutation({
@@ -113,6 +132,9 @@ export function ContentList({ initial }: { initial?: AdminContentPage }) {
             href={`/content/${row.original.id}`}
             className="font-medium text-content hover:text-brand"
           >
+            {row.original.isPinned && (
+              <Pin className="me-1 inline size-3.5 text-content-muted" aria-label={t("form.pinned")} />
+            )}
             {row.original.title ?? t("untitled")}
           </Link>
         ),
@@ -125,11 +147,14 @@ export function ContentList({ initial }: { initial?: AdminContentPage }) {
       {
         accessorKey: "status",
         header: t("columns.status"),
-        cell: ({ row }) => (
-          <Badge variant={statusVariant(row.original.status)}>
-            {t(`status.${row.original.status}`)}
-          </Badge>
-        ),
+        cell: ({ row }) =>
+          isScheduled(row.original) ? (
+            <Badge variant="warning">{t("scheduled")}</Badge>
+          ) : (
+            <Badge variant={statusVariant(row.original.status)}>
+              {t(`status.${row.original.status}`)}
+            </Badge>
+          ),
       },
       {
         accessorKey: "districtName",
@@ -161,12 +186,26 @@ export function ContentList({ initial }: { initial?: AdminContentPage }) {
     <div className="mx-auto max-w-7xl space-y-4">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight text-content">{t("title")}</h1>
-          <p className="mt-1 text-sm text-content-muted">{t("subtitle")}</p>
+          <h1 className="text-2xl font-semibold tracking-tight text-content">{title ?? t("title")}</h1>
+          <p className="mt-1 text-sm text-content-muted">{subtitle ?? t("subtitle")}</p>
         </div>
-        <Button asChild>
-          <Link href="/content/new">{t("create")}</Link>
-        </Button>
+        <div className="flex flex-wrap gap-2">
+          {!fixedKind && (
+            <>
+              <Button asChild variant="outline">
+                <Link href="/content/new?kind=ALERT">{t("quick.alert")}</Link>
+              </Button>
+              <Button asChild variant="outline">
+                <Link href="/content/new?kind=FEED_POST">{t("quick.post")}</Link>
+              </Button>
+            </>
+          )}
+          <Button asChild>
+            <Link href={fixedKind ? `/content/new?kind=${fixedKind}` : "/content/new"}>
+              {fixedKind ? t("createKind", { kind: t(`kinds.${fixedKind}`) }) : t("create")}
+            </Link>
+          </Button>
+        </div>
       </div>
 
       <ListToolbar
@@ -175,6 +214,7 @@ export function ContentList({ initial }: { initial?: AdminContentPage }) {
         searchPlaceholder={t("search")}
         filters={
           <>
+            {!fixedKind && (
             <Select
               value={kind}
               onValueChange={(value) => {
@@ -194,6 +234,7 @@ export function ContentList({ initial }: { initial?: AdminContentPage }) {
                 ))}
               </SelectContent>
             </Select>
+            )}
             <Select
               value={status}
               onValueChange={(value) => {
@@ -299,6 +340,10 @@ function statusVariant(status: ContentStatus): "secondary" | "success" | "warnin
     default:
       return "secondary";
   }
+}
+
+function isScheduled(row: AdminContentListItem): boolean {
+  return row.status === "PUBLISHED" && row.publishedAt !== null && new Date(row.publishedAt) > new Date();
 }
 
 function formatDate(iso: string): string {

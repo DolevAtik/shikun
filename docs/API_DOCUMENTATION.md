@@ -121,6 +121,23 @@ there is no score column.
 | GET | `/admin/quests` | `quests:manage` — every department with `users:manage`, else the viewer's own |
 | PUT | `/admin/quests/:departmentId` | `quests:manage` — `{ reward }` for this month; audited |
 | GET | `/admin/world/metrics?range=` | `analytics:view` — aggregates only |
+| POST | `/admin/audience/estimate` | — `{ count, total }` active employees an audience reaches |
+| GET | `/admin/home/data` | `feeds:manage` — key numbers, projects, weekly summaries |
+| POST · PATCH · DELETE | `/admin/home/metrics[/:id]` | `feeds:manage` |
+| PUT | `/admin/home/metrics/order` | `feeds:manage` — `{ ids }` top to bottom |
+| POST · PATCH · DELETE | `/admin/home/projects[/:id]` | `feeds:manage` |
+| PUT | `/admin/home/projects/order` | `feeds:manage` |
+| POST · PATCH · DELETE | `/admin/home/weekly[/:id]` | `feeds:manage` — one per week (409 on a duplicate) |
+| GET | `/admin/services` | `feeds:manage` |
+| POST · PATCH · DELETE | `/admin/services/{actions,links}[/:id]` | `feeds:manage` |
+| PUT | `/admin/services/{actions,links}/order` | `feeds:manage` |
+| GET | `/admin/sessions?kind=EVENT\|TRAINING&when=upcoming\|past\|all` | — scoped by `manageableWhere` |
+| GET | `/admin/sessions/:id/registrants` | — scoped by `manageableWhere` |
+| GET | `/admin/community/{channels,comments,recognitions}` | `content:manage` |
+| POST | `/admin/community/{comments,recognitions}/:id/remove` | `content:manage` — `{ reason }`; audited with the removed text |
+| GET | `/admin/employees` · `/admin/employees/:id` | `users:manage` |
+| PATCH | `/admin/employees/:id` | `users:manage` — title, unit, district, roles, `isActive`; see `employee-rules.ts` |
+| GET | `/admin/employees/role-counts` | `users:manage` |
 
 ## Contracts
 

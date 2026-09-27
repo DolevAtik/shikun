@@ -6,7 +6,20 @@ import { useDirection } from "@radix-ui/react-direction";
 import { Check, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/cn";
 
-const Select = SelectPrimitive.Root;
+/**
+ * Inside a `<form>`, Radix renders a hidden native `<select>`; when the options
+ * arrive after the value (lists fetched on mount), that native select fires a
+ * change with "" and the form silently loses its value. No select here uses ""
+ * as a real value — "none" options use an explicit sentinel — so drop it.
+ */
+function Select({ onValueChange, ...props }: React.ComponentProps<typeof SelectPrimitive.Root>) {
+  return (
+    <SelectPrimitive.Root
+      {...props}
+      onValueChange={onValueChange ? (value) => value !== "" && onValueChange(value) : undefined}
+    />
+  );
+}
 const SelectGroup = SelectPrimitive.Group;
 const SelectValue = SelectPrimitive.Value;
 

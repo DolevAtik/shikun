@@ -4,6 +4,12 @@ import { ProgressionModule } from "../progression/progression.module";
 import { AdminController } from "./admin.controller";
 import { AdminHomeController } from "./home.controller";
 import { AdminHomeService } from "./home.service";
+import { AdminHomeDataService } from "./home-data.service";
+import { AdminServicesController } from "./services.controller";
+import { AdminServicesService } from "./services.service";
+import { AdminSessionsController } from "./sessions.controller";
+import { AdminCommunityController } from "./community.controller";
+import { AdminCommunityService } from "./community.service";
 import { AuditController } from "./audit.controller";
 import { AuditService } from "./audit.service";
 import { ContentController } from "./content.controller";
@@ -31,6 +37,9 @@ import { AdminWorldService } from "./world.service";
     AuditController,
     AdminQuestsController,
     AdminWorldMetricsController,
+    AdminServicesController,
+    AdminSessionsController,
+    AdminCommunityController,
   ],
   providers: [
     DashboardService,
@@ -42,6 +51,9 @@ import { AdminWorldService } from "./world.service";
     AdminEmployeesRepository,
     AdminDistrictsService,
     AdminWorldService,
+    AdminHomeDataService,
+    AdminServicesService,
+    AdminCommunityService,
   ],
   exports: [AuditService, TelemetryService],
 })

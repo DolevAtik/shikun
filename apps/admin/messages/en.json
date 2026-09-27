@@ -17,13 +17,13 @@
     "media": "Media Library",
     "notifications": "Notifications",
     "analytics": "Analytics",
-    "settings": "Settings",
     "permissions": "Permissions",
     "audit": "Audit Logs",
     "collapse": "Collapse menu",
     "expand": "Expand menu",
     "menu": "Navigation menu",
-    "quests": "Department goals"
+    "quests": "Department goals",
+    "home": "Home screen"
   },
   "auth": {
     "signIn": "Sign in",
@@ -110,9 +110,14 @@
     "actions": {
       "newContent": "New content",
       "employees": "Manage employees",
-      "homeLayout": "Home layout",
-      "analytics": "Analytics"
-    }
+      "homeLayout": "Manage Home screen",
+      "analytics": "Analytics",
+      "newAnnouncement": "New announcement",
+      "newPost": "Community post",
+      "newAlert": "Emergency alert",
+      "newEvent": "New event"
+    },
+    "statsLabel": "Key figures"
   },
   "list": {
     "of": "of",
@@ -151,12 +156,59 @@
     "actions": {
       "publish": "Publish",
       "unpublish": "Unpublish",
-      "archive": "Archive"
+      "archive": "Archive",
+      "schedule": "Schedule",
+      "publishNow": "Publish now",
+      "saveDraft": "Save as draft",
+      "saveAndSchedule": "Save and schedule",
+      "saveAndPublish": "Save and publish"
     },
     "form": {
       "details": "Content details",
       "summary": "Summary",
-      "body": "Body"
+      "body": "Body",
+      "summaryHint": "One line shown on the Home card. Empty = the title.",
+      "image": "Image",
+      "imageHint": "Upload a file or paste an address. The card image is decorative; the text carries the meaning.",
+      "kindCard": {
+        "ALERT": "Alert details",
+        "EVENT": "Event details",
+        "TRAINING": "Training details",
+        "CAREER": "Position details",
+        "VIDEO": "Video details",
+        "CEO_MESSAGE": "Video (optional)",
+        "FEED_POST": "Channel"
+      },
+      "channel": "Community channel",
+      "severity": "Severity",
+      "expiresAt": "Shown until",
+      "expiresAtHint": "Empty = until removed by hand.",
+      "startsAt": "Starts at",
+      "endsAt": "Ends at",
+      "format": "Format",
+      "location": "Location",
+      "capacity": "Seats",
+      "capacityHint": "Empty = unlimited.",
+      "isOnline": "Online session",
+      "department": "Unit",
+      "noDepartment": "No unit",
+      "closesAt": "Apply by",
+      "isInternal": "Internal tender",
+      "careerHref": "Application link",
+      "alertHref": "Details link (optional)",
+      "videoUrl": "Video link",
+      "thumbnail": "Thumbnail",
+      "duration": "Length in seconds",
+      "videoOfWeek": "Video of the week",
+      "audience": "Who it is for",
+      "audienceHint": "Nothing ticked = everyone in the Ministry. Several ticks in one group = any of them; different groups = all together.",
+      "publishing": "Publishing",
+      "publishAt": "Publish at",
+      "publishAtHint": "Empty = now. A future date schedules it.",
+      "districtHint": "The district shown on the card. It does not limit who sees it.",
+      "pin": "Pin",
+      "pinHint": "Shown first in its list.",
+      "pinned": "Pinned"
     },
     "kinds": {
       "ANNOUNCEMENT": "Announcement",
@@ -173,19 +225,43 @@
       "PENDING": "Pending",
       "PUBLISHED": "Published",
       "ARCHIVED": "Archived"
+    },
+    "backToList": "← Back to content",
+    "createKind": "New {kind}",
+    "scheduledFor": "Scheduled for {date}",
+    "scheduled": "Scheduled",
+    "byAuthor": "By {name}",
+    "registrantsCount": "Registrants ({count})",
+    "fixErrors": "Some fields need fixing",
+    "quick": {
+      "alert": "Emergency alert",
+      "post": "Community post"
+    },
+    "appearsIn": {
+      "ANNOUNCEMENT": "Appears in the \"Announcements\" section on Home. Pinned items show first.",
+      "FEED_POST": "Appears in the community feed, in the channel you choose.",
+      "EVENT": "Appears in the \"Events\" section on Home until it starts, and employees can register.",
+      "CAREER": "Appears on the job board and in the \"Careers\" section on Home until it closes.",
+      "TRAINING": "Appears in the \"Trainings\" section on Home until it starts, and employees can register.",
+      "CEO_MESSAGE": "The latest published message shows in the \"CEO message\" section on Home.",
+      "VIDEO": "A video marked \"video of the week\" shows in that section on Home.",
+      "ALERT": "Shows at the top of Home, above everything else, until it expires."
+    },
+    "severity": {
+      "INFO": "Info",
+      "WARNING": "Warning",
+      "CRITICAL": "Critical"
+    },
+    "format": {
+      "ONLINE": "Online",
+      "IN_PERSON": "In person",
+      "HYBRID": "Hybrid"
     }
   },
   "homeLayout": {
-    "settingsTitle": "Settings",
-    "settingsSubtitle": "Manage what appears on the employee Home screen",
-    "title": "Home layout",
-    "subtitle": "Reorder and enable sections — changes appear in the app immediately.",
+    "title": "Home screen sections",
+    "subtitle": "Reorder, hide, retitle, set how many items, and choose who sees each section. A section with nothing in it is not shown at all.",
     "saved": "Home layout updated",
-    "moveUp": "Move up",
-    "moveDown": "Move down",
-    "enabled": "Enabled",
-    "noAccessTitle": "You cannot edit these settings",
-    "noAccessDescription": "Feed management permission is required to edit the Home layout.",
     "types": {
       "GREETING": "Greeting",
       "EMERGENCY": "Emergency alerts",
@@ -200,7 +276,20 @@
       "TRAININGS": "Trainings",
       "BIRTHDAYS": "Birthdays",
       "RECOGNITION": "Recognition"
-    }
+    },
+    "unsaved": "Unsaved changes",
+    "hidden": "Hidden",
+    "targeted": "Shown to some employees",
+    "moveUpNamed": "Move {name} up",
+    "moveDownNamed": "Move {name} down",
+    "settingsFor": "Settings for {name}",
+    "showNamed": "Show {name}",
+    "customTitle": "Title on Home",
+    "customTitleHint": "Empty = the default title.",
+    "maxItems": "How many items",
+    "maxItemsHint": "1–20. Empty = the section's default.",
+    "manageContent": "Manage this section's content",
+    "whoSees": "Who sees this section"
   },
   "employees": {
     "title": "Employees",
@@ -227,7 +316,22 @@
       "HR": "HR",
       "EXECUTIVE": "Executive",
       "ADMIN": "Administrator"
-    }
+    },
+    "saved": "Employee saved",
+    "rolesRequired": "At least one role is required",
+    "editTitle": "Edit employee",
+    "authored": "Content published",
+    "commentsCount": "Comments",
+    "phone": "Phone",
+    "jobTitle": "Job title (free text)",
+    "noDepartment": "No unit",
+    "rolesHint": "Roles decide permissions — {count} right now. Only an admin can grant \"System admin\".",
+    "activeLabel": "Active account",
+    "activeHint": "Deactivating signs the employee out at once and blocks sign-in. It can be undone.",
+    "confirmDeactivateTitle": "Deactivate this account?",
+    "confirmDeactivate": "{name} will be signed out and cannot sign in until the account is reactivated.",
+    "deactivate": "Deactivate",
+    "showInactive": "Deactivated accounts"
   },
   "districts": {
     "title": "Districts",
@@ -312,5 +416,308 @@
     "recognitionHint": "Thank-yous employees gave, by week (last 8 weeks).",
     "recognitionWeek": "{given} thank-yous from {givers} people",
     "privacy": "These figures come from the same rows that power My World. No per-person breakdown, no ranking."
+  },
+  "audience": {
+    "everyone": "Everyone in the Ministry",
+    "and": " · ",
+    "reach": "{count} of {total} employees",
+    "reachLoading": "Counting…",
+    "districts": "Districts",
+    "roles": "Roles",
+    "departments": "Units",
+    "organizations": "Bodies",
+    "any": "Anyone",
+    "reset": "Reset — whole Ministry",
+    "sentence": {
+      "districts": "District: {list}",
+      "departments": "Unit: {list}",
+      "organizations": "Body: {list}",
+      "roles": "Role: {list}"
+    }
+  },
+  "media": {
+    "title": "Media library",
+    "subtitle": "Upload files to storage and get an address to use in content.",
+    "uploadTitle": "Upload files",
+    "uploadHint": "Images, documents, presentations. Editors can also upload images straight from the form.",
+    "dropHere": "Drop files here, or",
+    "chooseFiles": "Choose files",
+    "upload": "Upload",
+    "uploading": "Uploading…",
+    "uploaded": "File uploaded",
+    "uploadFailed": "Upload failed",
+    "uploadFailedNamed": "Uploading {name} failed",
+    "remove": "Remove image",
+    "sessionUploads": "Uploaded just now",
+    "copy": "Copy",
+    "copied": "Address copied",
+    "copyFailed": "Copy failed — select and copy by hand",
+    "addressOf": "Address of {name}"
+  },
+  "rows": {
+    "moveUp": "Move {name} up",
+    "moveDown": "Move {name} down",
+    "edit": "Edit {name}",
+    "delete": "Delete {name}"
+  },
+  "homeScreen": {
+    "title": "Home screen",
+    "subtitle": "What employees see when they open the app. Changes reach them within half a minute.",
+    "noAccessTitle": "You cannot manage the Home screen",
+    "noAccessDescription": "It needs the feeds:manage permission.",
+    "tabs": {
+      "layout": "Section order",
+      "numbers": "Key numbers",
+      "projects": "Projects",
+      "weekly": "Weekly summary"
+    }
+  },
+  "homeData": {
+    "metrics": {
+      "title": "Key numbers",
+      "subtitle": "The figures in the \"Key numbers\" section, in this order.",
+      "add": "New number",
+      "edit": "Edit number",
+      "saved": "Number saved",
+      "deleted": "Number deleted",
+      "reordered": "Order updated",
+      "empty": "No numbers yet",
+      "required": "Required",
+      "numberRequired": "A number is required",
+      "label": "Label",
+      "value": "Value",
+      "unit": "Unit",
+      "unitHint": "e.g. units, ₪, %",
+      "changePct": "Change (%)",
+      "changePctHint": "Optional. Positive = up.",
+      "period": "Period",
+      "periodHint": "e.g. 2026 to date",
+      "confirmDelete": "Delete this number?"
+    },
+    "projects": {
+      "title": "Projects",
+      "subtitle": "The projects in the \"Projects\" section. Each employee sees their own district's first.",
+      "add": "New project",
+      "edit": "Edit project",
+      "saved": "Project saved",
+      "deleted": "Project deleted",
+      "reordered": "Order updated",
+      "empty": "No projects yet",
+      "required": "Required",
+      "numberRequired": "A positive number is required",
+      "progressRange": "Between 0 and 100",
+      "name": "Project name",
+      "city": "Town",
+      "district": "District",
+      "pickDistrict": "Choose a district",
+      "statusLabel": "Stage",
+      "status": {
+        "PLANNING": "Planning",
+        "MARKETING": "Marketing",
+        "BUILDING": "Building",
+        "COMPLETED": "Completed"
+      },
+      "progress": "Progress (%)",
+      "housingUnits": "Housing units",
+      "image": "Image",
+      "unitsCount": "{count} units",
+      "confirmDelete": "Delete this project?"
+    },
+    "weekly": {
+      "title": "Weekly summary",
+      "subtitle": "The latest week's summary shows in the \"Weekly summary\" section on Home.",
+      "add": "New summary",
+      "edit": "Edit summary",
+      "saved": "Summary saved",
+      "deleted": "Summary deleted",
+      "empty": "No summaries yet",
+      "required": "Required",
+      "onHome": "On Home now",
+      "weekOf": "Week of {date}",
+      "highlightsCount": "{count, plural, one {one highlight} other {# highlights}}",
+      "dialogHint": "One summary per week. The latest week is the one shown.",
+      "weekOfLabel": "Week",
+      "weekOfHint": "The Sunday the week starts on.",
+      "titleLabel": "Title",
+      "teaser": "Teaser",
+      "highlights": "Highlights",
+      "highlightsHint": "One per line, up to 10.",
+      "confirmDelete": "Delete this summary?"
+    }
+  },
+  "sessions": {
+    "title": {
+      "EVENT": "Events",
+      "TRAINING": "Learning and trainings"
+    },
+    "subtitle": {
+      "EVENT": "Events, registrations, and who actually came. Edit an event in the content editor.",
+      "TRAINING": "Trainings, seats left, and who actually came. Edit a training in the content editor."
+    },
+    "create": {
+      "EVENT": "New event",
+      "TRAINING": "New training"
+    },
+    "empty": {
+      "EVENT": "No events to show",
+      "TRAINING": "No trainings to show"
+    },
+    "emptyDescription": "Try another time range, or create one.",
+    "search": "Search by name…",
+    "when": "Time range",
+    "whenOptions": {
+      "upcoming": "Upcoming",
+      "past": "Past",
+      "all": "All"
+    },
+    "columns": {
+      "title": "Name",
+      "when": "When",
+      "status": "Status",
+      "registrations": "Registered",
+      "attendance": "Attendance",
+      "actions": "Actions"
+    },
+    "online": "Online",
+    "ofCapacity": "{count} / {capacity}",
+    "full": "Full",
+    "attendanceSummary": "{attended} came · {missed} did not",
+    "registrants": "Registrants",
+    "registeredCount": "{count, plural, one {one registrant} other {# registrants}}",
+    "loading": "Loading…",
+    "export": "Export CSV",
+    "noRegistrants": "No registrants yet.",
+    "noAnswer": "No answer",
+    "came": "Came",
+    "didNotCome": "Did not come",
+    "yes": "Yes",
+    "no": "No",
+    "csv": {
+      "name": "Name",
+      "email": "Email",
+      "department": "Unit",
+      "district": "District",
+      "registeredAt": "Registered at",
+      "attended": "Attended"
+    }
+  },
+  "careers": {
+    "title": "Careers",
+    "subtitle": "Positions and tenders on the job board and on Home."
+  },
+  "servicesAdmin": {
+    "title": "Services",
+    "subtitle": "The employees' Services screen: quick actions and links to systems. The order here is the order in the app.",
+    "saved": "Saved",
+    "deleted": "Deleted",
+    "reordered": "Order updated",
+    "required": "Required",
+    "external": "External",
+    "actions": {
+      "title": "Quick actions",
+      "subtitle": "Tasks employees start with a tap — a report, a request, a form.",
+      "add": "New action",
+      "empty": "No quick actions",
+      "hint": "An in-app path (starting with /) or a full address."
+    },
+    "links": {
+      "title": "Links to systems",
+      "subtitle": "Systems employees leave the app for — payroll, attendance, IT.",
+      "add": "New link",
+      "empty": "No links",
+      "hint": "The system's full address."
+    },
+    "edit": "Edit",
+    "label": "Name",
+    "href": "Address",
+    "hrefHint": "https://… or a path starting with /",
+    "icon": "Icon",
+    "noIcon": "No icon",
+    "isExternal": "Opens outside the app",
+    "confirmDelete": "Delete this item?",
+    "icons": {
+      "award": "Award",
+      "book": "Book",
+      "book-open": "Open book",
+      "briefcase": "Briefcase",
+      "building": "Building",
+      "clock": "Clock",
+      "file-plus": "New document",
+      "file-text": "Document",
+      "graduation-cap": "Graduation cap",
+      "home": "Home",
+      "landmark": "Institution",
+      "lightbulb": "Light bulb",
+      "map": "Map",
+      "megaphone": "Megaphone",
+      "phone": "Phone",
+      "play": "Play",
+      "receipt": "Receipt",
+      "scroll-text": "Scroll",
+      "user-round": "Person",
+      "users": "People",
+      "wallet": "Wallet"
+    }
+  },
+  "community": {
+    "title": "Community",
+    "subtitle": "Moderate the conversation: comments, thank-yous between colleagues, and channels.",
+    "newPost": "New post",
+    "tabs": {
+      "comments": "Comments",
+      "recognitions": "Thank-yous",
+      "channels": "Channels"
+    },
+    "mandatory": "Mandatory",
+    "channelStats": "{posts} posts · {followers} followers",
+    "removed": "Removed",
+    "search": "Search text or names…",
+    "commentsHint": "The latest comments across all posts. A removal is logged in the audit log with the text and the reason.",
+    "recognitionsHint": "Thank-yous employees gave each other. A removal is logged in the audit log with the text and the reason.",
+    "commentsEmpty": "No comments",
+    "recognitionsEmpty": "No thank-yous",
+    "onPost": "on",
+    "untitledPost": "Untitled post",
+    "system": "The system",
+    "thanked": "thanked",
+    "likes": "{count} likes",
+    "remove": "Remove",
+    "reason": "Reason for removal",
+    "reasonRequired": "Please give a reason",
+    "removeCommentTitle": "Remove this comment?",
+    "removeRecognitionTitle": "Remove this thank-you?",
+    "removeHint": "It disappears from the app. The text and the reason are kept in the audit log."
+  },
+  "permissionsAdmin": {
+    "title": "Permissions",
+    "subtitle": "What each role can do. Roles are granted per employee on the Employees screen.",
+    "rolesTitle": "Roles",
+    "whoHasIt": "Who holds this role",
+    "matrixTitle": "Permission matrix",
+    "matrixHint": "The same table the API enforces — what it says here is what actually happens.",
+    "permission": "Permission",
+    "granted": "Granted",
+    "notGranted": "Not granted",
+    "roleHints": {
+      "EMPLOYEE": "The employee app only.",
+      "MANAGER": "Publishes within their scope and sets their department's goal reward.",
+      "DISTRICT_MANAGER": "Manages their district's content and approves it.",
+      "CONTENT_EDITOR": "Manages all content, the Home screen, and Services.",
+      "HR": "Manages employees, positions, and trainings.",
+      "EXECUTIVE": "Sees analytics and approves content.",
+      "ADMIN": "Every permission."
+    },
+    "permissions": {
+      "admin_access": "Open the admin console",
+      "content_publish": "Publish content",
+      "content_edit": "Edit content",
+      "content_delete": "Delete content",
+      "content_approve": "Approve district content",
+      "content_manage": "Manage all content and the community",
+      "feeds_manage": "Manage the Home screen and Services",
+      "users_manage": "Manage employees",
+      "analytics_view": "View analytics and the audit log",
+      "quests_manage": "Set a department goal reward"
+    }
   }
 }

@@ -12,7 +12,7 @@ import {
   Images,
   Bell,
   BarChart3,
-  Settings,
+  House,
   Shield,
   ScrollText,
   Target,
@@ -21,6 +21,7 @@ import {
 
 export type NavSectionId =
   | "dashboard"
+  | "home"
   | "content"
   | "community"
   | "districts"
@@ -33,7 +34,6 @@ export type NavSectionId =
   | "media"
   | "notifications"
   | "analytics"
-  | "settings"
   | "permissions"
   | "audit";
 
@@ -52,13 +52,13 @@ export interface NavItem {
  */
 export const NAV_ITEMS: readonly NavItem[] = [
   { id: "dashboard", href: "/", icon: LayoutDashboard, permissions: [] },
+  // What employees see first: section order, and the numbers, projects and
+  // weekly summary those sections show. The API gate is `feeds:manage`.
+  { id: "home", href: "/home-screen", icon: House, permissions: ["feeds:manage"] },
   { id: "content", href: "/content", icon: FileText, permissions: ["content:edit", "content:manage"] },
-  {
-    id: "community",
-    href: "/community",
-    icon: MessagesSquare,
-    permissions: ["content:edit", "content:manage"],
-  },
+  // Moderation is Ministry-wide, so it needs `content:manage` — the same people
+  // the employee app lets delete any comment.
+  { id: "community", href: "/community", icon: MessagesSquare, permissions: ["content:manage"] },
   // Open to any console user: the districts overview is general org context
   // (the same counts the Dashboard shows), and the API gate matches — admin:access.
   { id: "districts", href: "/districts", icon: MapPinned, permissions: [] },
@@ -73,8 +73,9 @@ export const NAV_ITEMS: readonly NavItem[] = [
     permissions: ["content:edit", "content:manage"],
   },
   { id: "careers", href: "/careers", icon: Briefcase, permissions: ["content:edit", "content:manage"] },
-  { id: "services", href: "/services", icon: Wrench, permissions: ["content:manage", "feeds:manage"] },
-  { id: "media", href: "/media", icon: Images, permissions: ["content:manage", "content:edit"] },
+  { id: "services", href: "/services", icon: Wrench, permissions: ["feeds:manage"] },
+  // Uploading goes through `/media/presign`, which needs `content:publish`.
+  { id: "media", href: "/media", icon: Images, permissions: ["content:publish"] },
   {
     id: "notifications",
     href: "/notifications",
@@ -82,7 +83,6 @@ export const NAV_ITEMS: readonly NavItem[] = [
     permissions: ["content:manage", "content:publish"],
   },
   { id: "analytics", href: "/analytics", icon: BarChart3, permissions: ["analytics:view"] },
-  { id: "settings", href: "/settings", icon: Settings, permissions: ["content:manage", "feeds:manage"] },
   { id: "permissions", href: "/permissions", icon: Shield, permissions: ["users:manage"] },
   { id: "audit", href: "/audit", icon: ScrollText, permissions: ["analytics:view"] },
 ] as const;

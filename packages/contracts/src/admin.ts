@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { AudienceSchema } from "./audience";
 import { ChannelSlugSchema, ContentKindSchema, ContentStatusSchema } from "./feed";
-import { HomeSectionTypeSchema } from "./home";
+import { AlertSeveritySchema, HomeSectionTypeSchema } from "./home";
 import { arrayParam, ListQuerySchema, pageOf } from "./list";
 import { DistrictCodeSchema } from "./org";
 import { RoleSchema } from "./roles";
@@ -151,6 +151,9 @@ export type AdminContentListItem = z.infer<typeof AdminContentListItemSchema>;
 export const AdminContentPageSchema = pageOf(AdminContentListItemSchema);
 export type AdminContentPage = z.infer<typeof AdminContentPageSchema>;
 
+export const TrainingFormatSchema = z.enum(["ONLINE", "IN_PERSON", "HYBRID"]);
+export type TrainingFormat = z.infer<typeof TrainingFormatSchema>;
+
 export const AdminContentDetailSchema = z.object({
   id: z.string(),
   kind: ContentKindSchema,
@@ -167,33 +170,98 @@ export const AdminContentDetailSchema = z.object({
   districtName: z.string().nullable(),
   audience: AudienceSchema,
   summary: z.string().nullable(),
+  /** The card image of an announcement, event, or CEO message. */
   imageUrl: z.string().nullable(),
   channelSlug: z.string().nullable(),
+  // Kind-specific fields. Null when the kind does not have them.
+  severity: AlertSeveritySchema.nullable(),
+  href: z.string().nullable(),
+  expiresAt: z.string().nullable(),
+  startsAt: z.string().nullable(),
+  endsAt: z.string().nullable(),
+  location: z.string().nullable(),
+  isOnline: z.boolean().nullable(),
+  capacity: z.number().nullable(),
+  format: TrainingFormatSchema.nullable(),
+  departmentId: z.string().nullable(),
+  closesAt: z.string().nullable(),
+  isInternal: z.boolean().nullable(),
+  videoUrl: z.string().nullable(),
+  thumbnailUrl: z.string().nullable(),
+  durationSeconds: z.number().nullable(),
+  isVideoOfWeek: z.boolean().nullable(),
+  registrationCount: z.number(),
 });
 export type AdminContentDetail = z.infer<typeof AdminContentDetailSchema>;
 
-export const CreateAdminContentSchema = z.object({
-  /** Phase-2 create supports kinds that do not need a complex detail form yet. */
-  kind: z.enum(["ANNOUNCEMENT", "FEED_POST", "CEO_MESSAGE", "ALERT"]),
-  title: z.string().trim().min(1).max(200),
-  body: z.string().trim().max(20_000).optional(),
-  summary: z.string().trim().max(500).optional(),
-  districtId: z.string().nullable().optional(),
-  audience: AudienceSchema.optional(),
-  channelSlug: ChannelSlugSchema.optional(),
-  /** When set in the future, the item stays invisible until then (employee queries already filter publishedAt <= now). */
-  publishedAt: z.string().datetime().nullable().optional(),
-});
+const optionalText = (max: number) => z.string().trim().max(max).nullable().optional();
+const optionalDate = z.string().datetime().nullable().optional();
+
+/**
+ * The fields a kind's detail table carries, flat, so one form and one PATCH
+ * cover every kind. The repository writes only the ones the item's kind has.
+ */
+const ContentDetailFields = {
+  summary: optionalText(500),
+  imageUrl: optionalText(2_000),
+  severity: AlertSeveritySchema.optional(),
+  href: optionalText(2_000),
+  expiresAt: optionalDate,
+  startsAt: z.string().datetime().optional(),
+  endsAt: optionalDate,
+  location: optionalText(200),
+  isOnline: z.boolean().optional(),
+  capacity: z.number().int().min(1).max(100_000).nullable().optional(),
+  format: TrainingFormatSchema.optional(),
+  departmentId: z.string().nullable().optional(),
+  closesAt: optionalDate,
+  isInternal: z.boolean().optional(),
+  videoUrl: optionalText(2_000),
+  thumbnailUrl: optionalText(2_000),
+  durationSeconds: z.number().int().min(0).max(86_400).nullable().optional(),
+  isVideoOfWeek: z.boolean().optional(),
+};
+
+export const CreateAdminContentSchema = z
+  .object({
+    kind: ContentKindSchema,
+    title: z.string().trim().min(1).max(200),
+    body: z.string().trim().max(20_000).optional(),
+    districtId: z.string().nullable().optional(),
+    audience: AudienceSchema.optional(),
+    channelSlug: ChannelSlugSchema.optional(),
+    isPinned: z.boolean().optional(),
+    /**
+     * With `publish`, a future date schedules the item: it is PUBLISHED but
+     * invisible until then, because employee queries filter publishedAt <= now.
+     */
+    publishedAt: z.string().datetime().nullable().optional(),
+    /** Publish on save. Without it the item is saved as a draft. */
+    publish: z.boolean().optional(),
+    ...ContentDetailFields,
+  })
+  .superRefine((input, ctx) => {
+    const require = (field: keyof typeof input, message: string) => {
+      const value = input[field];
+      if (value === undefined || value === null || value === "") {
+        ctx.addIssue({ code: z.ZodIssueCode.custom, path: [field], message });
+      }
+    };
+    if (input.kind === "EVENT" || input.kind === "TRAINING") require("startsAt", "נדרש מועד התחלה");
+    if (input.kind === "TRAINING") require("format", "נדרש אופן ההדרכה");
+    if (input.kind === "VIDEO") require("videoUrl", "נדרש קישור לסרטון");
+  });
 export type CreateAdminContent = z.infer<typeof CreateAdminContentSchema>;
 
 export const UpdateAdminContentSchema = z.object({
   title: z.string().trim().min(1).max(200).optional(),
   body: z.string().trim().max(20_000).nullable().optional(),
-  summary: z.string().trim().max(500).nullable().optional(),
   districtId: z.string().nullable().optional(),
   audience: AudienceSchema.optional(),
   isPinned: z.boolean().optional(),
   publishedAt: z.string().datetime().nullable().optional(),
+  channelSlug: ChannelSlugSchema.optional(),
+  ...ContentDetailFields,
 });
 export type UpdateAdminContent = z.infer<typeof UpdateAdminContentSchema>;
 
@@ -230,6 +298,8 @@ export const UpdateHomeSectionsSchema = z.object({
         isEnabled: z.boolean(),
         title: z.string().trim().max(100).nullable().optional(),
         maxItems: z.number().int().min(1).max(20).nullable().optional(),
+        /** Who sees the section at all. Omitted leaves it as it is. */
+        audience: AudienceSchema.optional(),
       }),
     )
     .min(1),
@@ -276,6 +346,8 @@ export const AdminEmployeePageSchema = pageOf(AdminEmployeeListItemSchema);
 export type AdminEmployeePage = z.infer<typeof AdminEmployeePageSchema>;
 
 export const AdminEmployeeDetailSchema = AdminEmployeeListItemSchema.extend({
+  departmentId: z.string().nullable(),
+  districtId: z.string().nullable(),
   phone: z.string().nullable(),
   bio: z.string().nullable(),
   organizationName: z.string().nullable(),

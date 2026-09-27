@@ -3,6 +3,7 @@
 import * as React from "react";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
+import { useQueryState } from "nuqs";
 import type { ColumnDef } from "@tanstack/react-table";
 import type {
   AdminEmployeeListItem,
@@ -24,6 +25,8 @@ import {
 import { DataTable } from "@/components/data/DataTable";
 import { ListToolbar } from "@/components/data/ListToolbar";
 import { ListPagination } from "@/components/data/ListPagination";
+import { Button } from "@/components/ui/button";
+import { EmployeeEditor } from "@/components/employees/EmployeeEditor";
 
 const ROLES: Role[] = [
   "EMPLOYEE",
@@ -38,13 +41,18 @@ const ROLES: Role[] = [
 export function EmployeeList({
   initial,
   districts,
+  initialRole,
 }: {
   initial?: AdminEmployeePage;
   districts: District[];
+  /** From `?role=` — the Permissions page links here per role. */
+  initialRole?: Role;
 }) {
   const t = useTranslations("employees");
   const [params, setParams] = useListQuery();
-  const [role, setRole] = React.useState("all");
+  const [role, setRole] = React.useState<string>(initialRole ?? "all");
+  const [inactive, setInactive] = React.useState(false);
+  const [editing, setEditing] = useQueryState("employee");
   const [districtId, setDistrictId] = React.useState("all");
   const searchTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null);
   const [searchDraft, setSearchDraft] = React.useState(params.q);
@@ -59,6 +67,7 @@ export function EmployeeList({
     sort: params.sort || "name",
     ...(role !== "all" ? { role: [role] } : {}),
     ...(districtId !== "all" ? { districtId } : {}),
+    ...(inactive ? { inactive: true } : {}),
   };
 
   const query = useQuery({
@@ -66,7 +75,9 @@ export function EmployeeList({
     queryFn: () => api.get<AdminEmployeePage>(`/admin/employees?${toSearchParams(listQuery)}`),
     placeholderData: keepPreviousData,
     initialData:
-      role === "all" && districtId === "all" && params.page === 1 && !params.q ? initial : undefined,
+      role === (initialRole ?? "all") && districtId === "all" && !inactive && params.page === 1 && !params.q
+        ? initial
+        : undefined,
   });
 
   function onSearchChange(value: string) {
@@ -92,7 +103,13 @@ export function EmployeeList({
               </span>
               <div className="min-w-0">
                 <div className="truncate font-medium text-content">
-                  {e.fullName}
+                  <button
+                    type="button"
+                    className="text-start hover:text-brand"
+                    onClick={() => void setEditing(e.id)}
+                  >
+                    {e.fullName}
+                  </button>
                   {!e.isActive && (
                     <Badge variant="outline" className="ms-2 align-middle">
                       {t("inactiveBadge")}
@@ -152,7 +169,7 @@ export function EmployeeList({
         ),
       },
     ],
-    [t],
+    [t, setEditing],
   );
 
   return (
@@ -206,6 +223,17 @@ export function EmployeeList({
                 ))}
               </SelectContent>
             </Select>
+            <Button
+              type="button"
+              variant={inactive ? "secondary" : "ghost"}
+              aria-pressed={inactive}
+              onClick={() => {
+                setInactive((value) => !value);
+                void setParams({ page: 1 });
+              }}
+            >
+              {t("showInactive")}
+            </Button>
           </>
         }
       />
@@ -225,6 +253,8 @@ export function EmployeeList({
           onPageSizeChange={(pageSize) => void setParams({ pageSize, page: 1 })}
         />
       )}
+
+      <EmployeeEditor id={editing} onClose={() => void setEditing(null)} />
     </div>
   );
 }

@@ -3,8 +3,10 @@
 Employee Experience Platform for the Israeli Ministry of Construction and Housing.
 
 The employee web app ships **Home**, the **Feed**, the **Job board**, **Services**, and
-**Profile**. A separate **admin console** (round two) is in the tree and builds — content
-publishing, home-section ordering, media, analytics, audit, and permissions.
+**Profile**. A separate **admin console** (:3002) runs it: every content kind with
+targeting and scheduling, the Home screen (sections, key numbers, projects, weekly
+summary), events and trainings with sign-ups and attendance, Services, community
+moderation, employees and roles, media uploads, analytics, and the audit log.
 
 The plans this was built from are in [docs/planning/](docs/planning/). For a map of the
 whole system start with [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md); for the folder
@@ -101,11 +103,10 @@ pnpm db:reset       # wipe and reseed
 
 ## What is not here
 
-The interactive district map, the Weekly Summary page, Community, and push notifications
-are not built yet. The admin console exists and builds, but treat it as round-two work in
-progress rather than a finished product — some screens are further along than others.
-Content still originates from the seed script and the REST API; the admin publishing UI is
-the layer being brought up on top of them.
+The interactive district map, the Weekly Summary page, and push notifications are not
+built yet. In the console, **Notifications** is still an empty screen (there is no
+notification model), the media library uploads but does not browse the bucket, and roles
+come from the fixed matrix in `packages/contracts/src/roles.ts` — custom roles are not built.
 
 ## Open questions for the Ministry
 

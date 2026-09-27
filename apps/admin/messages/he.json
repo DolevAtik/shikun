@@ -17,13 +17,13 @@
     "media": "ספריית מדיה",
     "notifications": "התראות",
     "analytics": "נתונים",
-    "settings": "הגדרות",
     "permissions": "הרשאות",
     "audit": "יומן פעילות",
     "collapse": "כיווץ התפריט",
     "expand": "הרחבת התפריט",
     "menu": "תפריט ניווט",
-    "quests": "יעדי מחלקה"
+    "quests": "יעדי מחלקה",
+    "home": "מסך הבית"
   },
   "auth": {
     "signIn": "כניסה למערכת",
@@ -110,9 +110,14 @@
     "actions": {
       "newContent": "תוכן חדש",
       "employees": "ניהול עובדים",
-      "homeLayout": "פריסת בית",
-      "analytics": "נתונים"
-    }
+      "homeLayout": "ניהול מסך הבית",
+      "analytics": "נתונים",
+      "newAnnouncement": "הודעה חדשה",
+      "newPost": "פוסט בקהילה",
+      "newAlert": "התראת חירום",
+      "newEvent": "אירוע חדש"
+    },
+    "statsLabel": "מדדים עיקריים"
   },
   "list": {
     "of": "מתוך",
@@ -151,12 +156,59 @@
     "actions": {
       "publish": "פרסום",
       "unpublish": "ביטול פרסום",
-      "archive": "ארכיון"
+      "archive": "ארכיון",
+      "schedule": "תזמון פרסום",
+      "publishNow": "פרסום עכשיו",
+      "saveDraft": "שמירה כטיוטה",
+      "saveAndSchedule": "שמירה ותזמון",
+      "saveAndPublish": "שמירה ופרסום"
     },
     "form": {
       "details": "פרטי התוכן",
       "summary": "תקציר",
-      "body": "גוף התוכן"
+      "body": "גוף התוכן",
+      "summaryHint": "שורה אחת שמופיעה בכרטיס במסך הבית. ריק = הכותרת.",
+      "image": "תמונה",
+      "imageHint": "העלו קובץ או הדביקו כתובת. התמונה בכרטיס היא קישוט, והטקסט נושא את המשמעות.",
+      "kindCard": {
+        "ALERT": "פרטי ההתראה",
+        "EVENT": "פרטי האירוע",
+        "TRAINING": "פרטי ההדרכה",
+        "CAREER": "פרטי המשרה",
+        "VIDEO": "פרטי הסרטון",
+        "CEO_MESSAGE": "וידאו (לא חובה)",
+        "FEED_POST": "ערוץ"
+      },
+      "channel": "ערוץ בקהילה",
+      "severity": "רמת חומרה",
+      "expiresAt": "מוצגת עד",
+      "expiresAtHint": "ריק = עד שתוסר ידנית.",
+      "startsAt": "מתחיל ב־",
+      "endsAt": "מסתיים ב־",
+      "format": "אופן",
+      "location": "מיקום",
+      "capacity": "מספר מקומות",
+      "capacityHint": "ריק = ללא הגבלה.",
+      "isOnline": "מפגש מקוון",
+      "department": "יחידה",
+      "noDepartment": "ללא יחידה",
+      "closesAt": "הגשה עד",
+      "isInternal": "מכרז פנימי",
+      "careerHref": "קישור להגשת מועמדות",
+      "alertHref": "קישור לפרטים (לא חובה)",
+      "videoUrl": "קישור לסרטון",
+      "thumbnail": "תמונה ממוזערת",
+      "duration": "אורך בשניות",
+      "videoOfWeek": "סרטון השבוע",
+      "audience": "למי זה מיועד",
+      "audienceHint": "בלי בחירה = כל עובדי המשרד. כמה בחירות באותה קבוצה = כל אחת מהן; קבוצות שונות = כולן יחד.",
+      "publishing": "פרסום",
+      "publishAt": "מועד פרסום",
+      "publishAtHint": "ריק = מיד. תאריך עתידי מתזמן את הפרסום.",
+      "districtHint": "המחוז שמוצג על הכרטיס. אינו מגביל מי רואה.",
+      "pin": "נעיצה",
+      "pinHint": "מוצג ראשון ברשימה.",
+      "pinned": "נעוץ"
     },
     "kinds": {
       "ANNOUNCEMENT": "הודעה",
@@ -173,19 +225,43 @@
       "PENDING": "ממתין",
       "PUBLISHED": "פורסם",
       "ARCHIVED": "בארכיון"
+    },
+    "backToList": "→ חזרה לרשימת התוכן",
+    "createKind": "{kind} חדש/ה",
+    "scheduledFor": "מתוזמן ל־{date}",
+    "scheduled": "מתוזמן",
+    "byAuthor": "מאת {name}",
+    "registrantsCount": "נרשמים ({count})",
+    "fixErrors": "יש שדות שצריך לתקן",
+    "quick": {
+      "alert": "התראת חירום",
+      "post": "פוסט בקהילה"
+    },
+    "appearsIn": {
+      "ANNOUNCEMENT": "יופיע במקטע \"הודעות\" במסך הבית. הודעה נעוצה תוצג ראשונה.",
+      "FEED_POST": "יופיע בפיד הקהילה, בערוץ שתבחרו.",
+      "EVENT": "יופיע במקטע \"אירועים\" במסך הבית עד מועד האירוע, ועובדים יוכלו להירשם.",
+      "CAREER": "יופיע בלוח המשרות ובמקטע \"קריירה\" במסך הבית עד מועד הסגירה.",
+      "TRAINING": "יופיע במקטע \"הדרכות\" במסך הבית עד מועד ההדרכה, ועובדים יוכלו להירשם.",
+      "CEO_MESSAGE": "המסר האחרון שפורסם מוצג במקטע \"מסר מנכ״ל\" במסך הבית.",
+      "VIDEO": "סרטון שמסומן כ\"סרטון השבוע\" מוצג במקטע הזה במסך הבית.",
+      "ALERT": "מוצגת בראש מסך הבית, מעל כל השאר, עד מועד התפוגה."
+    },
+    "severity": {
+      "INFO": "מידע",
+      "WARNING": "אזהרה",
+      "CRITICAL": "קריטי"
+    },
+    "format": {
+      "ONLINE": "מקוון",
+      "IN_PERSON": "פרונטלי",
+      "HYBRID": "משולב"
     }
   },
   "homeLayout": {
-    "settingsTitle": "הגדרות",
-    "settingsSubtitle": "ניהול מה שמופיע במסך הבית של העובדים",
-    "title": "פריסת מסך הבית",
-    "subtitle": "סדרו והפעילו מקטעים — השינוי מופיע באפליקציה מיד.",
+    "title": "מקטעי מסך הבית",
+    "subtitle": "סדרו, הסתירו, שנו כותרת ומספר פריטים, וקבעו למי כל מקטע מוצג. מקטע שאין בו תוכן לא מוצג בכלל.",
     "saved": "פריסת הבית עודכנה",
-    "moveUp": "העלאה",
-    "moveDown": "הורדה",
-    "enabled": "מופעל",
-    "noAccessTitle": "אין הרשאה להגדרות אלה",
-    "noAccessDescription": "נדרשת הרשאת ניהול פידים לעריכת פריסת הבית.",
     "types": {
       "GREETING": "ברכה",
       "EMERGENCY": "התראות חירום",
@@ -200,7 +276,20 @@
       "TRAININGS": "הדרכות",
       "BIRTHDAYS": "ימי הולדת",
       "RECOGNITION": "הכרה"
-    }
+    },
+    "unsaved": "יש שינויים שלא נשמרו",
+    "hidden": "מוסתר",
+    "targeted": "מוצג לחלק מהעובדים",
+    "moveUpNamed": "העלאת {name}",
+    "moveDownNamed": "הורדת {name}",
+    "settingsFor": "הגדרות {name}",
+    "showNamed": "הצגת {name}",
+    "customTitle": "כותרת במסך הבית",
+    "customTitleHint": "ריק = כותרת ברירת המחדל.",
+    "maxItems": "כמה פריטים להציג",
+    "maxItemsHint": "1–20. ריק = ברירת המחדל של המקטע.",
+    "manageContent": "ניהול התוכן של המקטע",
+    "whoSees": "מי רואה את המקטע"
   },
   "employees": {
     "title": "עובדים",
@@ -227,7 +316,22 @@
       "HR": "משאבי אנוש",
       "EXECUTIVE": "הנהלה בכירה",
       "ADMIN": "מנהל מערכת"
-    }
+    },
+    "saved": "פרטי העובד נשמרו",
+    "rolesRequired": "צריך לפחות תפקיד אחד",
+    "editTitle": "עריכת עובד",
+    "authored": "תוכן שפרסם/ה",
+    "commentsCount": "תגובות",
+    "phone": "טלפון",
+    "jobTitle": "תפקיד (טקסט חופשי)",
+    "noDepartment": "ללא יחידה",
+    "rolesHint": "התפקידים קובעים הרשאות — כרגע {count} הרשאות. רק מנהל מערכת יכול להעניק \"מנהל מערכת\".",
+    "activeLabel": "חשבון פעיל",
+    "activeHint": "השבתה מנתקת את העובד מיד ומונעת כניסה. אפשר להפעיל שוב.",
+    "confirmDeactivateTitle": "להשבית את החשבון?",
+    "confirmDeactivate": "{name} ינותק/תנותק ולא יוכל/תוכל להיכנס עד שהחשבון יופעל מחדש.",
+    "deactivate": "השבתה",
+    "showInactive": "חשבונות מושבתים"
   },
   "districts": {
     "title": "מחוזות",
@@ -312,5 +416,308 @@
     "recognitionHint": "הוקרות שעובדים נתנו, לפי שבוע (8 שבועות אחרונים).",
     "recognitionWeek": "{given} הוקרות מ-{givers} עובדים",
     "privacy": "הנתונים כאן מחושבים מאותן שורות שמזינות את העולם שלי. אין פילוח לפי עובד/ת, ואין דירוג."
+  },
+  "audience": {
+    "everyone": "כל עובדי המשרד",
+    "and": " · ",
+    "reach": "{count} מתוך {total} עובדים",
+    "reachLoading": "מחשב…",
+    "districts": "מחוזות",
+    "roles": "תפקידים",
+    "departments": "יחידות",
+    "organizations": "גופים",
+    "any": "כולם",
+    "reset": "איפוס — כל המשרד",
+    "sentence": {
+      "districts": "מחוז: {list}",
+      "departments": "יחידה: {list}",
+      "organizations": "גוף: {list}",
+      "roles": "תפקיד: {list}"
+    }
+  },
+  "media": {
+    "title": "ספריית מדיה",
+    "subtitle": "העלאת קבצים לאחסון וקבלת כתובת לשימוש בתוכן.",
+    "uploadTitle": "העלאת קבצים",
+    "uploadHint": "תמונות, מסמכים ומצגות. העורכים מעלים תמונות גם ישירות מתוך הטופס.",
+    "dropHere": "גררו קבצים לכאן, או",
+    "chooseFiles": "בחירת קבצים",
+    "upload": "העלאה",
+    "uploading": "מעלה…",
+    "uploaded": "הקובץ הועלה",
+    "uploadFailed": "ההעלאה נכשלה",
+    "uploadFailedNamed": "ההעלאה של {name} נכשלה",
+    "remove": "הסרת התמונה",
+    "sessionUploads": "הועלו עכשיו",
+    "copy": "העתקה",
+    "copied": "הכתובת הועתקה",
+    "copyFailed": "ההעתקה נכשלה — סמנו והעתיקו ידנית",
+    "addressOf": "הכתובת של {name}"
+  },
+  "rows": {
+    "moveUp": "העלאת {name}",
+    "moveDown": "הורדת {name}",
+    "edit": "עריכת {name}",
+    "delete": "מחיקת {name}"
+  },
+  "homeScreen": {
+    "title": "מסך הבית",
+    "subtitle": "מה שהעובדים רואים כשהם פותחים את האפליקציה. כל שינוי מופיע אצלם תוך חצי דקה.",
+    "noAccessTitle": "אין הרשאה לנהל את מסך הבית",
+    "noAccessDescription": "נדרשת הרשאת ניהול פידים (feeds:manage).",
+    "tabs": {
+      "layout": "סדר המקטעים",
+      "numbers": "מספרים מרכזיים",
+      "projects": "פרויקטים",
+      "weekly": "סיכום שבועי"
+    }
+  },
+  "homeData": {
+    "metrics": {
+      "title": "מספרים מרכזיים",
+      "subtitle": "הנתונים שמוצגים במקטע \"מספרים מרכזיים\", לפי הסדר כאן.",
+      "add": "מספר חדש",
+      "edit": "עריכת מספר",
+      "saved": "המספר נשמר",
+      "deleted": "המספר נמחק",
+      "reordered": "הסדר עודכן",
+      "empty": "אין עדיין מספרים",
+      "required": "שדה חובה",
+      "numberRequired": "נדרש מספר",
+      "label": "תיאור",
+      "value": "ערך",
+      "unit": "יחידה",
+      "unitHint": "למשל: יח״ד, ₪, %",
+      "changePct": "שינוי באחוזים",
+      "changePctHint": "לא חובה. חיובי = עלייה.",
+      "period": "תקופה",
+      "periodHint": "למשל: 2026 עד כה",
+      "confirmDelete": "למחוק את המספר?"
+    },
+    "projects": {
+      "title": "פרויקטים",
+      "subtitle": "הפרויקטים שמוצגים במקטע \"פרויקטים\". כל עובד רואה קודם את פרויקטי המחוז שלו.",
+      "add": "פרויקט חדש",
+      "edit": "עריכת פרויקט",
+      "saved": "הפרויקט נשמר",
+      "deleted": "הפרויקט נמחק",
+      "reordered": "הסדר עודכן",
+      "empty": "אין עדיין פרויקטים",
+      "required": "שדה חובה",
+      "numberRequired": "נדרש מספר חיובי",
+      "progressRange": "בין 0 ל־100",
+      "name": "שם הפרויקט",
+      "city": "יישוב",
+      "district": "מחוז",
+      "pickDistrict": "בחירת מחוז",
+      "statusLabel": "שלב",
+      "status": {
+        "PLANNING": "תכנון",
+        "MARKETING": "שיווק",
+        "BUILDING": "בנייה",
+        "COMPLETED": "הושלם"
+      },
+      "progress": "התקדמות (%)",
+      "housingUnits": "יחידות דיור",
+      "image": "תמונה",
+      "unitsCount": "{count} יח״ד",
+      "confirmDelete": "למחוק את הפרויקט?"
+    },
+    "weekly": {
+      "title": "סיכום שבועי",
+      "subtitle": "הסיכום של השבוע האחרון מוצג במקטע \"סיכום שבועי\" במסך הבית.",
+      "add": "סיכום חדש",
+      "edit": "עריכת סיכום",
+      "saved": "הסיכום נשמר",
+      "deleted": "הסיכום נמחק",
+      "empty": "אין עדיין סיכומים",
+      "required": "שדה חובה",
+      "onHome": "מוצג עכשיו",
+      "weekOf": "שבוע של {date}",
+      "highlightsCount": "{count, plural, one {נקודה אחת} other {# נקודות}}",
+      "dialogHint": "סיכום אחד לכל שבוע. השבוע המאוחר ביותר הוא שמוצג.",
+      "weekOfLabel": "השבוע",
+      "weekOfHint": "יום ראשון שבו השבוע מתחיל.",
+      "titleLabel": "כותרת",
+      "teaser": "פתיח",
+      "highlights": "נקודות עיקריות",
+      "highlightsHint": "נקודה בכל שורה, עד 10.",
+      "confirmDelete": "למחוק את הסיכום?"
+    }
+  },
+  "sessions": {
+    "title": {
+      "EVENT": "אירועים",
+      "TRAINING": "למידה והדרכות"
+    },
+    "subtitle": {
+      "EVENT": "אירועים, הרשמות והגעה בפועל. עריכת אירוע נעשית בעורך התוכן.",
+      "TRAINING": "הדרכות, מקומות פנויים והגעה בפועל. עריכת הדרכה נעשית בעורך התוכן."
+    },
+    "create": {
+      "EVENT": "אירוע חדש",
+      "TRAINING": "הדרכה חדשה"
+    },
+    "empty": {
+      "EVENT": "אין אירועים להצגה",
+      "TRAINING": "אין הדרכות להצגה"
+    },
+    "emptyDescription": "נסו טווח זמן אחר, או צרו חדש.",
+    "search": "חיפוש לפי שם…",
+    "when": "טווח זמן",
+    "whenOptions": {
+      "upcoming": "קרובים",
+      "past": "שהתקיימו",
+      "all": "הכל"
+    },
+    "columns": {
+      "title": "שם",
+      "when": "מתי",
+      "status": "סטטוס",
+      "registrations": "נרשמו",
+      "attendance": "הגעה",
+      "actions": "פעולות"
+    },
+    "online": "מקוון",
+    "ofCapacity": "{count} / {capacity}",
+    "full": "מלא",
+    "attendanceSummary": "{attended} הגיעו · {missed} לא הגיעו",
+    "registrants": "נרשמים",
+    "registeredCount": "{count, plural, one {נרשם/ה אחד/ת} other {# נרשמים}}",
+    "loading": "טוען…",
+    "export": "ייצוא ל־CSV",
+    "noRegistrants": "עדיין אין נרשמים.",
+    "noAnswer": "לא ענה/תה",
+    "came": "הגיע/ה",
+    "didNotCome": "לא הגיע/ה",
+    "yes": "כן",
+    "no": "לא",
+    "csv": {
+      "name": "שם",
+      "email": "דוא״ל",
+      "department": "יחידה",
+      "district": "מחוז",
+      "registeredAt": "נרשם/ה ב",
+      "attended": "הגיע/ה"
+    }
+  },
+  "careers": {
+    "title": "קריירה",
+    "subtitle": "משרות ומכרזים שמופיעים בלוח המשרות ובמסך הבית."
+  },
+  "servicesAdmin": {
+    "title": "שירותים",
+    "subtitle": "מסך השירותים של העובדים: פעולות מהירות וקישורים למערכות. הסדר כאן הוא הסדר באפליקציה.",
+    "saved": "נשמר",
+    "deleted": "נמחק",
+    "reordered": "הסדר עודכן",
+    "required": "שדה חובה",
+    "external": "חיצוני",
+    "actions": {
+      "title": "פעולות מהירות",
+      "subtitle": "משימות שעובדים מתחילים בלחיצה — דיווח, בקשה, טופס.",
+      "add": "פעולה חדשה",
+      "empty": "אין פעולות מהירות",
+      "hint": "נתיב באפליקציה (מתחיל ב־/) או כתובת מלאה."
+    },
+    "links": {
+      "title": "קישורים למערכות",
+      "subtitle": "מערכות שהעובדים יוצאים אליהן — שכר, נוכחות, מחשוב.",
+      "add": "קישור חדש",
+      "empty": "אין קישורים",
+      "hint": "כתובת מלאה של המערכת."
+    },
+    "edit": "עריכה",
+    "label": "שם",
+    "href": "כתובת",
+    "hrefHint": "https://… או נתיב שמתחיל ב־/",
+    "icon": "סמל",
+    "noIcon": "ללא סמל",
+    "isExternal": "נפתח מחוץ לאפליקציה",
+    "confirmDelete": "למחוק את הפריט?",
+    "icons": {
+      "award": "פרס",
+      "book": "ספר",
+      "book-open": "ספר פתוח",
+      "briefcase": "תיק עבודה",
+      "building": "בניין",
+      "clock": "שעון",
+      "file-plus": "מסמך חדש",
+      "file-text": "מסמך",
+      "graduation-cap": "כובע סיום",
+      "home": "בית",
+      "landmark": "מוסד",
+      "lightbulb": "נורה",
+      "map": "מפה",
+      "megaphone": "מגאפון",
+      "phone": "טלפון",
+      "play": "הפעלה",
+      "receipt": "קבלה",
+      "scroll-text": "מגילה",
+      "user-round": "אדם",
+      "users": "אנשים",
+      "wallet": "ארנק"
+    }
+  },
+  "community": {
+    "title": "קהילה",
+    "subtitle": "ניהול השיח: תגובות, הוקרות בין עמיתים וערוצים.",
+    "newPost": "פוסט חדש",
+    "tabs": {
+      "comments": "תגובות",
+      "recognitions": "הוקרות",
+      "channels": "ערוצים"
+    },
+    "mandatory": "חובה",
+    "channelStats": "{posts} פוסטים · {followers} עוקבים",
+    "removed": "הוסר",
+    "search": "חיפוש בטקסט או לפי שם…",
+    "commentsHint": "התגובות האחרונות מכל הפוסטים. הסרה נרשמת ביומן הפעילות עם הטקסט והסיבה.",
+    "recognitionsHint": "תודות שעובדים נתנו זה לזה. הסרה נרשמת ביומן הפעילות עם הטקסט והסיבה.",
+    "commentsEmpty": "אין תגובות",
+    "recognitionsEmpty": "אין הוקרות",
+    "onPost": "על",
+    "untitledPost": "פוסט ללא כותרת",
+    "system": "המערכת",
+    "thanked": "הוקיר/ה את",
+    "likes": "{count} לייקים",
+    "remove": "הסרה",
+    "reason": "סיבת ההסרה",
+    "reasonRequired": "נא לציין סיבה",
+    "removeCommentTitle": "להסיר את התגובה?",
+    "removeRecognitionTitle": "להסיר את ההוקרה?",
+    "removeHint": "הפריט יוסר מהאפליקציה. הטקסט והסיבה נשמרים ביומן הפעילות."
+  },
+  "permissionsAdmin": {
+    "title": "הרשאות",
+    "subtitle": "מה כל תפקיד יכול לעשות. התפקידים מוענקים לכל עובד במסך העובדים.",
+    "rolesTitle": "תפקידים",
+    "whoHasIt": "מי מחזיק בתפקיד",
+    "matrixTitle": "טבלת הרשאות",
+    "matrixHint": "זו אותה טבלה שה־API אוכף — מה שכתוב כאן הוא מה שקורה בפועל.",
+    "permission": "הרשאה",
+    "granted": "יש",
+    "notGranted": "אין",
+    "roleHints": {
+      "EMPLOYEE": "אפליקציית העובדים בלבד.",
+      "MANAGER": "מפרסם/ת בתחום שלו/ה וקובע/ת פרס ליעד המחלקה.",
+      "DISTRICT_MANAGER": "מנהל/ת את תוכן המחוז ומאשר/ת פרסומים בו.",
+      "CONTENT_EDITOR": "מנהל/ת את כל התוכן, מסך הבית והשירותים.",
+      "HR": "מנהל/ת עובדים, משרות והדרכות.",
+      "EXECUTIVE": "רואה נתונים ומאשר/ת פרסומים.",
+      "ADMIN": "כל ההרשאות."
+    },
+    "permissions": {
+      "admin_access": "כניסה למערכת הניהול",
+      "content_publish": "פרסום תוכן",
+      "content_edit": "עריכת תוכן",
+      "content_delete": "מחיקת תוכן",
+      "content_approve": "אישור תוכן במחוז",
+      "content_manage": "ניהול כל התוכן והקהילה",
+      "feeds_manage": "ניהול מסך הבית והשירותים",
+      "users_manage": "ניהול עובדים",
+      "analytics_view": "צפייה בנתונים וביומן",
+      "quests_manage": "קביעת פרס ליעד מחלקה"
+    }
   }
 }

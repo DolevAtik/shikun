@@ -67,7 +67,19 @@ export const qk = {
   home: {
     all: ["home"] as const,
     sections: ["home", "sections"] as const,
+    data: ["home", "data"] as const,
   },
+
+  services: ["services"] as const,
+
+  community: {
+    all: ["community"] as const,
+    channels: ["community", "channels"] as const,
+    comments: (query: Record<string, unknown>) => ["community", "comments", normalize(query)] as const,
+    recognitions: (query: Record<string, unknown>) => ["community", "recognitions", normalize(query)] as const,
+  },
+
+  roleCounts: ["roles", "counts"] as const,
 
   audit: {
     all: ["audit"] as const,
