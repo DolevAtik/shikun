@@ -2,7 +2,7 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
   "installCommand": "cd ../.. && pnpm install --frozen-lockfile",
-  "buildCommand": "cd ../.. && pnpm turbo run build --filter=@moch/api && cd apps/api && pnpm exec prisma migrate deploy && mkdir -p public",
+  "buildCommand": "cd ../.. && pnpm turbo run build --filter=@moch/api && cd apps/api && pnpm exec prisma migrate deploy",
   "outputDirectory": "public",
   "regions": ["fra1"],
   "functions": {
