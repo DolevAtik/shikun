@@ -1,76 +1,97 @@
 /**
  * Design tokens — Ministry of Construction and Housing.
  *
- * PROVISIONAL. These are derived from the Ministry's live gov.il page and from
- * the logo, and they are darkened where the public palette failed WCAG 2.0 AA
- * at mobile card scale. Israel's national government design system is mandatory
- * for new government digital projects but is restricted to authorized agencies;
- * the moment the Ministry obtains it, this file is what gets replaced — and
- * nothing else has to change, because nothing else hardcodes a color.
+ * PROVISIONAL. These are derived from the Ministry's live gov.il page, its
+ * letterhead and the logo, and they are darkened where the public palette failed
+ * WCAG 2.0 AA at mobile card scale. Israel's national government design system
+ * is mandatory for new government digital projects but is restricted to
+ * authorized agencies; the moment the Ministry obtains it, this file is what gets
+ * replaced — and nothing else has to change, because nothing else hardcodes a
+ * color.
+ *
+ * Two designs, each with a light and a dark mode:
+ *
+ *   - "בונים עתיד" (the default) — `:root` and `.dark`. White paper, the logo's
+ *     navy, and the colored mosaic from the Ministry's letterhead.
+ *   - "קלאסי" — `[data-design="classic"]`, with or without `.dark`. Clay and
+ *     timber under a dusk skyline, the product's first look.
+ *
+ * The design is an attribute on <html>, set before first paint from the choice
+ * kept on the profile page. Each design block redefines every color token, so
+ * the two never bleed into each other; shape and motion are shared.
  *
  * Every foreground/background pair used in the product is checked by
- * `scripts/check-contrast.mjs`, which runs in `pnpm lint`.
+ * `scripts/check-contrast.mjs`, which runs in `pnpm lint`, in all four blocks.
  */
 
+/* ── Design 2 · "בונים עתיד" · light (default) ─────────────────────────────── */
 :root {
-  /* Brand — clay and timber, the colors of a building site, not a gov.il header. */
-  --brand-navy: #3d2918;
-  --brand-blue: #7a3412;
-  --brand-blue-hover: #63290e;
-  --brand-blue-soft: #f6e4d2;
+  /* Brand — the navy of the logo's wordmark and the letterhead's rule. */
+  --brand-navy: #1c3466;
+  --brand-blue: #274a8e;
+  --brand-blue-hover: #1e3b73;
+  --brand-blue-soft: #e5ecf8;
 
-  /* A wash of sunset behind the skyline. Decorative; text never sits on it alone. */
-  --sky-glow: #f6c98a;
+  /* A cool wash behind the page. Decorative; text never sits on it alone. */
+  --sky-glow: #dbe6f8;
 
-  /* Accents — the colored houses in the Ministry logo. These are what keep the
-     app from being a wall of government blue. */
-  --accent-red: #a8331e;
-  --accent-green: #146b42;
-  --accent-amber: #8a5d0c;
-  --accent-blue: #0e5f7a;
-  --accent-teal: #0e6b80;
-  --accent-violet: #58419c;
+  /* Accents — the colored pieces of the logo mosaic, darkened for text. */
+  --accent-red: #bf2b1c;
+  --accent-green: #1b7a36;
+  --accent-amber: #8f5a00;
+  --accent-blue: #1466a6;
+  --accent-teal: #0b6b7e;
+  --accent-violet: #5a44a0;
 
   /* District colors are tokens, not database hexes.
      A single hex cannot be legible on both a white card and a dark one, and a
      district chip is colored text on a tint of itself — so each district needs
      a light value and a dark value, exactly like every other color here. The
      database stores `var(--district-haifa)`, and the theme decides what that is. */
-  --district-north: #186b4a;
-  --district-haifa: #0b5d74;
-  --district-center: #a63520;
-  --district-jerusalem: #7a5309;
-  --district-south: #553ba0;
+  --district-north: #1b7a36;
+  --district-haifa: #0b6b7e;
+  --district-center: #bf2b1c;
+  --district-jerusalem: #8a5800;
+  --district-south: #5a44a0;
 
-  /* Surfaces — warm plaster, not office gray. */
-  --bg: #f3e6d4;
-  --surface: #fff8f0;
-  --surface-raised: #fff8f0;
-  --surface-tint: #f6e7d4;
-  --surface-sunken: #ead9c4;
+  /* Surfaces — white paper on a faintly cool page, like the letterhead. */
+  --bg: #f4f7fb;
+  --surface: #ffffff;
+  --surface-raised: #ffffff;
+  --surface-tint: #eef3fa;
+  --surface-sunken: #e3eaf4;
 
-  /* The header is a brand-colored *surface*, which is a different job from
-     `--brand-navy` as a *text* color. They were the same token once; in dark
-     mode the text color inverts to a light blue, and the header quietly became
-     white-on-pale-blue at 1.94:1. Two jobs, two tokens. */
-  --surface-brand: #2c2118;
-  --on-surface-brand: #fff8f0;
+  /* A brand-colored *surface* (admin sidebar, tooltips), which is a different
+     job from `--brand-navy` as a *text* color. Two jobs, two tokens. */
+  --surface-brand: #1c3466;
+  --on-surface-brand: #ffffff;
 
-  /* Dusk behind the header skyline. Dark enough that the light label still clears. */
-  --hero-from: #2c2118;
-  --hero-to: #5c3a22;
+  /* The app header. Its own tokens, because in this design it is white paper
+     with a navy name — not the brand surface. */
+  --header-from: #ffffff;
+  --header-to: #ffffff;
+  --on-header: #1c3466;
+  --header-chip: #e5ecf8;
+
+  /* Hero cards — deep navy, the letterhead's rule stretched into a panel. */
+  --hero-from: #172b57;
+  --hero-to: #2a4c8f;
+
+  /* The rule under the letterhead mosaic. The mosaic itself is the logo's own
+     saturated colors — decorative only, never text, never a boundary. */
+  --mosaic-rule: #274a8e;
 
   /* Text */
-  --text: #24180f;
-  --text-muted: #5e4a38;
-  --text-inverse: #fff8f0;
-  --text-on-brand: #fff8f0;
+  --text: #13203b;
+  --text-muted: #4a5873;
+  --text-inverse: #ffffff;
+  --text-on-brand: #ffffff;
 
   /* Lines. `--border` is decorative and may be faint; `--border-strong` marks a
      real component boundary (an input, a control) and must clear 3:1 — WCAG
      1.4.11. It is noticeably darker than it "wants" to be for that reason. */
-  --border: #e0d0bc;
-  --border-strong: #7a6552;
+  --border: #dde4ee;
+  --border-strong: #6b7a93;
 
   /* Feedback. `--danger` is danger as *text*; `--danger-on` is the label printed
      on top of danger as a *surface* (a destructive button). They are not the
@@ -85,9 +106,9 @@
   --success-soft: #e6f4ed;
 
   /* Elevation — soft, never heavy. A government app should feel calm. */
-  --shadow-sm: 0 1px 2px rgb(16 32 51 / 0.06), 0 1px 3px rgb(16 32 51 / 0.04);
-  --shadow-md: 0 2px 8px rgb(16 32 51 / 0.07), 0 1px 3px rgb(16 32 51 / 0.05);
-  --shadow-lg: 0 12px 32px rgb(16 32 51 / 0.1), 0 2px 8px rgb(16 32 51 / 0.06);
+  --shadow-sm: 0 1px 2px rgb(16 32 64 / 0.06), 0 1px 3px rgb(16 32 64 / 0.04);
+  --shadow-md: 0 2px 8px rgb(16 32 64 / 0.07), 0 1px 3px rgb(16 32 64 / 0.05);
+  --shadow-lg: 0 12px 32px rgb(16 32 64 / 0.1), 0 2px 8px rgb(16 32 64 / 0.06);
 
   /* Shape */
   --radius-sm: 8px;
@@ -104,7 +125,145 @@
   --focus-ring: 0 0 0 3px #ffffff, 0 0 0 5px var(--brand-blue);
 }
 
+/* ── Design 2 · "בונים עתיד" · dark ────────────────────────────────────────── */
 .dark {
+  --brand-navy: #b9ccf2;
+  --brand-blue: #8fb0f0;
+  --brand-blue-hover: #adc5f5;
+  --brand-blue-soft: #1c2a47;
+
+  --sky-glow: #1b2a4d;
+
+  /* Lightened so they still clear 4.5:1 against the dark surface. */
+  --accent-red: #f28b7c;
+  --accent-green: #6cc98a;
+  --accent-amber: #f0b64a;
+  --accent-blue: #6cb8ec;
+  --accent-teal: #5cbcd2;
+  --accent-violet: #a99af0;
+
+  --district-north: #6cc98a;
+  --district-haifa: #5cbcd2;
+  --district-center: #f28b7c;
+  --district-jerusalem: #f0b64a;
+  --district-south: #a99af0;
+
+  --bg: #0d1424;
+  --surface: #151f35;
+  --surface-raised: #1a2640;
+  --surface-tint: #1c2a47;
+  --surface-sunken: #0a101d;
+
+  /* Stays a dark surface in dark mode — it is a surface, not a text color. */
+  --surface-brand: #0a101d;
+  --on-surface-brand: #eef3fb;
+
+  --header-from: #131e36;
+  --header-to: #0d1424;
+  --on-header: #eef3fb;
+  --header-chip: #22314f;
+
+  --hero-from: #0f1a33;
+  --hero-to: #1f3666;
+
+  --mosaic-rule: #3d63ad;
+
+  --text: #eef3fb;
+  --text-muted: #a8b6cf;
+  --text-inverse: #0d1424;
+  --text-on-brand: #0d1a33;
+
+  --border: #26344f;
+  --border-strong: #7d8fb0;
+
+  --danger: #f2988f;
+  --danger-on: #2a0f0d;
+  --danger-soft: #36201f;
+  --warning: #f0b64a;
+  --warning-soft: #2b2415;
+  --success: #6cc98a;
+  --success-soft: #152b20;
+
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
+  --shadow-md: 0 2px 10px rgb(0 0 0 / 0.45);
+  --shadow-lg: 0 14px 36px rgb(0 0 0 / 0.5);
+
+  --focus-ring: 0 0 0 3px var(--bg), 0 0 0 5px var(--brand-blue);
+}
+
+/* ── Design 1 · "קלאסי" · light ────────────────────────────────────────────── */
+[data-design="classic"] {
+  /* Brand — clay and timber, the colors of a building site, not a gov.il header. */
+  --brand-navy: #3d2918;
+  --brand-blue: #7a3412;
+  --brand-blue-hover: #63290e;
+  --brand-blue-soft: #f6e4d2;
+
+  /* A wash of sunset behind the skyline. Decorative; text never sits on it alone. */
+  --sky-glow: #f6c98a;
+
+  /* Accents — the colored houses in the Ministry logo. */
+  --accent-red: #a8331e;
+  --accent-green: #146b42;
+  --accent-amber: #8a5d0c;
+  --accent-blue: #0e5f7a;
+  --accent-teal: #0e6b80;
+  --accent-violet: #58419c;
+
+  --district-north: #186b4a;
+  --district-haifa: #0b5d74;
+  --district-center: #a63520;
+  --district-jerusalem: #7a5309;
+  --district-south: #553ba0;
+
+  /* Surfaces — warm plaster, not office gray. */
+  --bg: #f3e6d4;
+  --surface: #fff8f0;
+  --surface-raised: #fff8f0;
+  --surface-tint: #f6e7d4;
+  --surface-sunken: #ead9c4;
+
+  --surface-brand: #2c2118;
+  --on-surface-brand: #fff8f0;
+
+  /* Dusk behind the header skyline. Dark enough that the light label still clears. */
+  --header-from: #5c3a22;
+  --header-to: #2c2118;
+  --on-header: #fff8f0;
+  --header-chip: rgb(255 255 255 / 0.2);
+
+  --hero-from: #2c2118;
+  --hero-to: #5c3a22;
+
+  --mosaic-rule: #7a3412;
+
+  --text: #24180f;
+  --text-muted: #5e4a38;
+  --text-inverse: #fff8f0;
+  --text-on-brand: #fff8f0;
+
+  --border: #e0d0bc;
+  --border-strong: #7a6552;
+
+  --danger: #b3261e;
+  --danger-on: #ffffff;
+  --danger-soft: #fdecea;
+  --warning: #8a5d0c;
+  --warning-soft: #fdf3e2;
+  --success: #1f7a51;
+  --success-soft: #e6f4ed;
+
+  --shadow-sm: 0 1px 2px rgb(16 32 51 / 0.06), 0 1px 3px rgb(16 32 51 / 0.04);
+  --shadow-md: 0 2px 8px rgb(16 32 51 / 0.07), 0 1px 3px rgb(16 32 51 / 0.05);
+  --shadow-lg: 0 12px 32px rgb(16 32 51 / 0.1), 0 2px 8px rgb(16 32 51 / 0.06);
+
+  --focus-ring: 0 0 0 3px #ffffff, 0 0 0 5px var(--brand-blue);
+}
+
+/* ── Design 1 · "קלאסי" · dark ─────────────────────────────────────────────── */
+/* Two selectors' worth of specificity, so it beats both `.dark` and the classic
+   light block above. */
+[data-design="classic"].dark {
   --brand-navy: #f0c9a0;
   --brand-blue: #f0a36a;
   --brand-blue-hover: #f6c09a;
@@ -112,7 +271,6 @@
 
   --sky-glow: #4a3020;
 
-  /* Lightened so they still clear 4.5:1 against the dark surface. */
   --accent-red: #f08a72;
   --accent-green: #5fc394;
   --accent-amber: #dfae54;
@@ -132,12 +290,18 @@
   --surface-tint: #32261c;
   --surface-sunken: #140f0c;
 
-  /* Stays a dark surface in dark mode — it is a surface, not a text color. */
   --surface-brand: #140f0c;
   --on-surface-brand: #f6efe6;
 
+  --header-from: #3a2418;
+  --header-to: #140f0c;
+  --on-header: #f6efe6;
+  --header-chip: rgb(255 255 255 / 0.2);
+
   --hero-from: #140f0c;
   --hero-to: #3a2418;
+
+  --mosaic-rule: #f0a36a;
 
   --text: #f6efe6;
   --text-muted: #cbb8a4;

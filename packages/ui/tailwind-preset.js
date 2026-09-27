@@ -100,5 +100,12 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    // `classic:` styles apply only under design 1 ("קלאסי"). Colors never need
+    // it — the tokens already switch — it is for decoration that differs in
+    // kind, like the skyline that the default design replaces with a mosaic.
+    function ({ addVariant }) {
+      addVariant("classic", '[data-design="classic"] &');
+    },
+  ],
 };

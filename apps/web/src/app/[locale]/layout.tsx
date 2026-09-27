@@ -4,6 +4,7 @@ import { getMessages, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { Assistant } from "next/font/google";
 import { DIRECTION, routing, type Locale } from "@/i18n/routing";
+import { APPEARANCE_SCRIPT, THEME_COLOR } from "@/lib/appearance";
 import "../globals.css";
 
 /**
@@ -27,10 +28,10 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  // One colour, because the app no longer follows the OS: it is light unless the
-  // person chose dark, so a `prefers-color-scheme` split would tint the browser
-  // chrome dark around a light page.
-  themeColor: "#2c2118",
+  // One colour, because the app does not follow the OS: it is the default design
+  // in light mode unless the person chose otherwise. The appearance script
+  // rewrites this tag before first paint when they did.
+  themeColor: THEME_COLOR.mosaic.light,
   // No maximum-scale: pinch-zoom must never be disabled — WCAG 1.4.4.
   width: "device-width",
   initialScale: 1,
@@ -69,16 +70,11 @@ export default async function LocaleLayout({
 }
 
 /**
- * Applies the saved theme before first paint. The default is light — the OS
- * preference is deliberately ignored — so only an explicit choice of dark, kept
- * in localStorage from the profile toggle, turns the app dark. Doing it here
- * rather than on mount avoids a flash of light before it switches.
+ * Applies the saved design and theme before first paint. The default is design 2
+ * in light mode — the OS preference is deliberately ignored — so only an explicit
+ * choice on the profile page changes it. Doing it here rather than on mount
+ * avoids a flash of the default before it switches.
  */
 function ThemeScript() {
-  const script = `
-    try {
-      if (localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark');
-    } catch (e) {}
-  `;
-  return <script dangerouslySetInnerHTML={{ __html: script }} />;
+  return <script dangerouslySetInnerHTML={{ __html: APPEARANCE_SCRIPT }} />;
 }

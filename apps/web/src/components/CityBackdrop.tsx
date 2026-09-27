@@ -18,11 +18,29 @@ export function CityBackdrop() {
       <svg
         viewBox="0 0 360 120"
         preserveAspectRatio="xMidYMax slice"
-        className="absolute inset-x-0 bottom-0 h-44 w-full overflow-hidden text-brand opacity-30 dark:opacity-40 rtl:-scale-x-100"
+        className="absolute inset-x-0 bottom-7 h-44 w-full overflow-hidden text-brand opacity-30 classic:bottom-0 dark:opacity-40 rtl:-scale-x-100"
       >
         <Skyline />
       </svg>
+      {/* In the default design the street stands on the letterhead's footer. */}
+      <MosaicStrip className="absolute inset-x-0 bottom-0 h-7 border-b-[6px] classic:hidden" />
     </div>
+  );
+}
+
+/**
+ * The foot of the Ministry's "בונים עתיד" letterhead: the logo's mosaic in a row
+ * on a navy rule. The default design's answer to the skyline.
+ */
+export function MosaicStrip({ className }: { className?: string }) {
+  return (
+    <div
+      aria-hidden="true"
+      className={cn(
+        "mosaic-strip pointer-events-none h-3.5 w-full border-b-[3px] border-[var(--mosaic-rule)] dark:opacity-90",
+        className,
+      )}
+    />
   );
 }
 

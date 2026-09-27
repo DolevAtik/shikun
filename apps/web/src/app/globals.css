@@ -66,6 +66,16 @@
   }
 }
 
+/* The letterhead mosaic — the logo's colored pieces in a row, tiled sideways at
+   whatever height the element is. Decorative only, so these are the logo's own
+   saturated colors, not tokens: they never carry text and never mark a boundary. */
+.mosaic-strip {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 18' width='120' height='18'%3E%3Cpolygon points='0,18 5,9 10,18' fill='%233a9d3a'/%3E%3Cpath d='M12 18a6 6 0 0 1 12 0z' fill='%23f7c51e'/%3E%3Cpolygon points='26,10 33,14 26,18' fill='%232b4c8c'/%3E%3Cpolygon points='39,9 43.5,13.5 39,18 34.5,13.5' fill='%2358b1e3'/%3E%3Cpolygon points='45,10 53,10 49,17' fill='%23e4322b'/%3E%3Cpath d='M55 18v-5l4.5-4 4.5 4v5z' fill='%23f29a1f'/%3E%3Cpolygon points='73,10 73,18 66,14' fill='%232b4c8c'/%3E%3Cpath d='M75 18a5 5 0 0 1 10 0z' fill='%2358b1e3'/%3E%3Cpolygon points='87,18 91.5,10 96,18' fill='%23e4322b'/%3E%3Cpolygon points='101,11 104,14 101,17 98,14' fill='%23b8c92a'/%3E%3Cpolygon points='106,18 110,11 114,18' fill='%23f7c51e'/%3E%3Cpolygon points='115,13 119,15.5 115,18' fill='%233a9d3a'/%3E%3Ccircle cx='18' cy='4' r='1' fill='%23f29a1f'/%3E%3Ccircle cx='47' cy='3' r='1.2' fill='%23f7c51e'/%3E%3Ccircle cx='62' cy='5' r='.9' fill='%2358b1e3'/%3E%3Ccircle cx='80' cy='2.5' r='1' fill='%233a9d3a'/%3E%3Ccircle cx='99' cy='5' r='1' fill='%23e4322b'/%3E%3Cpolygon points='4,6 6,2.5 8,6' fill='%23e4322b'/%3E%3Cpolygon points='30,5 33,3.5 30,2' fill='%232b4c8c'/%3E%3Cpolygon points='108,6 110,2.5 112,6' fill='%23b8c92a'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-size: auto 100%;
+  background-position: bottom center;
+}
+
 /* Soft window glow on the skyline. Decorative — text never sits on it alone.
    Motion is opt-in via motion-safe; prefers-reduced-motion keeps windows lit. */
 @keyframes skyline-window-glow {

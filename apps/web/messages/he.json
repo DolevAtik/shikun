@@ -558,6 +558,9 @@
     "theme": "ערכת נושא",
     "themeLight": "מצב בהיר",
     "themeDark": "מצב כהה",
+    "design": "עיצוב",
+    "designMosaic": "בונים עתיד",
+    "designClassic": "קלאסי",
     "language": "שפה"
   },
   "common": {

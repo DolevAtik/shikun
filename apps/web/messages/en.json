@@ -558,6 +558,9 @@
     "theme": "Theme",
     "themeLight": "Light mode",
     "themeDark": "Dark mode",
+    "design": "Design",
+    "designMosaic": "Building the future",
+    "designClassic": "Classic",
     "language": "Language"
   },
   "common": {

@@ -17,8 +17,13 @@ import { dirname, join } from "node:path";
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const css = readFileSync(join(root, "packages/ui/src/tokens.css"), "utf8");
 
+/**
+ * A block is found by its selector at the start of a line, so `.dark {` does not
+ * also match the tail of `[data-design="classic"].dark {`.
+ */
 function parseBlock(selector) {
-  const match = new RegExp(`${selector}\\s*\\{([^}]*)\\}`, "m").exec(css);
+  const escaped = selector.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const match = new RegExp(`^${escaped}\\s*\\{([^}]*)\\}`, "m").exec(css);
   if (!match) throw new Error(`Could not find ${selector} in tokens.css`);
 
   const tokens = {};
@@ -59,7 +64,9 @@ const PAIRS = [
   ["--text-muted", "--bg", 4.5, "secondary text on the page"],
   ["--text-muted", "--surface", 4.5, "secondary text on a card"],
   ["--text-on-brand", "--brand-blue", 4.5, "label on a primary button"],
-  ["--on-surface-brand", "--surface-brand", 4.5, "header text on the brand header"],
+  ["--on-surface-brand", "--surface-brand", 4.5, "text on a brand surface (sidebar, tooltip)"],
+  ["--on-header", "--header-from", 4.5, "header text (gradient top)"],
+  ["--on-header", "--header-to", 4.5, "header text (gradient bottom)"],
   ["--on-surface-brand", "--hero-from", 4.5, "hero card text (gradient start)"],
   ["--on-surface-brand", "--hero-to", 4.5, "hero card text (gradient end)"],
   ["--brand-blue", "--surface", 4.5, "link / active tab on a card"],
@@ -139,9 +146,16 @@ const CHIP_TOKENS = [
 let failures = 0;
 let checks = 0;
 
-for (const theme of ["\\:root", "\\.dark"]) {
+/** Both designs, each in both modes. See the header of tokens.css. */
+const THEMES = [
+  [":root", "light"],
+  [".dark", "dark"],
+  ['[data-design="classic"]', "classic light"],
+  ['[data-design="classic"].dark', "classic dark"],
+];
+
+for (const [theme, label] of THEMES) {
   const tokens = parseBlock(theme);
-  const label = theme === "\\:root" ? "light" : "dark";
 
   for (const [fg, bg, minimum, description] of PAIRS) {
     if (!tokens[fg] || !tokens[bg]) {
@@ -206,4 +220,4 @@ if (failures > 0) {
   process.exit(1);
 }
 
-console.log(`Contrast gate passed: ${checks} pairs, both themes, all at or above WCAG 2.0 AA.`);
+console.log(`Contrast gate passed: ${checks} pairs, both designs in both modes, all at or above WCAG 2.0 AA.`);
