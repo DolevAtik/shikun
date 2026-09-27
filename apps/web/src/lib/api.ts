@@ -19,8 +19,8 @@ export class NotFoundError extends Error {}
  * cached Home to the wrong person has leaked targeted content, and the whole
  * point of the audience model is that Home differs per viewer.
  *
- * A cold API (Render's free instance) takes 30–50 seconds to wake, so every
- * call waits it out through `fetchThroughWake` — the shell skeleton stays on
+ * A cold API (a fresh Vercel function instance, or a paused host) can take a while
+ * to answer, so every call waits it out through `fetchThroughWake` — the shell skeleton stays on
  * screen meanwhile, instead of the error page after a couple of seconds.
  */
 export const serverFetch = cache(async function serverFetch<T>(path: string): Promise<T> {
@@ -42,7 +42,7 @@ export const serverFetch = cache(async function serverFetch<T>(path: string): Pr
   return (await response.json()) as T;
 });
 
-/** While it wakes, Render answers 502/503/504 or drops the connection. */
+/** While it wakes, a host answers 502/503/504 or drops the connection. */
 const WAKING_STATUS = new Set([502, 503, 504]);
 
 /**

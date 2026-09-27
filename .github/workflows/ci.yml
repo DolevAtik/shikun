@@ -1,7 +1,7 @@
 name: CI
 
 # Until now nothing ran the gates: `check-contrast` and `check-logical-props`
-# existed but were honour-system, and both Vercel and Render deploy from `main`
+# existed but were honour-system, and Vercel deploys web, admin and the API from `main`
 # on push. Accessibility under IS 5568 is a legal floor for a public body, and a
 # floor that is only checked when someone remembers to check it is not a floor.
 #
