@@ -2,7 +2,7 @@
 
 import type { DepartmentQuest as DepartmentModel } from "@moch/contracts";
 import { Button, Card, ProgressBar, SectionHeader } from "@moch/ui";
-import { Building2, Users } from "lucide-react";
+import { Building2, Flame, Gift, Users } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { Numeric } from "./Numeric";
 import { formatXp, xpText } from "./progress";
@@ -58,6 +58,22 @@ export function DepartmentQuest({ department, onOpen }: { department: Department
           max={department.target}
           valueText={ratio}
         />
+        <p className="mt-3 text-sm font-medium text-content">{t("department.mine", { xp: xpText(department.mine, locale) })}</p>
+        {department.reward ? (
+          <p className="mt-3 flex items-start gap-2 rounded-lg bg-surface-tint px-3 py-2.5 text-sm text-content">
+            <Gift aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-brand" />
+            <span>
+              <span className="font-semibold">{remaining === 0 ? t("department.rewardEarned") : t("department.rewardLabel")}</span>{" "}
+              {department.reward}
+            </span>
+          </p>
+        ) : null}
+        {department.reachedRun > 0 ? (
+          <p className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-success">
+            <Flame aria-hidden="true" className="size-4" />
+            {t("department.run", { count: department.reachedRun })}
+          </p>
+        ) : null}
         <div className="mt-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
           <p className="text-sm text-content-muted">
             {remaining === 0 ? t("department.reached") : t("department.remaining", { xp: xpText(remaining, locale) })}

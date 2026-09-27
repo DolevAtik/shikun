@@ -1,14 +1,24 @@
 "use client";
 
-import type { Unlock } from "@moch/contracts";
+import type { AvatarStyle, Unlock } from "@moch/contracts";
 import { cn, IllustratedAvatar, SectionHeader } from "@moch/ui";
 import { Check, ChevronLeft, Lock } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { MiniBar } from "./MiniBar";
-import { xpText } from "./progress";
+import { stagePreview, xpText } from "./progress";
 import type { OpenDetail } from "./types";
 
-export function UnlockSection({ items, total, onOpen }: { items: Unlock[]; total: number; onOpen: OpenDetail }) {
+export function UnlockSection({
+  items,
+  total,
+  style,
+  onOpen,
+}: {
+  items: Unlock[];
+  total: number;
+  style: AvatarStyle;
+  onOpen: OpenDetail;
+}) {
   const t = useTranslations("myWorld");
 
   return (
@@ -17,7 +27,7 @@ export function UnlockSection({ items, total, onOpen }: { items: Unlock[]; total
       <ol className="m-0 grid list-none gap-3 p-0 md:grid-cols-3">
         {items.map((unlock) => (
           <li key={unlock.id}>
-            <UnlockCard unlock={unlock} total={total} onOpen={() => onOpen({ kind: "unlock", id: unlock.id })} />
+            <UnlockCard unlock={unlock} total={total} style={style} onOpen={() => onOpen({ kind: "unlock", id: unlock.id })} />
           </li>
         ))}
       </ol>
@@ -25,7 +35,7 @@ export function UnlockSection({ items, total, onOpen }: { items: Unlock[]; total
   );
 }
 
-function UnlockCard({ unlock, total, onOpen }: { unlock: Unlock; total: number; onOpen: () => void }) {
+function UnlockCard({ unlock, total, style, onOpen }: { unlock: Unlock; total: number; style: AvatarStyle; onOpen: () => void }) {
   const t = useTranslations("myWorld");
   const locale = useLocale();
   const remaining = Math.max(0, unlock.xpAt - total);
@@ -41,7 +51,7 @@ function UnlockCard({ unlock, total, onOpen }: { unlock: Unlock; total: number; 
       )}
     >
       <span className={cn("size-12 shrink-0 overflow-hidden rounded-full ring-2 ring-line", !unlock.unlocked && "opacity-60")}>
-        <IllustratedAvatar level={unlock.level} />
+        <IllustratedAvatar level={unlock.level} {...stagePreview(unlock, style)} />
       </span>
       <span className="min-w-0 flex-1">
         <span className="block text-sm font-semibold text-content">{t(`unlocks.items.${unlock.id}.title`)}</span>

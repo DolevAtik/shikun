@@ -30,6 +30,10 @@ export const qk = {
 
   search: (term: string) => ["search", term] as const,
 
+  quests: ["quests"] as const,
+
+  worldMetrics: (range: string) => ["world", "metrics", range] as const,
+
   content: {
     all: ["content"] as const,
     list: (query: Record<string, unknown>) => ["content", "list", normalize(query)] as const,

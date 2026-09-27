@@ -163,6 +163,7 @@ async function resetAll() {
   await prisma.quickAction.deleteMany();
   await prisma.weeklySummary.deleteMany();
   await prisma.homeSectionConfig.deleteMany();
+  await prisma.departmentQuestReward.deleteMany();
   await prisma.user.deleteMany();
   await prisma.department.deleteMany();
   await prisma.district.deleteMany();
@@ -299,7 +300,9 @@ async function seedUsers({ passwordHash, districts, departments, ministry }: See
           districtId: person.districtId,
           organizationId: ministry.id,
           birthday: birthdayNear(index * 2),
-          startedAt: new Date(2019, index % 12, 1),
+          // נועה's seventh year at the Ministry turns over in two days, so the
+          // anniversary moment on העולם שלי has a real date to show.
+          startedAt: person.email === "employee@moch.gov.il" ? anniversaryIn(2, 7) : new Date(2019, index % 12, 1),
           bio: null,
           phone: `02-584${String(1000 + index).slice(-4)}`,
         },
@@ -451,11 +454,13 @@ async function seedRecognition(users: User[]) {
  * `ContentRead` (a full read of a post) and `Registration`. Nothing here is a
  * score — XP, level, streak and achievements are computed from these rows.
  *
- * נועה (employee@) has read five posts across three worlds on recent days and
- * registered for one training, so she opens on level 2 with the newest posts,
- * one training and the events still open as missions. Her department
- * colleagues have read a little this month, so the department bar has a real
- * total without naming anyone.
+ * נועה (employee@) has read five posts across three worlds on recent days,
+ * registered for one training ahead, attended one three weeks ago, and has an
+ * event from three days ago waiting for "were you there?". She has thanked one
+ * colleague this week and has not written a bio yet, so the profile mission is
+ * open. Her department colleagues have read a little this month and in the
+ * months before, so the department bar and its history are real totals
+ * without naming anyone, and HR has set this month's reward.
  */
 async function seedProgress(users: User[]) {
   const noa = users.find((u) => u.email === "employee@moch.gov.il")!;
@@ -489,13 +494,55 @@ async function seedProgress(users: User[]) {
     await prisma.registration.create({ data: { userId: noa.id, contentItemId: writing.id, createdAt: daysAgo(1) } });
   }
 
+  const excel = await prisma.contentItem.findFirst({ where: { kind: "TRAINING", title: { contains: "אקסל" } }, select: { id: true } });
+  if (excel) {
+    await prisma.registration.create({
+      data: { userId: noa.id, contentItemId: excel.id, createdAt: daysAgo(26), attended: true, attendanceAt: daysAgo(20) },
+    });
+  }
+  const quarter = await prisma.contentItem.findFirst({ where: { kind: "EVENT", title: { contains: "רבעון" } }, select: { id: true } });
+  if (quarter) {
+    await prisma.registration.create({ data: { userId: noa.id, contentItemId: quarter.id, createdAt: daysAgo(10) } });
+  }
+
   const colleagues = users.filter((u) => u.departmentId === noa.departmentId && u.id !== noa.id);
   for (const [index, colleague] of colleagues.entries()) {
-    for (const post of posts.slice(index, index + 2 + (index % 3))) {
+    const thisMonth = posts.slice(index, index + 2 + (index % 3));
+    const reads = [
+      ...thisMonth.map((post) => ({ post, daysAgo: (index % 4) + 1 })),
+      // Last month, everything else: enough that the department reached that
+      // month's goal, so its history and "months in a row" have something true to show.
+      ...posts.filter((post) => !thisMonth.includes(post)).map((post) => ({ post, daysAgo: 33 + (index % 5) })),
+    ];
+    for (const read of reads) {
       await prisma.contentRead.create({
-        data: { userId: colleague.id, contentItemId: post.id, readAt: daysAgo((index % 4) + 1) },
+        data: { userId: colleague.id, contentItemId: read.post.id, readAt: daysAgo(read.daysAgo) },
       });
     }
+  }
+
+  const thanked = colleagues[0];
+  if (thanked) {
+    await prisma.recognition.create({
+      data: {
+        recipientId: thanked.id,
+        giverId: noa.id,
+        badge: "MENTOR",
+        reason: "עזר לי לסגור את דוח הביצוע הרבעוני, והסביר כל שלב בסבלנות",
+        awardedAt: daysAgo(0),
+      },
+    });
+  }
+
+  if (noa.departmentId) {
+    await prisma.departmentQuestReward.create({
+      data: {
+        departmentId: noa.departmentId,
+        month: jerusalemMonth(new Date()),
+        reward: "ארוחת בוקר צוותית ביום חמישי האחרון של החודש",
+        setById: hr.id,
+      },
+    });
   }
 
   await prisma.recognition.createMany({
@@ -672,6 +719,28 @@ async function seedContent({ users, districts, departments, channels }: SeedCont
       body: "איך כותבים מסמך שאזרח מבין מהקריאה הראשונה.",
       authorId: hr.id, publishedAt: daysAgo(4),
       training: { create: { startsAt: daysFromNow(6), format: "ONLINE", capacity: 100 } },
+    },
+  });
+
+  // Two sessions that already happened. Home and the missions only offer what
+  // is ahead; these exist so a registration can be followed by "were you there?".
+  await prisma.contentItem.create({
+    data: {
+      kind: "TRAINING", status: "PUBLISHED",
+      title: "הדרכה: אקסל לניתוח תקציב",
+      body: "טבלאות ציר ותרחישים לרפרנטים ולכלכלנים.",
+      authorId: hr.id, publishedAt: daysAgo(30),
+      training: { create: { startsAt: daysAgo(20), format: "IN_PERSON", capacity: 25 } },
+    },
+  });
+
+  await prisma.contentItem.create({
+    data: {
+      kind: "EVENT", status: "PUBLISHED",
+      title: "מפגש סיכום רבעון באגף",
+      body: "מה הושג ברבעון, ומה הלאה.",
+      authorId: hr.id, publishedAt: daysAgo(12),
+      event: { create: { startsAt: daysAgo(3), endsAt: daysAgo(3), location: "חדר הישיבות, קומה 4", isOnline: false, capacity: 40 } },
     },
   });
 
@@ -918,6 +987,17 @@ function daysAgo(days: number): Date {
   const date = new Date();
   date.setDate(date.getDate() - days);
   return date;
+}
+
+/** A start date whose `years`-th anniversary is `days` from today. */
+function anniversaryIn(days: number, years: number): Date {
+  const date = daysFromNow(days);
+  date.setFullYear(date.getFullYear() - years);
+  return date;
+}
+
+function jerusalemMonth(date: Date): string {
+  return new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Jerusalem", year: "numeric", month: "2-digit" }).format(date);
 }
 
 function daysFromNow(days: number): Date {

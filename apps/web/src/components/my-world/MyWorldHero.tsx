@@ -1,10 +1,11 @@
 "use client";
 
 import type { EmployeeProgress, Mission } from "@moch/contracts";
-import { ChevronLeft, CircleHelp, Lock, Sparkles } from "lucide-react";
+import { ChevronLeft, CircleHelp, Lock, Medal, PartyPopper, Sparkles } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { SkylineStrip } from "@/components/CityBackdrop";
 import { AvatarProgress } from "./AvatarProgress";
+import { formatDate } from "@/lib/format";
 import { tierForLevel, xpText } from "./progress";
 import type { MyWorldProfile, OpenDetail } from "./types";
 import { FirstSteps, WeeklyCard } from "./WeeklyCard";
@@ -15,12 +16,14 @@ interface MyWorldHeroProps {
   progress: EmployeeProgress;
   gain: number | null;
   sinceLastVisit: number | null;
+  /** Recognitions that arrived since this browser last opened the screen. */
+  newRecognitions: number;
   onOpen: OpenDetail;
   onRegister: (mission: Mission) => void;
 }
 
 /** Who I am, where I am, and what the next thing to open is. */
-export function MyWorldHero({ profile, progress, gain, sinceLastVisit, onOpen, onRegister }: MyWorldHeroProps) {
+export function MyWorldHero({ profile, progress, gain, sinceLastVisit, newRecognitions, onOpen, onRegister }: MyWorldHeroProps) {
   const t = useTranslations("myWorld");
   const locale = useLocale();
   const { level } = progress;
@@ -39,6 +42,23 @@ export function MyWorldHero({ profile, progress, gain, sinceLastVisit, onOpen, o
       />
       <div className="relative z-10 grid grid-cols-1 justify-items-center gap-4 text-center md:grid-cols-[auto_minmax(0,1fr)] md:items-center md:justify-items-stretch md:gap-x-8 md:text-start">
         <div className="md:col-start-2 md:row-start-1 md:self-end">
+          {progress.moment ? (
+            <p className="mb-3 inline-flex items-center gap-2 rounded-full bg-warning-soft px-3 py-1.5 text-sm font-semibold text-content">
+              <PartyPopper aria-hidden="true" className="size-4 text-accent-amber" />
+              {t("moment.anniversary", { years: progress.moment.years, date: formatDate(progress.moment.date, locale) })}
+            </p>
+          ) : null}
+          {newRecognitions > 0 ? (
+            <p className="mb-2">
+              <a
+                href="#recognition"
+                className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-brand underline-offset-4 hover:underline focus-visible:outline-none focus-visible:shadow-focus"
+              >
+                <Medal aria-hidden="true" className="size-4" />
+                {t("moment.newRecognition", { count: newRecognitions })}
+              </a>
+            </p>
+          ) : null}
           {near ? (
             <p className="mb-2 inline-flex items-center gap-1.5 text-sm font-semibold text-brand">
               <Sparkles aria-hidden="true" className="size-4" />
@@ -56,7 +76,13 @@ export function MyWorldHero({ profile, progress, gain, sinceLastVisit, onOpen, o
         </div>
 
         <div className="md:col-start-1 md:row-span-2 md:row-start-1 md:justify-self-center">
-          <AvatarProgress level={level.level} current={level.current} next={level.next} onOpen={() => onOpen({ kind: "avatar" })} />
+          <AvatarProgress
+            level={level.level}
+            current={level.current}
+            next={level.next}
+            style={progress.avatar}
+            onOpen={() => onOpen({ kind: "avatar" })}
+          />
         </div>
 
         <div className="w-full max-w-md md:col-start-2 md:row-start-2 md:max-w-none md:self-start">

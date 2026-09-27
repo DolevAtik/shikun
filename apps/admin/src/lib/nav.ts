@@ -15,6 +15,7 @@ import {
   Settings,
   Shield,
   ScrollText,
+  Target,
   type LucideIcon,
 } from "lucide-react";
 
@@ -24,6 +25,7 @@ export type NavSectionId =
   | "community"
   | "districts"
   | "employees"
+  | "quests"
   | "events"
   | "learning"
   | "careers"
@@ -61,6 +63,8 @@ export const NAV_ITEMS: readonly NavItem[] = [
   // (the same counts the Dashboard shows), and the API gate matches — admin:access.
   { id: "districts", href: "/districts", icon: MapPinned, permissions: [] },
   { id: "employees", href: "/employees", icon: Users, permissions: ["users:manage"] },
+  // A manager sets their own department's reward; HR and admins set any.
+  { id: "quests", href: "/quests", icon: Target, permissions: ["quests:manage"] },
   { id: "events", href: "/events", icon: CalendarDays, permissions: ["content:edit", "content:manage"] },
   {
     id: "learning",

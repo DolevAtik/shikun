@@ -1,4 +1,14 @@
-import { type AchievementId, type ChannelSlug, type ProgressAct, type UnlockId, type WorldFocus, XP_PER_ACT } from "@moch/contracts";
+import {
+  type AchievementId,
+  type AvatarBackdrop,
+  type AvatarOutfit,
+  type ChannelSlug,
+  type ProgressAct,
+  type UnlockId,
+  type WorldFocus,
+  RECOGNITIONS_PER_WEEK,
+  XP_PER_ACT,
+} from "@moch/contracts";
 
 /**
  * Every rule of the progression layer, in one plain object.
@@ -6,9 +16,10 @@ import { type AchievementId, type ChannelSlug, type ProgressAct, type UnlockId, 
  * This is the shape a future admin table stores. Moving it to the database
  * changes the loader, not the service and not the screen.
  *
- * Only real acts earn XP: a first full read of a post, and a registration for
- * a training or an event. Opening the app, a like, a comment, or viewing a
- * screen earn nothing. Colleague recognition is never XP.
+ * Only real acts earn XP: a first full read of a post, a registration for a
+ * training or an event, the attendance confirmed after it, and a first bio.
+ * Opening the app, a like, a comment, or viewing a screen earn nothing.
+ * Colleague recognition is never XP, given or received.
  */
 export const RULES = {
   xp: XP_PER_ACT,
@@ -20,7 +31,13 @@ export const RULES = {
     learning: "develop",
   } as Partial<Record<ChannelSlug, WorldFocus>>,
 
-  actWorld: { training: "develop", event: "participate" } as Record<Exclude<ProgressAct, "read">, WorldFocus>,
+  actWorld: {
+    training: "develop",
+    trainingAttended: "develop",
+    event: "participate",
+    eventAttended: "participate",
+    profile: "feel",
+  } as Record<Exclude<ProgressAct, "read">, WorldFocus>,
 
   /** Level 1 → 2 costs `base`; every level after costs `step` more. */
   curve: { base: 100, step: 20 },
@@ -38,19 +55,38 @@ export const RULES = {
     { id: "level5", target: 5, world: null },
   ] as { id: AchievementId; target: number; world: WorldFocus | null }[],
 
-  /** Cosmetic stages. Keep in step with `IllustratedAvatar`. */
+  /**
+   * Something opens every two or three levels, so the next one is never far.
+   * Backdrop and outfit open a choice; the rest change the figure. Keep in step
+   * with `IllustratedAvatar`.
+   */
   unlocks: [
+    { id: "backdrop", level: 3 },
     { id: "pin", level: 5 },
+    { id: "outfit", level: 7 },
     { id: "badge", level: 10 },
+    { id: "skyline", level: 12 },
     { id: "frame", level: 15 },
   ] as { id: UnlockId; level: number }[],
 
-  /** Monthly department goal, per member who has at least signed in once. */
+  avatar: {
+    backdrops: ["sand", "sky", "olive", "dusk"] as AvatarBackdrop[],
+    outfits: ["terracotta", "navy", "olive", "plum"] as AvatarOutfit[],
+  },
+
+  /** Monthly department goal, per active member. */
   departmentXpPerMember: 80,
+  /** Months of department history shown before this one. */
+  departmentHistoryMonths: 5,
 
   weeklyTarget: 3,
   readMissions: 2,
   wordsPerMinute: 200,
+
+  recognitionsPerWeek: RECOGNITIONS_PER_WEEK,
+
+  /** An anniversary is shown from a few days before to a week after the date. */
+  anniversaryWindow: { before: 3, after: 7 },
 } as const;
 
 export const WORLDS: WorldFocus[] = ["know", "feel", "develop", "participate"];
@@ -85,4 +121,8 @@ export function worldForChannel(slug: string): WorldFocus {
 export function readMinutes(text: string): number {
   const words = text.trim().split(/\s+/).filter(Boolean).length;
   return Math.max(1, Math.ceil(words / RULES.wordsPerMinute));
+}
+
+export function unlockLevel(id: UnlockId): number {
+  return RULES.unlocks.find((unlock) => unlock.id === id)!.level;
 }

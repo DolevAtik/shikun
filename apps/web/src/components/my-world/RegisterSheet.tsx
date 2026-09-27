@@ -1,6 +1,6 @@
 "use client";
 
-import type { EmployeeProgress, Mission } from "@moch/contracts";
+import { type EmployeeProgress, type Mission, XP_PER_ACT } from "@moch/contracts";
 import { Button } from "@moch/ui";
 import { CalendarDays, MapPin, MonitorSmartphone, Users } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
@@ -78,6 +78,11 @@ export function RegisterSheet({ mission, onClose, onRegistered }: RegisterSheetP
 
           <p className="rounded-lg bg-brand-soft px-3 py-2.5 text-sm font-medium text-brand">
             {t("register.reward", { xp: xpText(mission.xp, locale), world: t(`worlds.${mission.world}.name`) })}
+          </p>
+          <p className="text-sm text-content-muted">
+            {t("register.attendNote", {
+              xp: xpText(XP_PER_ACT[isTraining ? "trainingAttended" : "eventAttended"], locale),
+            })}
           </p>
           <p className="text-xs text-content-muted">{t("register.cancelNote")}</p>
 

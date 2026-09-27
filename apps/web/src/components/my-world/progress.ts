@@ -1,9 +1,19 @@
-import type { Achievement, Mission, WorldFocus } from "@moch/contracts";
+import type { Achievement, AvatarStyle, Mission, Unlock, WorldFocus } from "@moch/contracts";
 import { formatNumber } from "@/lib/format";
 import type { XpTier } from "./types";
 
-/** Keep these in step with the figure in `IllustratedAvatar`. */
-export const AVATAR_STAGES = [1, 5, 10, 15] as const;
+/** Keep these in step with the figure in `IllustratedAvatar` and `RULES.unlocks`. */
+export const AVATAR_STAGES = [1, 3, 5, 7, 10, 12, 15] as const;
+
+/**
+ * How a stage is drawn in a preview. A choice that is already open shows the
+ * employee's own; one still locked shows a sample, so the preview says what opens.
+ */
+export function stagePreview(unlock: Unlock | undefined, style: AvatarStyle): AvatarStyle {
+  if (unlock?.id === "backdrop" && !unlock.unlocked) return { ...style, backdrop: "sky" };
+  if (unlock?.id === "outfit" && !unlock.unlocked) return { ...style, outfit: "navy" };
+  return style;
+}
 
 /** Levels 1–4 beginner, 5–9 partner, 10–14 lead, 15+ veteran. */
 export function tierForLevel(level: number): XpTier {

@@ -16,5 +16,7 @@ export function getMyWorldFlags(): MyWorldFlags {
     showRecognition: true,
     showDepartment: true,
     showUnlocks: true,
+    showBookings: true,
+    showRecap: true,
   };
 }

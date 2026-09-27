@@ -1,5 +1,6 @@
 import { Module } from "@nestjs/common";
 import { HomeModule } from "../home/home.module";
+import { ProgressionModule } from "../progression/progression.module";
 import { AdminController } from "./admin.controller";
 import { AdminHomeController } from "./home.controller";
 import { AdminHomeService } from "./home.service";
@@ -15,9 +16,11 @@ import { AdminEmployeesRepository } from "./employees.repository";
 import { EventsController } from "./events.controller";
 import { SearchService } from "./search.service";
 import { TelemetryService } from "./telemetry.service";
+import { AdminQuestsController, AdminWorldMetricsController } from "./world.controller";
+import { AdminWorldService } from "./world.service";
 
 @Module({
-  imports: [HomeModule],
+  imports: [HomeModule, ProgressionModule],
   controllers: [
     AdminController,
     EventsController,
@@ -26,6 +29,8 @@ import { TelemetryService } from "./telemetry.service";
     EmployeesController,
     DistrictsController,
     AuditController,
+    AdminQuestsController,
+    AdminWorldMetricsController,
   ],
   providers: [
     DashboardService,
@@ -36,6 +41,7 @@ import { TelemetryService } from "./telemetry.service";
     AdminHomeService,
     AdminEmployeesRepository,
     AdminDistrictsService,
+    AdminWorldService,
   ],
   exports: [AuditService, TelemetryService],
 })

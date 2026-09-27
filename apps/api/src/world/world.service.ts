@@ -1,10 +1,14 @@
 import { Injectable } from "@nestjs/common";
 import type { EmployeeWorld, UpdateEmployeeWorld, WorldFocus } from "@moch/contracts";
+import { AvatarBackdropSchema, AvatarOutfitSchema } from "@moch/contracts";
 import { PrismaService } from "../common/prisma/prisma.service";
 import { dayToDate, jerusalemDay, sundayOf } from "./world-dates";
 
+const SELECT = { chosenWorld: true, avatarBackdrop: true, avatarOutfit: true } as const;
+
 /**
- * The stored half of העולם שלי: the week's chosen focus, and read receipts.
+ * The stored half of העולם שלי: the week's chosen focus, the avatar choices,
+ * and read receipts.
  *
  * XP, level, streak, and the weekly card are not stored. They are computed from
  * `ContentRead` and `Registration` by `ProgressionService`. The older counter
@@ -16,18 +20,23 @@ export class WorldService {
   constructor(private readonly prisma: PrismaService) {}
 
   async get(userId: string): Promise<EmployeeWorld> {
-    const row = await this.prisma.employeeWorld.findUnique({ where: { userId }, select: { chosenWorld: true } });
-    return { chosenWorld: toFocus(row?.chosenWorld) };
+    const row = await this.prisma.employeeWorld.findUnique({ where: { userId }, select: SELECT });
+    return toWorld(row);
   }
 
   async update(userId: string, input: UpdateEmployeeWorld): Promise<EmployeeWorld> {
+    const data = {
+      ...(input.chosenWorld !== undefined ? { chosenWorld: input.chosenWorld } : {}),
+      ...(input.avatarBackdrop !== undefined ? { avatarBackdrop: input.avatarBackdrop } : {}),
+      ...(input.avatarOutfit !== undefined ? { avatarOutfit: input.avatarOutfit } : {}),
+    };
     const saved = await this.prisma.employeeWorld.upsert({
       where: { userId },
-      create: { userId, chosenWorld: input.chosenWorld, weekStart: dayToDate(sundayOf(jerusalemDay())) },
-      update: { chosenWorld: input.chosenWorld },
-      select: { chosenWorld: true },
+      create: { userId, ...data, weekStart: dayToDate(sundayOf(jerusalemDay())) },
+      update: data,
+      select: SELECT,
     });
-    return { chosenWorld: toFocus(saved.chosenWorld) };
+    return toWorld(saved);
   }
 
   /**
@@ -41,6 +50,18 @@ export class WorldService {
     });
     return result.count > 0;
   }
+}
+
+function toWorld(
+  row: { chosenWorld: string | null; avatarBackdrop: string | null; avatarOutfit: string | null } | null,
+): EmployeeWorld {
+  const backdrop = AvatarBackdropSchema.safeParse(row?.avatarBackdrop);
+  const outfit = AvatarOutfitSchema.safeParse(row?.avatarOutfit);
+  return {
+    chosenWorld: toFocus(row?.chosenWorld),
+    avatarBackdrop: backdrop.success ? backdrop.data : "sand",
+    avatarOutfit: outfit.success ? outfit.data : "terracotta",
+  };
 }
 
 function toFocus(value: string | null | undefined): WorldFocus | null {

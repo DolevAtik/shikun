@@ -1,10 +1,12 @@
-import type { Achievement, ProgressAct, WorldFocus, WorldProgress } from "@moch/contracts";
+import type { Achievement, AchievementId, Moment, ProgressAct, WorldFocus, WorldProgress } from "@moch/contracts";
+import { ProgressActSchema } from "@moch/contracts";
 import { daysBetween, jerusalemDay, sundayOf } from "../world/world-dates";
 import { levelFor, RULES, WORLDS, xpForLevel } from "./rules";
 
 /** One thing the employee did that earns XP. */
 export interface Act {
-  contentItemId: string;
+  /** Null for the profile act, which is about the employee, not an item. */
+  contentItemId: string | null;
   act: ProgressAct;
   world: WorldFocus;
   xp: number;
@@ -117,13 +119,14 @@ function achievements(sorted: Act[], streakDays: number, level: number): Achieve
         current = sorted.filter((act) => act.act === "read").length;
         unlockedAt = nth((act) => act.act === "read", target);
         break;
+      // Being there, not signing up: these open on confirmed attendance.
       case "learner":
-        current = sorted.filter((act) => act.act === "training").length;
-        unlockedAt = nth((act) => act.act === "training", target);
+        current = sorted.filter((act) => act.act === "trainingAttended").length;
+        unlockedAt = nth((act) => act.act === "trainingAttended", target);
         break;
       case "participant":
-        current = sorted.filter((act) => act.act === "event").length;
-        unlockedAt = nth((act) => act.act === "event", target);
+        current = sorted.filter((act) => act.act === "eventAttended").length;
+        unlockedAt = nth((act) => act.act === "eventAttended", target);
         break;
       case "explorer": {
         const seen = new Set<WorldFocus>();
@@ -165,4 +168,129 @@ function shift(day: string, delta: number): string {
   const date = new Date(`${day}T12:00:00Z`);
   date.setUTCDate(date.getUTCDate() + delta);
   return date.toISOString().slice(0, 10);
+}
+
+/** Jerusalem calendar month of a moment, YYYY-MM. */
+export function monthOf(date: Date): string {
+  return jerusalemDay(date).slice(0, 7);
+}
+
+/** `count` months ending with `month`, oldest first. */
+export function monthsBack(month: string, count: number): string[] {
+  const [year, index] = month.split("-").map(Number);
+  const out: string[] = [];
+  for (let back = count - 1; back >= 0; back -= 1) {
+    const date = new Date(Date.UTC(year!, index! - 1 - back, 1));
+    out.push(date.toISOString().slice(0, 7));
+  }
+  return out;
+}
+
+/** UTC instant of the Jerusalem midnight that opens `month`, with a day of slack before it. */
+export function monthFloor(month: string): Date {
+  const [year, index] = month.split("-").map(Number);
+  return new Date(Date.UTC(year!, index! - 1, 1) - 86_400_000);
+}
+
+export interface RecapCounts {
+  xp: number;
+  acts: Record<ProgressAct, number>;
+  activeDays: number;
+  topWorld: WorldFocus | null;
+  achievements: AchievementId[];
+  levelStart: number;
+  levelEnd: number;
+}
+
+/**
+ * One month looked back on, from the full act history. The level at the start
+ * is what the acts before the month add up to; the achievements are the ones
+ * whose unlocking act fell inside it.
+ */
+export function recapCounts(acts: Act[], month: string, now = new Date()): RecapCounts {
+  const inMonth = acts.filter((act) => monthOf(act.at) === month);
+  const before = acts.filter((act) => monthOf(act.at) < month);
+  const through = acts.filter((act) => monthOf(act.at) <= month);
+  const counts = Object.fromEntries(ProgressActSchema.options.map((act) => [act, 0])) as Record<ProgressAct, number>;
+  for (const act of inMonth) counts[act.act] += 1;
+
+  const byWorld = new Map<WorldFocus, number>();
+  for (const act of inMonth) byWorld.set(act.world, (byWorld.get(act.world) ?? 0) + act.xp);
+  let topWorld: WorldFocus | null = null;
+  for (const world of WORLDS) {
+    if ((byWorld.get(world) ?? 0) > (topWorld ? byWorld.get(topWorld)! : 0)) topWorld = world;
+  }
+
+  const unlocked = compute(through, now).achievements
+    .filter((item) => item.unlockedAt && monthOf(new Date(item.unlockedAt)) === month)
+    .map((item) => item.id);
+
+  const sum = (list: Act[]) => list.reduce((total, act) => total + act.xp, 0);
+  return {
+    xp: sum(inMonth),
+    acts: counts,
+    activeDays: new Set(inMonth.map((act) => jerusalemDay(act.at))).size,
+    topWorld,
+    achievements: unlocked,
+    levelStart: levelFor(sum(before)).level,
+    levelEnd: levelFor(sum(through)).level,
+  };
+}
+
+export interface DepartmentMonth {
+  month: string;
+  earned: number;
+  target: number;
+  reached: boolean;
+}
+
+/**
+ * The department's result per month, for the months before `month`, and how
+ * many of the latest ones in a row reached the goal. Past targets use today's
+ * headcount: membership history is not recorded, and saying so beats guessing.
+ */
+export function departmentHistory(
+  acts: Act[],
+  month: string,
+  target: number,
+  count: number,
+): { history: DepartmentMonth[]; reachedRun: number } {
+  const months = monthsBack(month, count + 1).slice(0, -1);
+  const earned = new Map<string, number>();
+  for (const act of acts) {
+    const key = monthOf(act.at);
+    earned.set(key, (earned.get(key) ?? 0) + act.xp);
+  }
+  const history = months.map((key) => {
+    const value = earned.get(key) ?? 0;
+    return { month: key, earned: value, target, reached: target > 0 && value >= target };
+  });
+  let reachedRun = 0;
+  for (let index = history.length - 1; index >= 0 && history[index]!.reached; index -= 1) reachedRun += 1;
+  return { history, reachedRun };
+}
+
+/**
+ * A work anniversary near today: from a few days before the date to a week
+ * after it, and only from the first full year.
+ */
+export function anniversary(startedAt: Date | null, now = new Date()): Moment | null {
+  if (!startedAt) return null;
+  const start = jerusalemDay(startedAt);
+  const today = jerusalemDay(now);
+  const year = Number(today.slice(0, 4));
+  for (const candidateYear of [year - 1, year, year + 1]) {
+    const years = candidateYear - Number(start.slice(0, 4));
+    if (years < 1) continue;
+    const [, month, day] = start.split("-").map(Number);
+    // 29 February falls back to the 28th in a common year.
+    const rolled = new Date(Date.UTC(candidateYear, month! - 1, day!));
+    const valid =
+      rolled.getUTCMonth() === month! - 1 ? rolled.toISOString().slice(0, 10) : `${candidateYear}-02-28`;
+    const distance = daysBetween(today, valid);
+    if (distance <= RULES.anniversaryWindow.before && -distance <= RULES.anniversaryWindow.after) {
+      return { kind: "anniversary", years, date: valid };
+    }
+  }
+  return null;
 }

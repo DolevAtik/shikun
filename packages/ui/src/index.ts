@@ -10,5 +10,12 @@ export { MissionCard, type MissionCardProps } from "./components/MissionCard";
 export { WorldCard, type WorldCardProps } from "./components/WorldCard";
 export { LevelMark, type LevelMarkProps } from "./components/LevelMark";
 export { AchievementBadge, type AchievementBadgeProps } from "./components/AchievementBadge";
-export { IllustratedAvatar, type IllustratedAvatarProps } from "./components/IllustratedAvatar";
+export {
+  AVATAR_BACKDROP_SWATCH,
+  AVATAR_OUTFIT_SWATCH,
+  type AvatarBackdropId,
+  type AvatarOutfitId,
+  IllustratedAvatar,
+  type IllustratedAvatarProps,
+} from "./components/IllustratedAvatar";
 export { WORLD_IDS, WORLD_BORDER, type WorldId } from "./worlds";

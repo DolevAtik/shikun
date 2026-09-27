@@ -80,6 +80,24 @@ Legend: 🔓 public · 🔒 authenticated · 🛡 requires the listed permission
 |---|---|---|---|
 | POST | `/media/presign` | 🛡 `content:publish` | 20/min; returns a presigned S3 upload URL |
 
+### Me — העולם שלי — `/api/me`
+Everything here is the signed-in employee's own. XP is derived on every request from
+`ContentRead`, `Registration` (with the attendance answer) and `User.profileCompletedAt`;
+there is no score column.
+
+| Method | Path | Access | Notes |
+|---|---|---|---|
+| GET | `/me/progress` | 🔒 | level, missions, worlds, achievements, recognition received and given, department goal with history and reward, bookings, avatar, anniversary |
+| GET | `/me/progress/worlds/:world` | 🔒 | one world: history and open opportunities |
+| GET | `/me/progress/recap?month=YYYY-MM` | 🔒 | a month looked back on; without `month`, this one |
+| POST | `/me/registrations` | 🔒 | `{ contentItemId }`, idempotent, audience-checked; answers with progress |
+| DELETE | `/me/registrations/:contentItemId` | 🔒 | only before the session starts |
+| POST | `/me/registrations/:contentItemId/attendance` | 🔒 | `{ attended }`, from the start of the session for 30 days |
+| POST | `/me/recognitions` | 🔒 | `{ recipientId, badge, reason }`; 3 per Jerusalem week, one per colleague per week, never yourself; 10/min |
+| GET | `/me/colleagues?q=` | 🔒 | active colleagues by name, for the recognition picker (8 max) |
+| PATCH | `/me/profile` | 🔒 | `{ bio, phone }`; a first bio of 20+ characters is the profile act |
+| GET / PATCH | `/me/world` | 🔒 | weekly focus and avatar choices (partial update); a choice the level has not opened is 400 |
+
 ### Telemetry — `/api/events`
 | Method | Path | Access | Notes |
 |---|---|---|---|
@@ -100,6 +118,9 @@ Legend: 🔓 public · 🔒 authenticated · 🛡 requires the listed permission
 | POST | `/admin/content/:id/archive` | `content:edit` |
 | GET | `/admin/home/sections` | `feeds:manage` |
 | PUT | `/admin/home/sections` | `feeds:manage` |
+| GET | `/admin/quests` | `quests:manage` — every department with `users:manage`, else the viewer's own |
+| PUT | `/admin/quests/:departmentId` | `quests:manage` — `{ reward }` for this month; audited |
+| GET | `/admin/world/metrics?range=` | `analytics:view` — aggregates only |
 
 ## Contracts
 

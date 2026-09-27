@@ -155,8 +155,9 @@ model Department {
   nameHe String
   nameEn String
 
-  users   User[]
-  careers CareerDetail[]
+  users        User[]
+  careers      CareerDetail[]
+  questRewards DepartmentQuestReward[]
 }
 
 // ─── Identity ────────────────────────────────────────────────────────────────
@@ -174,6 +175,8 @@ model User {
   /// Stored as a date; only month and day are ever rendered.
   birthday     DateTime?
   startedAt    DateTime?
+  /// When the employee first wrote a bio long enough to introduce themselves.
+  profileCompletedAt DateTime?
   locale       String    @default("he")
   isActive     Boolean   @default(true)
   roles        Role[]    @default([EMPLOYEE])
@@ -200,6 +203,7 @@ model User {
   analyticsEvents AnalyticsEvent[]
   reads           ContentRead[]
   world           EmployeeWorld?
+  questRewardsSet DepartmentQuestReward[] @relation("QuestRewardSetter")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -467,6 +471,9 @@ model Registration {
   userId        String
   contentItemId String
   createdAt     DateTime @default(now())
+  /// The employee's own answer after the session started. Null until asked and answered.
+  attended      Boolean?
+  attendanceAt  DateTime?
 
   user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   contentItem ContentItem @relation(fields: [contentItemId], references: [id], onDelete: Cascade)
@@ -536,6 +543,7 @@ model Recognition {
   giver     User? @relation("RecognitionGiver", fields: [giverId], references: [id])
 
   @@index([recipientId])
+  @@index([giverId, awardedAt])
 }
 
 model WeeklySummary {
@@ -657,7 +665,26 @@ model EmployeeWorld {
   lastActOn      DateTime?
   bonusXp        Int       @default(0)
   pulsePending   Boolean   @default(false)
+  /// Avatar choices, each opened by a level. Null is the default look.
+  avatarBackdrop String?
+  avatarOutfit   String?
   updatedAt      DateTime  @updatedAt
+}
+
+/// What a department gets when it reaches its monthly goal. Set by a manager or HR.
+model DepartmentQuestReward {
+  id           String   @id @default(cuid())
+  departmentId String
+  /// Jerusalem calendar month, YYYY-MM.
+  month        String
+  reward       String
+  setById      String?
+  updatedAt    DateTime @updatedAt
+
+  department Department @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+  setBy      User?      @relation("QuestRewardSetter", fields: [setById], references: [id], onDelete: SetNull)
+
+  @@unique([departmentId, month])
 }
 
 model ContentRead {

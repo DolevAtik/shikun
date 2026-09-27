@@ -1,8 +1,9 @@
 "use client";
 
-import type { Mission, WorldActivity, WorldDetail } from "@moch/contracts";
+import type { Mission, ProgressAct, WorldActivity, WorldDetail } from "@moch/contracts";
 import { Button, ProgressBar, SectionHeader } from "@moch/ui";
-import { ArrowRight, BookOpen, CalendarDays, CheckCircle2, GraduationCap } from "lucide-react";
+import { ArrowRight, BookOpen, CalendarCheck, CalendarDays, CheckCircle2, GraduationCap, UserPen, UserRoundCheck } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 import { Link, useRouter } from "@/i18n/routing";
@@ -15,7 +16,14 @@ import { formatXp, milestoneProgress, ratioText, xpText } from "./progress";
 import { RegisterSheet } from "./RegisterSheet";
 import { WORLD_BAR, WORLD_COLOR, worldTint, worldWash } from "./world-tone";
 
-const ACT_ICONS = { read: BookOpen, training: GraduationCap, event: CalendarDays } as const;
+const ACT_ICONS: Record<ProgressAct, LucideIcon> = {
+  read: BookOpen,
+  training: GraduationCap,
+  event: CalendarDays,
+  trainingAttended: UserRoundCheck,
+  eventAttended: CalendarCheck,
+  profile: UserPen,
+};
 
 /** One world in full: what counts, what I did, and what is open right now. */
 export function WorldDetailView({ detail }: { detail: WorldDetail }) {
@@ -124,7 +132,7 @@ export function WorldDetailView({ detail }: { detail: WorldDetail }) {
         ) : (
           <ul className="flex flex-col divide-y divide-line rounded-xl border border-line bg-surface shadow-sm">
             {detail.history.map((activity) => (
-              <HistoryRow key={activity.contentItemId} activity={activity} onCancelled={() => router.refresh()} />
+              <HistoryRow key={`${activity.act}:${activity.contentItemId ?? "profile"}`} activity={activity} onCancelled={() => router.refresh()} />
             ))}
           </ul>
         )}
@@ -167,9 +175,21 @@ function HistoryRow({ activity, onCancelled }: { activity: WorldActivity; onCanc
       <Link href={`/feed/${activity.contentItemId}`} className="font-medium text-content underline-offset-4 hover:underline">
         {activity.title}
       </Link>
+    ) : activity.act === "profile" ? (
+      <Link href="/profile#about" className="font-medium text-content underline-offset-4 hover:underline">
+        {t("world.profileTitle")}
+      </Link>
     ) : (
       <span className="font-medium text-content">{activity.title}</span>
     );
+  const when =
+    activity.act === "read"
+      ? t("world.readOn", { date: formatDate(activity.at, locale) })
+      : activity.act === "profile"
+        ? t("world.profileOn", { date: formatDate(activity.at, locale) })
+        : activity.act === "trainingAttended" || activity.act === "eventAttended"
+          ? t("world.attendedOn", { date: formatDate(activity.at, locale) })
+          : t("world.registeredOn", { date: formatDate(activity.at, locale) });
 
   return (
     <li className="flex flex-wrap items-center gap-x-3 gap-y-2 px-4 py-3">
@@ -179,10 +199,8 @@ function HistoryRow({ activity, onCancelled }: { activity: WorldActivity; onCanc
         <p className="text-xs text-content-muted">
           {t(`act.${activity.act}`)}
           <span aria-hidden="true"> · </span>
-          {activity.act === "read"
-            ? t("world.readOn", { date: formatDate(activity.at, locale) })
-            : t("world.registeredOn", { date: formatDate(activity.at, locale) })}
-          {activity.startsAt ? (
+          {when}
+          {activity.startsAt && (activity.act === "training" || activity.act === "event") ? (
             <>
               <span aria-hidden="true"> · </span>
               {t("world.startsOn", { date: formatDateTime(activity.startsAt, locale) })}

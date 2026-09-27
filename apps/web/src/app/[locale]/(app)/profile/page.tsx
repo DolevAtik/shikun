@@ -2,6 +2,7 @@ import type { CurrentUser, EmployeeProgress } from "@moch/contracts";
 import { Avatar, Card, Chip, IllustratedAvatar, ProgressBar, SectionHeader } from "@moch/ui";
 import { Award, Building2, ChevronLeft, Mail, MapPin, Medal, Phone } from "lucide-react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { ProfileAbout } from "@/components/ProfileAbout";
 import { ProfileActions } from "@/components/ProfileActions";
 import { Link } from "@/i18n/routing";
 import { serverFetchOrLogin } from "@/lib/api";
@@ -61,7 +62,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ locale
         >
           <Card interactive className="flex items-center gap-4 p-4">
             <span className="size-14 shrink-0 overflow-hidden rounded-full bg-brand-soft ring-2 ring-line">
-              <IllustratedAvatar level={progress.level.level} />
+              <IllustratedAvatar level={progress.level.level} backdrop={progress.avatar.backdrop} outfit={progress.avatar.outfit} />
             </span>
             <span className="min-w-0 flex-1">
               <span className="block font-semibold text-content">
@@ -81,6 +82,8 @@ export default async function ProfilePage({ params }: { params: Promise<{ locale
           </Card>
         </Link>
       </section>
+
+      <ProfileAbout bio={user.bio} phone={user.phone} />
 
       <section>
         <SectionHeader title="פרטים" />

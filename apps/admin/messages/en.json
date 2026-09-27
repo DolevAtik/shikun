@@ -22,7 +22,8 @@
     "audit": "Audit Logs",
     "collapse": "Collapse menu",
     "expand": "Expand menu",
-    "menu": "Navigation menu"
+    "menu": "Navigation menu",
+    "quests": "Department goals"
   },
   "auth": {
     "signIn": "Sign in",
@@ -255,5 +256,61 @@
       "entity": "Record",
       "summary": "Summary"
     }
+  },
+  "quests": {
+    "title": "Department goals",
+    "subtitle": "Each department's monthly goal in My World ({month}), and what it gets for reaching it.",
+    "members": "{count, plural, one {# person} other {# people}}",
+    "progress": "This month",
+    "progressOf": "{name} progress",
+    "reward": "What the department gets for reaching the goal",
+    "rewardPlaceholder": "e.g. a team breakfast on Thursday",
+    "rewardHint": "Employees see this on the department card in My World. No money, no ranking.",
+    "setBy": "Set by {name}",
+    "save": "Save",
+    "saving": "Saving…",
+    "clear": "Remove",
+    "saved": "Reward saved",
+    "saveError": "Couldn't save",
+    "emptyTitle": "No department to manage",
+    "emptyDescription": "You can set a reward for the department you belong to. You aren't assigned to one right now."
+  },
+  "worldMetrics": {
+    "title": "My World: is it working?",
+    "subtitle": "Totals only. Nothing here is broken down by person.",
+    "range": "Time range",
+    "ranges": {
+      "7d": "7 days",
+      "30d": "30 days",
+      "90d": "90 days"
+    },
+    "headline": "Headline figures",
+    "visitors": "Employees who opened My World",
+    "visitorsHint": "At least one visit in range.",
+    "returnRate": "Came back within a week",
+    "returnHint": "{returned} of {base} whose first visit in range was a week or more ago.",
+    "missionRate": "Missions completed",
+    "missionHint": "{completed} of {opens} mission opens ended in the act itself within a week.",
+    "attendanceRate": "Actually attended",
+    "attendanceHint": "{attended} attended, {missed} didn't, {unanswered} didn't answer, of {total} registrations for sessions that took place.",
+    "focusTitle": "Weekly focus",
+    "focusHint": "Acts per active employee in range.",
+    "withFocus": "Chose a focus ({users})",
+    "withoutFocus": "No focus ({users})",
+    "focusNote": "Focus is the current choice. This is a correlation, not proof of cause.",
+    "actsTitle": "Acts by type",
+    "actsHint": "Every counted act in range, Ministry-wide.",
+    "acts": {
+      "read": "Reads",
+      "training": "Training registrations",
+      "event": "Event registrations",
+      "trainingAttended": "Trainings attended",
+      "eventAttended": "Events attended",
+      "profile": "Profiles completed"
+    },
+    "recognitionTitle": "Colleague recognition",
+    "recognitionHint": "Thank-yous employees gave, by week (last 8 weeks).",
+    "recognitionWeek": "{given} thank-yous from {givers} people",
+    "privacy": "These figures come from the same rows that power My World. No per-person breakdown, no ranking."
   }
 }

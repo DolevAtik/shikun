@@ -6,6 +6,38 @@ date rather than released version.
 
 ## [Unreleased]
 
+### Added — העולם שלי grows
+- **Thank a colleague.** `POST /me/recognitions` with a colleague picker
+  (`GET /me/colleagues`): a badge and a reason, 3 per week, one per colleague per week.
+  It shows in their world and on the Home recognition wall, and is never XP.
+- **After the registration.** A "my registrations" section: add an upcoming session to
+  the calendar (an `.ics` built in the browser), and answer "were you there?" once it
+  has started (`POST /me/registrations/:id/attendance`).
+- **More real acts.** Read missions prefer followed channels and the chosen world. A
+  one-time profile act (a bio of 20+ characters, edited on the profile's new "about me").
+- **Rewards every two or three levels:** a backdrop choice (3), pin (5), outfit choice (7),
+  badge (10), skyline (12), frame (15). Choices are saved on `EmployeeWorld` and checked
+  against the level on the server.
+- **Personal moments:** a work anniversary on the hero, a monthly recap
+  (`GET /me/progress/recap`), and "you received a new thank-you" since the last visit.
+- **Department goal:** your share on the card, the five previous months, a months-in-a-row
+  line, and a reward a manager or HR sets in the console (new `quests:manage` permission,
+  `/quests` page).
+- **Measurement:** the console's Analytics page now answers whether העולם שלי works —
+  visitors, return within a week, missions opened → done, attendance, focus vs no focus,
+  acts by type, and recognition per week. Aggregates only. The app sends `mission.open`,
+  `world.focus` and `booking.calendar` events.
+
+### Changed
+- A session's XP moves from signing up to being there: registration 10, attendance
+  30 (training) or 20 (event). "צמיחה" and "חלק מהקהילה" now open on confirmed attendance.
+  Existing registrations lose XP until their attendance is confirmed.
+
+### Migration
+- `20260927090000_world_growth` is additive only: `Registration.attended/attendanceAt`,
+  `User.profileCompletedAt`, `EmployeeWorld.avatarBackdrop/avatarOutfit`, an index on
+  `Recognition(giverId, awardedAt)`, and the `DepartmentQuestReward` table.
+
 ### Changed — העולם שלי is real (plan: `docs/planning/my-world-production.md`)
 - Every number on העולם שלי is now computed from what the employee did — `ContentRead`
   and `Registration` rows — by a new `GET /me/progress`. The demo catalog, the fake

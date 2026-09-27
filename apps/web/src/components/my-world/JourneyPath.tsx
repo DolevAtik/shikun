@@ -6,7 +6,7 @@ import { ChevronLeft, Flag, Star } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import type { ReactNode } from "react";
 import { JourneyCard } from "./JourneyCard";
-import { xpText } from "./progress";
+import { stagePreview, xpText } from "./progress";
 import type { OpenDetail } from "./types";
 import { WORLD_COLOR } from "./world-tone";
 
@@ -68,7 +68,7 @@ export function JourneyPath({ progress, chosen, onOpen }: JourneyPathProps) {
             className="flex w-full items-center gap-3 rounded-lg border border-dashed border-line bg-surface px-3 py-2.5 text-start hover:bg-surface-tint focus-visible:outline-none focus-visible:shadow-focus"
           >
             <span className="size-10 shrink-0 overflow-hidden rounded-full opacity-70 ring-2 ring-line">
-              <IllustratedAvatar level={nextUnlock.level} />
+              <IllustratedAvatar level={nextUnlock.level} {...stagePreview(nextUnlock, progress.avatar)} />
             </span>
             <span className="min-w-0 flex-1 text-sm">
               <span className="block font-semibold text-content">{t("journey.nextUnlock")}</span>

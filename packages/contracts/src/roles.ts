@@ -24,6 +24,9 @@ export const PermissionSchema = z.enum([
   "feeds:manage",
   "users:manage",
   "analytics:view",
+  // Sets what a department gets for reaching its monthly goal in העולם שלי.
+  // Scope: `users:manage` holders for any department, everyone else for their own.
+  "quests:manage",
 ]);
 export type Permission = z.infer<typeof PermissionSchema>;
 
@@ -36,7 +39,7 @@ export type Permission = z.infer<typeof PermissionSchema>;
  */
 export const ROLE_PERMISSIONS: Record<Role, readonly Permission[]> = {
   EMPLOYEE: [],
-  MANAGER: ["admin:access", "content:publish", "content:edit"],
+  MANAGER: ["admin:access", "content:publish", "content:edit", "quests:manage"],
   DISTRICT_MANAGER: ["admin:access", "content:publish", "content:edit", "content:approve"],
   CONTENT_EDITOR: [
     "admin:access",
@@ -46,7 +49,7 @@ export const ROLE_PERMISSIONS: Record<Role, readonly Permission[]> = {
     "content:manage",
     "feeds:manage",
   ],
-  HR: ["admin:access", "content:publish", "content:edit", "users:manage"],
+  HR: ["admin:access", "content:publish", "content:edit", "users:manage", "quests:manage"],
   EXECUTIVE: ["admin:access", "content:publish", "content:approve", "analytics:view"],
   ADMIN: [
     "admin:access",
@@ -58,6 +61,7 @@ export const ROLE_PERMISSIONS: Record<Role, readonly Permission[]> = {
     "feeds:manage",
     "users:manage",
     "analytics:view",
+    "quests:manage",
   ],
 } as const;
 

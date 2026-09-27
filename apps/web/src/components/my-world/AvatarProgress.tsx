@@ -1,5 +1,6 @@
 "use client";
 
+import type { AvatarStyle } from "@moch/contracts";
 import { IllustratedAvatar } from "@moch/ui";
 import { useTranslations } from "next-intl";
 import { Numeric } from "./Numeric";
@@ -8,11 +9,12 @@ interface AvatarProgressProps {
   level: number;
   current: number;
   next: number;
+  style: AvatarStyle;
   onOpen: () => void;
 }
 
 /** The figure with a ring that follows XP inside the level. A button: it opens the figure's stages. */
-export function AvatarProgress({ level, current, next, onOpen }: AvatarProgressProps) {
+export function AvatarProgress({ level, current, next, style, onOpen }: AvatarProgressProps) {
   const t = useTranslations("myWorld");
   const radius = 54;
   const circumference = 2 * Math.PI * radius;
@@ -44,7 +46,7 @@ export function AvatarProgress({ level, current, next, onOpen }: AvatarProgressP
         />
       </svg>
       <span className="absolute inset-[11px] overflow-hidden rounded-full bg-brand-soft shadow-md ring-4 ring-surface transition-transform duration-300 group-hover:scale-[1.03] motion-reduce:transition-none">
-        <IllustratedAvatar level={level} />
+        <IllustratedAvatar level={level} backdrop={style.backdrop} outfit={style.outfit} />
       </span>
       <span
         aria-hidden="true"

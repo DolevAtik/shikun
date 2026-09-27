@@ -44,7 +44,7 @@ export function FirstSteps({
 }) {
   const t = useTranslations("myWorld");
   const read = progress.missions.find((mission) => mission.act === "read");
-  const registration = progress.missions.find((mission) => mission.act !== "read");
+  const registration = progress.missions.find((mission) => mission.act === "training" || mission.act === "event");
   const link = "font-medium text-brand underline-offset-4 hover:underline focus-visible:outline-none focus-visible:shadow-focus";
 
   const steps = [

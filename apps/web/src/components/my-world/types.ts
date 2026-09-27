@@ -10,6 +10,8 @@ export interface MyWorldFlags {
   showRecognition: boolean;
   showDepartment: boolean;
   showUnlocks: boolean;
+  showBookings: boolean;
+  showRecap: boolean;
 }
 
 export type XpTier = "starter" | "partner" | "leader" | "veteran";
@@ -28,6 +30,7 @@ export type Detail =
   | { kind: "unlock"; id: UnlockId }
   | { kind: "recognition"; id: string }
   | { kind: "department" }
-  | { kind: "register"; mission: Mission };
+  | { kind: "register"; mission: Mission }
+  | { kind: "give" };
 
 export type OpenDetail = (detail: Detail) => void;

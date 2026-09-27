@@ -2,20 +2,10 @@
 
 import * as React from "react";
 import { usePathname } from "next/navigation";
+import { enqueue, ensureSessionId, QUEUE_KEY, type QueuedEvent } from "@/lib/telemetry";
 
-const SESSION_KEY = "moch_sid";
-const QUEUE_KEY = "moch_telemetry_q";
 const FLUSH_MS = 5_000;
 const MAX_BATCH = 20;
-
-type QueuedEvent = {
-  type: string;
-  sessionId: string;
-  entityType?: string;
-  entityId?: string;
-  props?: Record<string, unknown>;
-  ts: string;
-};
 
 /**
  * Batched analytics beacon for the employee app.
@@ -54,29 +44,6 @@ export function TelemetryBeacon() {
   }, []);
 
   return null;
-}
-
-function ensureSessionId(): string {
-  try {
-    const existing = sessionStorage.getItem(SESSION_KEY);
-    if (existing) return existing;
-    const id = crypto.randomUUID();
-    sessionStorage.setItem(SESSION_KEY, id);
-    return id;
-  } catch {
-    return "anon";
-  }
-}
-
-function enqueue(event: QueuedEvent) {
-  try {
-    const raw = sessionStorage.getItem(QUEUE_KEY);
-    const queue: QueuedEvent[] = raw ? (JSON.parse(raw) as QueuedEvent[]) : [];
-    queue.push(event);
-    sessionStorage.setItem(QUEUE_KEY, JSON.stringify(queue.slice(-200)));
-  } catch {
-    /* ignore */
-  }
 }
 
 async function flush() {

@@ -1,15 +1,27 @@
 "use client";
 
-import type { EmployeeProgress } from "@moch/contracts";
-import { Button, cn, IllustratedAvatar, ProgressBar } from "@moch/ui";
-import { ArrowLeft, BookOpen, CalendarDays, Check, GraduationCap, Lock, X as NotIcon } from "lucide-react";
+import type { AvatarBackdrop, AvatarOutfit, AvatarStyle, EmployeeProgress, ProgressAct } from "@moch/contracts";
+import { AVATAR_BACKDROP_SWATCH, AVATAR_OUTFIT_SWATCH, Button, cn, IllustratedAvatar, ProgressBar } from "@moch/ui";
+import {
+  ArrowLeft,
+  BookOpen,
+  CalendarCheck,
+  CalendarDays,
+  Check,
+  GraduationCap,
+  Lock,
+  UserPen,
+  UserRoundCheck,
+  X as NotIcon,
+} from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import type { ReactNode } from "react";
 import { Link } from "@/i18n/routing";
 import { formatDate } from "@/lib/format";
 import { AchievementIcon } from "./AchievementCard";
 import { Numeric } from "./Numeric";
-import { AVATAR_STAGES, formatXp, remainingFor, xpText } from "./progress";
+import { AVATAR_STAGES, formatXp, remainingFor, stagePreview, xpText } from "./progress";
 import { Sheet } from "./Sheet";
 import type { Detail } from "./types";
 import { WORLD_COLOR } from "./world-tone";
@@ -17,21 +29,24 @@ import { WORLD_COLOR } from "./world-tone";
 interface DetailSheetProps {
   detail: Detail | null;
   progress: EmployeeProgress;
+  /** Saves an avatar choice. Only called for a choice the level has opened. */
+  onAvatarChange: (patch: Partial<AvatarStyle>) => void;
+  avatarError: boolean;
   onClose: () => void;
 }
 
 /** Every "tell me more" on the screen. None of them is decorative: each answers what, how far, and how. */
-export function DetailSheet({ detail, progress, onClose }: DetailSheetProps) {
+export function DetailSheet({ detail, progress, onAvatarChange, avatarError, onClose }: DetailSheetProps) {
   const t = useTranslations("myWorld");
   const locale = useLocale();
-  const open = detail !== null && detail.kind !== "register";
+  const open = detail !== null && detail.kind !== "register" && detail.kind !== "give";
 
   let title = "";
   let body: ReactNode = null;
 
   if (detail?.kind === "avatar") {
     title = t("avatar.title");
-    body = <AvatarBody progress={progress} />;
+    body = <AvatarBody progress={progress} onChange={onAvatarChange} failed={avatarError} />;
   } else if (detail?.kind === "rules") {
     title = t("rules.title");
     body = <RulesBody progress={progress} />;
@@ -45,7 +60,7 @@ export function DetailSheet({ detail, progress, onClose }: DetailSheetProps) {
     const unlock = progress.unlocks.find((item) => item.id === detail.id);
     if (unlock) {
       title = t(`unlocks.items.${unlock.id}.title`);
-      body = <UnlockBody unlock={unlock} total={progress.level.total} />;
+      body = <UnlockBody unlock={unlock} total={progress.level.total} style={progress.avatar} />;
     }
   } else if (detail?.kind === "recognition") {
     const recognition = progress.recognitions.find((item) => item.id === detail.id);
@@ -68,16 +83,62 @@ export function DetailSheet({ detail, progress, onClose }: DetailSheetProps) {
   );
 }
 
-function AvatarBody({ progress }: { progress: EmployeeProgress }) {
+function AvatarBody({
+  progress,
+  onChange,
+  failed,
+}: {
+  progress: EmployeeProgress;
+  onChange: (patch: Partial<AvatarStyle>) => void;
+  failed: boolean;
+}) {
   const t = useTranslations("myWorld");
   const locale = useLocale();
   const level = progress.level.level;
   const unlockAt = new Map(progress.unlocks.map((unlock) => [unlock.level, unlock]));
+  const backdrop = progress.unlocks.find((unlock) => unlock.id === "backdrop")!;
+  const outfit = progress.unlocks.find((unlock) => unlock.id === "outfit")!;
 
   return (
     <div>
-      <p className="text-sm text-content-muted">{t("avatar.body")}</p>
-      <ol className="mt-4 grid grid-cols-2 gap-3">
+      <div className="flex items-center gap-4">
+        <span className="size-24 shrink-0 overflow-hidden rounded-full bg-brand-soft shadow-md ring-4 ring-[var(--sky-glow)]">
+          <IllustratedAvatar level={level} backdrop={progress.avatar.backdrop} outfit={progress.avatar.outfit} />
+        </span>
+        <p className="text-sm text-content-muted">{t("avatar.body")}</p>
+      </div>
+
+      <section className="mt-5 flex flex-col gap-4">
+        <h3 className="text-sm font-semibold text-content">{t("avatar.customize")}</h3>
+        <SwatchGroup
+          name="avatar-backdrop"
+          legend={t("avatar.backdrop")}
+          unlock={backdrop}
+          options={Object.keys(AVATAR_BACKDROP_SWATCH) as AvatarBackdrop[]}
+          value={progress.avatar.backdrop}
+          swatch={(id) => AVATAR_BACKDROP_SWATCH[id]}
+          label={(id) => t(`avatar.backdrops.${id}`)}
+          onPick={(id) => onChange({ backdrop: id })}
+        />
+        <SwatchGroup
+          name="avatar-outfit"
+          legend={t("avatar.outfit")}
+          unlock={outfit}
+          options={Object.keys(AVATAR_OUTFIT_SWATCH) as AvatarOutfit[]}
+          value={progress.avatar.outfit}
+          swatch={(id) => AVATAR_OUTFIT_SWATCH[id]}
+          label={(id) => t(`avatar.outfits.${id}`)}
+          onPick={(id) => onChange({ outfit: id })}
+        />
+        {failed ? (
+          <p role="alert" className="text-sm font-medium text-danger">
+            {t("avatar.saveError")}
+          </p>
+        ) : null}
+      </section>
+
+      <h3 className="mt-6 text-sm font-semibold text-content">{t("avatar.stages")}</h3>
+      <ol className="mt-3 grid grid-cols-2 gap-3">
         {AVATAR_STAGES.map((stage) => {
           const reached = level >= stage;
           const unlock = unlockAt.get(stage);
@@ -91,7 +152,7 @@ function AvatarBody({ progress }: { progress: EmployeeProgress }) {
               )}
             >
               <span className={cn("size-20 overflow-hidden rounded-full ring-2 ring-line", !reached && "opacity-45 grayscale")}>
-                <IllustratedAvatar level={stage} />
+                <IllustratedAvatar level={stage} {...stagePreview(unlock, progress.avatar)} />
               </span>
               <span className="text-sm font-semibold text-content">
                 {stage === 1 ? t("avatar.stageBase") : t("avatar.stageLevel", { level: stage })}
@@ -114,9 +175,69 @@ function AvatarBody({ progress }: { progress: EmployeeProgress }) {
   );
 }
 
+const RULE_ICONS: Record<ProgressAct, LucideIcon> = {
+  read: BookOpen,
+  training: GraduationCap,
+  event: CalendarDays,
+  trainingAttended: UserRoundCheck,
+  eventAttended: CalendarCheck,
+  profile: UserPen,
+};
+
+function SwatchGroup<T extends string>({
+  name,
+  legend,
+  unlock,
+  options,
+  value,
+  swatch,
+  label,
+  onPick,
+}: {
+  name: string;
+  legend: string;
+  unlock: EmployeeProgress["unlocks"][number];
+  options: T[];
+  value: T;
+  swatch: (id: T) => string;
+  label: (id: T) => string;
+  onPick: (id: T) => void;
+}) {
+  const t = useTranslations("myWorld");
+  return (
+    <fieldset disabled={!unlock.unlocked}>
+      <legend className="mb-2 flex items-center gap-1.5 text-sm text-content">
+        {legend}
+        {unlock.unlocked ? null : (
+          <span className="inline-flex items-center gap-1 text-xs text-content-muted">
+            <Lock aria-hidden="true" className="size-3" />
+            {t("unlocks.atLevel", { level: unlock.level })}
+          </span>
+        )}
+      </legend>
+      <div className="flex flex-wrap gap-2">
+        {options.map((id) => (
+          <label
+            key={id}
+            className={cn(
+              "flex min-h-11 items-center gap-2 rounded-full border px-3 text-sm has-[:focus-visible]:shadow-focus",
+              unlock.unlocked ? "cursor-pointer" : "cursor-not-allowed opacity-60",
+              value === id ? "border-brand bg-brand-soft font-semibold text-content" : "border-line text-content",
+            )}
+          >
+            <input type="radio" name={name} value={id} checked={value === id} onChange={() => onPick(id)} className="sr-only" />
+            <span aria-hidden="true" className="size-5 rounded-full ring-1 ring-line-strong" style={{ backgroundColor: swatch(id) }} />
+            {label(id)}
+          </label>
+        ))}
+      </div>
+    </fieldset>
+  );
+}
+
 function RulesBody({ progress }: { progress: EmployeeProgress }) {
   const t = useTranslations("myWorld");
-  const icons = { read: BookOpen, training: GraduationCap, event: CalendarDays } as const;
+  const icons = RULE_ICONS;
 
   return (
     <div className="flex flex-col gap-5 text-sm">
@@ -212,7 +333,15 @@ function AchievementBody({
   );
 }
 
-function UnlockBody({ unlock, total }: { unlock: EmployeeProgress["unlocks"][number]; total: number }) {
+function UnlockBody({
+  unlock,
+  total,
+  style,
+}: {
+  unlock: EmployeeProgress["unlocks"][number];
+  total: number;
+  style: AvatarStyle;
+}) {
   const t = useTranslations("myWorld");
   const locale = useLocale();
   const remaining = Math.max(0, unlock.xpAt - total);
@@ -221,7 +350,7 @@ function UnlockBody({ unlock, total }: { unlock: EmployeeProgress["unlocks"][num
     <div className="flex flex-col gap-4">
       <div className="flex items-center gap-4">
         <span className={cn("size-20 shrink-0 overflow-hidden rounded-full ring-2 ring-line", !unlock.unlocked && "opacity-60")}>
-          <IllustratedAvatar level={unlock.level} />
+          <IllustratedAvatar level={unlock.level} {...stagePreview(unlock, style)} />
         </span>
         <div>
           <p className="text-sm font-semibold text-content">{t("unlocks.atLevel", { level: unlock.level })}</p>
@@ -334,10 +463,50 @@ function DepartmentBody({ department }: { department: NonNullable<EmployeeProgre
         </dl>
       </section>
       <p className="font-medium text-content">{t("department.mine", { xp: xpText(department.mine, locale) })}</p>
+      {department.reward ? (
+        <p className="rounded-lg bg-surface-tint px-3 py-2.5 text-content">
+          <span className="font-semibold">{t("department.rewardLabel")}</span> {department.reward}
+        </p>
+      ) : null}
+      {department.history.length > 0 ? (
+        <section>
+          <h3 className="mb-2 font-semibold text-content">{t("department.history")}</h3>
+          <ol className="grid grid-cols-5 gap-2">
+            {department.history.map((month) => (
+              <li key={month.month} className="flex flex-col items-center gap-1.5 text-center">
+                <span className="relative h-16 w-full overflow-hidden rounded-md bg-surface-sunken" aria-hidden="true">
+                  <span
+                    className={cn("absolute inset-x-0 bottom-0 rounded-md", month.reached ? "bg-success" : "bg-brand")}
+                    style={{ height: `${Math.round(Math.min(1, month.target > 0 ? month.earned / month.target : 0) * 100)}%` }}
+                  />
+                </span>
+                <span aria-hidden="true" className="text-xs text-content-muted">
+                  {formatMonth(month.month, locale)}
+                </span>
+                <span className="sr-only">
+                  {t(month.reached ? "department.historyReached" : "department.historyMonth", {
+                    month: formatMonth(month.month, locale),
+                    earned: month.earned,
+                    target: month.target,
+                  })}
+                </span>
+                {month.reached ? <Check aria-hidden="true" className="size-3.5 text-success" /> : null}
+              </li>
+            ))}
+          </ol>
+          <p className="mt-2 text-xs text-content-muted">{t("department.historyNote")}</p>
+        </section>
+      ) : null}
       <p className="inline-flex items-center gap-1.5 text-xs text-content-muted">
         <Lock aria-hidden="true" className="size-3.5" />
         {t("department.privacy")}
       </p>
     </div>
+  );
+}
+
+function formatMonth(month: string, locale: string): string {
+  return new Intl.DateTimeFormat(locale === "en" ? "en-GB" : "he-IL", { month: "short", timeZone: "UTC" }).format(
+    new Date(`${month}-01T12:00:00Z`),
   );
 }

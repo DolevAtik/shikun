@@ -1,13 +1,42 @@
 import { useId } from "react";
 import { cn } from "../cn";
 
+export type AvatarBackdropId = "sand" | "sky" | "olive" | "dusk";
+export type AvatarOutfitId = "terracotta" | "navy" | "olive" | "plum";
+
+/** Background, sun and hill per backdrop. Fixed illustration colors, like the rest of the figure. */
+const BACKDROPS: Record<AvatarBackdropId, { sky: string; sun: string; hill: string; city: string }> = {
+  sand: { sky: "#f3dcc4", sun: "#f6c98a", hill: "#e7c8a4", city: "#d9b48e" },
+  sky: { sky: "#d6e6f2", sun: "#f6e3a8", hill: "#bcd3e4", city: "#9fbad0" },
+  olive: { sky: "#e1e6c9", sun: "#f2d38a", hill: "#c8d1a6", city: "#aab58a" },
+  dusk: { sky: "#ead7e6", sun: "#f4b98a", hill: "#d6bdd4", city: "#b99cb8" },
+};
+
+const OUTFITS: Record<AvatarOutfitId, string> = {
+  terracotta: "#7a3412",
+  navy: "#1f3a5f",
+  olive: "#4f5d2f",
+  plum: "#5b2a4e",
+};
+
+export const AVATAR_BACKDROP_SWATCH: Record<AvatarBackdropId, string> = {
+  sand: BACKDROPS.sand.sky,
+  sky: BACKDROPS.sky.sky,
+  olive: BACKDROPS.olive.sky,
+  dusk: BACKDROPS.dusk.sky,
+};
+export const AVATAR_OUTFIT_SWATCH: Record<AvatarOutfitId, string> = OUTFITS;
+
 export interface IllustratedAvatarProps {
   /**
    * Cosmetic milestones, independent of the ring around the figure.
-   * 5 adds a lapel pin, 10 a badge, 15 a frame. Keep the cuts in step with
-   * `avatarProgress` in the web app.
+   * 5 adds a lapel pin, 10 a badge, 12 a skyline behind the figure, 15 a
+   * frame. 3 and 7 open the backdrop and outfit choices below. Keep the cuts
+   * in step with `RULES.unlocks` in the API.
    */
   level?: number;
+  backdrop?: AvatarBackdropId;
+  outfit?: AvatarOutfitId;
   className?: string;
 }
 
@@ -18,10 +47,13 @@ export interface IllustratedAvatarProps {
  * Fills are the Ministry palette as fixed illustration colors. They do not
  * follow the dark-mode text inversion, or the hair would turn pale.
  */
-export function IllustratedAvatar({ level = 1, className }: IllustratedAvatarProps) {
+export function IllustratedAvatar({ level = 1, backdrop = "sand", outfit = "terracotta", className }: IllustratedAvatarProps) {
   const clipId = useId();
+  const scene = BACKDROPS[backdrop] ?? BACKDROPS.sand;
+  const coat = OUTFITS[outfit] ?? OUTFITS.terracotta;
   const pin = level >= 5 && level < 10;
   const badge = level >= 10;
+  const skyline = level >= 12;
   const framed = level >= 15;
 
   return (
@@ -32,10 +64,20 @@ export function IllustratedAvatar({ level = 1, className }: IllustratedAvatarPro
         </clipPath>
       </defs>
       <g clipPath={`url(#${clipId})`}>
-        <rect width="160" height="160" fill="#f3dcc4" />
-        <circle cx="118" cy="28" r="36" fill="#f6c98a" opacity="0.85" />
-        <ellipse cx="46" cy="128" rx="28" ry="18" fill="#e7c8a4" opacity="0.7" />
-        <path d="M18 168c8-50 28-68 62-68s54 18 62 68" fill="#7a3412" />
+        <rect width="160" height="160" fill={scene.sky} />
+        <circle cx="118" cy="28" r="36" fill={scene.sun} opacity="0.85" />
+        {skyline ? (
+          <g fill={scene.city} opacity="0.9">
+            <rect x="4" y="92" width="16" height="60" />
+            <rect x="22" y="78" width="14" height="74" />
+            <path d="M38 96h14v56H38z M38 96l7-8 7 8z" />
+            <rect x="112" y="86" width="14" height="66" />
+            <path d="M128 98h12v54h-12z M128 98l6-7 6 7z" />
+            <rect x="142" y="80" width="16" height="72" />
+          </g>
+        ) : null}
+        <ellipse cx="46" cy="128" rx="28" ry="18" fill={scene.hill} opacity="0.7" />
+        <path d="M18 168c8-50 28-68 62-68s54 18 62 68" fill={coat} />
         <path d="M62 108c6 16 10 26 18 34 8-8 12-18 18-34-4 6-12 10-18 10s-14-4-18-10z" fill="#fff8f0" />
         <path d="M68 102h24l-5 12H73z" fill="#e8c4a4" />
         <rect x="72" y="92" width="16" height="16" rx="4" fill="#e4c0a4" />

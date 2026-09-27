@@ -29,7 +29,7 @@ export function NextMission({ mission, onRegister }: { mission: Mission; onRegis
           <p className="text-xs font-bold tracking-wide" style={{ color: WORLD_COLOR[mission.world] }}>
             {copy.kicker}
           </p>
-          <h3 className="mt-0.5 text-xl font-bold leading-snug text-content">{mission.title}</h3>
+          <h3 className="mt-0.5 text-xl font-bold leading-snug text-content">{copy.title}</h3>
           <p className="mt-1 text-sm leading-relaxed text-content-muted">{copy.body}</p>
           <p className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm">
             {copy.duration ? (
@@ -47,7 +47,7 @@ export function NextMission({ mission, onRegister }: { mission: Mission; onRegis
             <Numeric className="font-bold text-brand">{copy.xp}</Numeric>
           </p>
         </div>
-        <MissionAction mission={mission} onRegister={onRegister} className="w-full sm:w-auto" />
+        <MissionAction mission={mission} onRegister={onRegister} featured className="w-full sm:w-auto" />
       </div>
     </article>
   );

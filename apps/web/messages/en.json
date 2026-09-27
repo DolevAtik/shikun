@@ -139,14 +139,18 @@
       "trainingTitle": "Register for training: {title}",
       "eventTitle": "Register for event: {title}",
       "readBody": "A full read earns XP the first time.",
-      "trainingBody": "Registering earns XP. You can cancel until it starts.",
-      "eventBody": "Registering earns XP. You can cancel until it starts.",
+      "trainingBody": "Registering earns XP, and attending adds more. You can cancel until it starts.",
+      "eventBody": "Registering earns XP, and attending adds more. You can cancel until it starts.",
       "duration": "{count, plural, one {# minute} other {# minutes}}",
       "emptyTitle": "All calm right now",
       "emptyBody": "You've read every update and registered for everything open. New missions will appear here.",
       "emptyCta": "What's new in the feed",
       "registeredNotice": "Registered for \"{title}\" · {xp}",
-      "viewInWorld": "Open {world}"
+      "viewInWorld": "Open {world}",
+      "profile": "Profile",
+      "profileTitle": "Write a few words about yourself",
+      "profileBody": "A few lines on your profile, so colleagues know who they're writing to. Once, and it stays yours.",
+      "profileCta": "Write"
     },
     "journey": {
       "title": "My journey",
@@ -174,19 +178,19 @@
         "name": "Belonging",
         "code": "FEEL",
         "description": "Connection with people and the team",
-        "counts": "Reading updates in the People and Success stories channels."
+        "counts": "Reading the People and Success stories channels, and a few words about yourself."
       },
       "develop": {
         "name": "Growth",
         "code": "DEVELOP",
         "description": "Grow in the role",
-        "counts": "Registering for training, and reading the Learning channel."
+        "counts": "Registering for and attending training, and reading the Learning channel."
       },
       "participate": {
         "name": "Involvement",
         "code": "PARTICIPATE",
         "description": "Be part of what's happening",
-        "counts": "Registering for Ministry events and meetups."
+        "counts": "Registering for and attending Ministry events and meetups."
       }
     },
     "world": {
@@ -205,12 +209,18 @@
       "cancel": "Cancel registration",
       "cancelling": "Cancelling…",
       "cancelError": "Cancelling failed. Try again.",
-      "cancelHint": "Cancelling removes that registration's XP."
+      "cancelHint": "Cancelling removes that registration's XP.",
+      "profileTitle": "A few words about you",
+      "profileOn": "Written {date}",
+      "attendedOn": "Attended {date}"
     },
     "act": {
       "read": "Read",
       "training": "Training",
-      "event": "Event"
+      "event": "Event",
+      "trainingAttended": "Training attended",
+      "eventAttended": "Event attended",
+      "profile": "Profile"
     },
     "achievements": {
       "title": "My achievements",
@@ -226,7 +236,7 @@
       "items": {
         "firstStep": {
           "title": "First step",
-          "condition": "Your first meaningful action: a read or a registration."
+          "condition": "Your first meaningful action: a read, a registration or attending."
         },
         "reader": {
           "title": "Curious",
@@ -234,11 +244,11 @@
         },
         "learner": {
           "title": "Growth",
-          "condition": "Register for one training."
+          "condition": "Attend one training, confirmed after it."
         },
         "participant": {
           "title": "Part of the community",
-          "condition": "Register for two Ministry events."
+          "condition": "Attend two Ministry events, confirmed after them."
         },
         "explorer": {
           "title": "Explorer",
@@ -278,10 +288,17 @@
       "target": "Goal: {xp} per person per month",
       "breakdown": "What moved the department this month",
       "reads": "Reads",
-      "trainings": "Training registrations",
-      "events": "Event registrations",
+      "trainings": "Trainings",
+      "events": "Events",
       "mine": "Your contribution this month: {xp}",
-      "privacy": "Totals only. Nobody sees who contributed what."
+      "privacy": "Totals only. Nobody sees who contributed what.",
+      "rewardLabel": "When the goal is reached:",
+      "rewardEarned": "Goal reached:",
+      "run": "{count, plural, one {The goal was reached last month too} other {Goal reached # months in a row}}",
+      "history": "Previous months",
+      "historyMonth": "{month}: {earned} of {target} XP",
+      "historyReached": "{month}: {earned} of {target} XP, goal reached",
+      "historyNote": "Past goals use today's headcount."
     },
     "unlocks": {
       "title": "What's ahead",
@@ -297,6 +314,18 @@
         "frame": {
           "title": "Profile frame",
           "body": "A gold frame around your figure."
+        },
+        "backdrop": {
+          "title": "Choose a backdrop",
+          "body": "Four backdrops for your figure. Pick one in \"My figure\"."
+        },
+        "outfit": {
+          "title": "Choose an outfit",
+          "body": "Four outfit colors for your figure. Pick one in \"My figure\"."
+        },
+        "skyline": {
+          "title": "Skyline",
+          "body": "A small neighborhood behind your figure."
         }
       },
       "atLevel": "At level {level}",
@@ -304,7 +333,7 @@
       "remaining": "{xp} to go",
       "whatOpens": "What opens",
       "howFar": "How far",
-      "how": "You earn XP from reads and registrations. Your next mission is the shortest path."
+      "how": "You earn XP from reading, registering and attending. Your next mission is the shortest path."
     },
     "avatar": {
       "title": "My figure",
@@ -313,7 +342,24 @@
       "stageLevel": "Level {level}",
       "current": "Current stage",
       "reached": "Unlocked",
-      "locked": "{xp} to go"
+      "locked": "{xp} to go",
+      "customize": "Make it yours",
+      "backdrop": "Backdrop",
+      "outfit": "Outfit",
+      "backdrops": {
+        "sand": "Sand",
+        "sky": "Sky",
+        "olive": "Olive",
+        "dusk": "Dusk"
+      },
+      "outfits": {
+        "terracotta": "Terracotta",
+        "navy": "Navy",
+        "olive": "Olive",
+        "plum": "Plum"
+      },
+      "saveError": "Your choice wasn't saved. Try again.",
+      "stages": "Your figure's stages"
     },
     "rules": {
       "title": "How XP works",
@@ -324,8 +370,11 @@
       "notEarns": "What doesn't",
       "notList": "Opening the app, a like, a comment, or viewing a screen.",
       "why": "What XP does",
-      "whyBody": "XP raises your level. Levels 5, 10 and 15 unlock new stages for your figure. XP also moves your department's monthly goal.",
-      "recognition": "Colleague recognition is never XP."
+      "whyBody": "XP raises your level. Levels 3, 5, 7, 10, 12 and 15 open something new for your figure. XP also moves your department's monthly goal.",
+      "recognition": "Colleague recognition is never XP, for the giver or the receiver.",
+      "trainingAttended": "Attending a training (confirmed after it)",
+      "eventAttended": "Attending an event (confirmed after it)",
+      "profile": "Writing a few words about yourself (once)"
     },
     "register": {
       "title": "Registration",
@@ -340,7 +389,8 @@
       "error": "Registration failed: {message}",
       "retry": "Try again",
       "cancelNote": "You can cancel from the world page until it starts.",
-      "seatsLabel": "Seats"
+      "seatsLabel": "Seats",
+      "attendNote": "After the session we'll ask if you were there. Attending adds another {xp}."
     },
     "trainingFormat": {
       "ONLINE": "Online",
@@ -364,7 +414,78 @@
     "loading": "Loading your world",
     "errorTitle": "We couldn't load your data",
     "errorHint": "The server may be waking up. Try again in a moment.",
-    "retry": "Try again"
+    "retry": "Try again",
+    "bookings": {
+      "title": "My registrations",
+      "hint": "What you signed up for. Add it to your calendar in one tap.",
+      "waiting": "{count, plural, one {One session is waiting: were you there?} other {# sessions are waiting: were you there?}}",
+      "ahead": "Coming up",
+      "happened": "Already happened",
+      "question": "Did you attend?",
+      "yes": "Yes, I was there · {xp}",
+      "no": "I didn't make it",
+      "calendar": "Add to calendar",
+      "error": "Your answer wasn't saved: {message}",
+      "thanksAttended": "Marked as attended: \"{title}\" · {xp}",
+      "thanksMissed": "Marked as missed: \"{title}\". That's fine, there will be more."
+    },
+    "give": {
+      "prompt": "Did someone help you this week?",
+      "left": "{count, plural, one {You have one thank-you left this week} other {You have # thank-yous left this week}}",
+      "none": "You've given all of this week's thank-yous. They renew on Sunday.",
+      "open": "Thank a colleague",
+      "title": "Thank a colleague",
+      "intro": "It will appear in your colleague's world and on the recognition wall on Home. {left} left this week.",
+      "who": "Who?",
+      "searchLabel": "Search a colleague by name",
+      "searchPlaceholder": "First or last name",
+      "searching": "Searching…",
+      "searchError": "The search failed. Try again.",
+      "noResults": "No colleagues found by that name.",
+      "change": "Change",
+      "badge": "For what?",
+      "badges": {
+        "COMMUNITY_CONTRIBUTOR": "Community",
+        "INNOVATION_CHAMPION": "Innovation",
+        "KNOWLEDGE_SHARER": "Sharing knowledge",
+        "DISTRICT_AMBASSADOR": "Connecting districts",
+        "VOLUNTEER": "Volunteering",
+        "MENTOR": "Mentoring"
+      },
+      "reason": "In your words",
+      "reasonPlaceholder": "What exactly they did, and why it helped",
+      "reasonMin": "At least {count} characters",
+      "reasonNote": "Your colleague will see exactly what you wrote.",
+      "send": "Send thank-you",
+      "sending": "Sending…",
+      "error": "The thank-you wasn't sent: {message}",
+      "noXp": "A thank-you earns no XP, for you or for them. It's a thank-you.",
+      "sent": "Sent to {name}. It will appear in their world and on the recognition wall on Home.",
+      "recentTitle": "Thank-yous you gave recently",
+      "recentLine": "{badge} to {name}"
+    },
+    "moment": {
+      "anniversary": "{years} years at the Ministry · {date}",
+      "newRecognition": "{count, plural, one {You received a new thank-you} other {You received # new thank-yous}}"
+    },
+    "recap": {
+      "title": "My month",
+      "older": "Previous month",
+      "newer": "Next month",
+      "error": "Couldn't load that month. Try again.",
+      "quiet": "A quiet month. That's fine.",
+      "xp": "Earned this month",
+      "activeDays": "Active days",
+      "received": "Thank-yous received",
+      "given": "Thank-yous given",
+      "reads": "{count, plural, one {You read one update} other {You read # updates}}",
+      "registrations": "{count, plural, one {You registered for one session} other {You registered for # sessions}}",
+      "attended": "{count, plural, one {You attended one session} other {You attended # sessions}}",
+      "profile": "You wrote about yourself on your profile",
+      "topWorld": "Most of it in {world}",
+      "levelUp": "From level {from} to level {to}",
+      "achievements": "Achievements this month"
+    }
   },
   "jobs": {
     "title": "Job board",
@@ -457,6 +578,20 @@
     "achievementsEmpty": "No achievements unlocked yet.",
     "recognition": "Recognition received",
     "recognitionEmpty": "No recognition yet.",
-    "from": "From {name}"
+    "from": "From {name}",
+    "about": "About me",
+    "aboutEdit": "Edit",
+    "aboutWrite": "Write",
+    "aboutEmpty": "You haven't written about yourself yet. A few lines help colleagues know who they're writing to.",
+    "aboutBio": "A few words about yourself",
+    "aboutPlaceholder": "What you work on, and what people can ask you about",
+    "aboutMin": "At least {count} characters to count in My World",
+    "aboutEnough": "Enough to count in My World",
+    "aboutPhone": "Phone",
+    "aboutSave": "Save",
+    "aboutCancel": "Cancel",
+    "aboutError": "Couldn't save: {message}",
+    "aboutSaved": "Saved.",
+    "aboutSavedXp": "Saved · {xp} in My World"
   }
 }
