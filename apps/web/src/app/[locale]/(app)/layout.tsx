@@ -7,6 +7,13 @@ import { SideNav } from "@/components/SideNav";
 import { TelemetryBeacon } from "@/components/TelemetryBeacon";
 import { serverFetchOrLogin } from "@/lib/api";
 
+/**
+ * Every screen here waits on the API, which can take up to a minute to wake
+ * (see `fetchThroughWake`). Let the render wait that long instead of Vercel's
+ * short default.
+ */
+export const maxDuration = 60;
+
 export default async function AppLayout({
   children,
   params,

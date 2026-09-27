@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { API_URL } from "@/lib/api";
+import { API_URL, fetchThroughWake } from "@/lib/api";
 import { ACCESS_COOKIE, REFRESH_COOKIE, cookieOptions } from "@/lib/session";
 
 /**
@@ -7,10 +7,6 @@ import { ACCESS_COOKIE, REFRESH_COOKIE, cookieOptions } from "@/lib/session";
  * Let this function wait that long instead of Vercel's short default.
  */
 export const maxDuration = 60;
-
-/** While it wakes, Render answers 502/503/504 or drops the connection. */
-const WAKING_STATUS = new Set([502, 503, 504]);
-const WAKE_BUDGET_MS = 55_000;
 
 type Credentials = {
   email: string;
@@ -52,31 +48,13 @@ export async function POST(request: Request) {
   return result;
 }
 
-/**
- * One login attempt per few seconds until the API answers or the budget runs
- * out. Wrong credentials (401/400) come back at once — only a sleeping or
- * unreachable API is retried. Null means it never woke up.
- */
-async function loginWithWake(creds: Credentials): Promise<Response | null> {
-  const deadline = Date.now() + WAKE_BUDGET_MS;
-  for (let attempt = 0; ; attempt += 1) {
-    const remaining = deadline - Date.now();
-    if (remaining <= 0) return null;
-    try {
-      const response = await fetch(`${API_URL}/api/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: creds.email, password: creds.password }),
-        signal: AbortSignal.timeout(Math.min(remaining, 30_000)),
-      });
-      if (!WAKING_STATUS.has(response.status)) return response;
-    } catch {
-      // Connection refused, reset, or this attempt timed out: the API is still waking.
-    }
-    const pause = Math.min(1_000 * 2 ** attempt, 5_000);
-    if (Date.now() + pause >= deadline) return null;
-    await new Promise((resolve) => setTimeout(resolve, pause));
-  }
+/** Wrong credentials (401/400) come back at once — only a sleeping API is waited out. */
+function loginWithWake(creds: Credentials): Promise<Response | null> {
+  return fetchThroughWake(`${API_URL}/api/auth/login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email: creds.email, password: creds.password }),
+  });
 }
 
 async function readCredentials(request: Request): Promise<Credentials | null> {

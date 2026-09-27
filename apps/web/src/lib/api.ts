@@ -19,41 +19,20 @@ export class NotFoundError extends Error {}
  * cached Home to the wrong person has leaked targeted content, and the whole
  * point of the audience model is that Home differs per viewer.
  *
- * A cold API (Render's free instance) answers 502 for a few seconds while it
- * wakes. Those statuses are retried so the screen does not collapse into
- * Next's generic server error.
+ * A cold API (Render's free instance) takes 30–50 seconds to wake, so every
+ * call waits it out through `fetchThroughWake` — the shell skeleton stays on
+ * screen meanwhile, instead of the error page after a couple of seconds.
  */
-const TRANSIENT_STATUS = new Set([502, 503, 504]);
-
-function wait(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
 export const serverFetch = cache(async function serverFetch<T>(path: string): Promise<T> {
   const token = await getAccessToken();
   if (!token) throw new UnauthorizedError();
 
-  let response: Response | undefined;
-  let networkError: unknown;
+  const response = await fetchThroughWake(`${API_URL}/api${path}`, {
+    headers: { Authorization: `Bearer ${token}` },
+    cache: "no-store",
+  });
 
-  for (let attempt = 0; attempt < 3; attempt++) {
-    try {
-      response = await fetch(`${API_URL}/api${path}`, {
-        headers: { Authorization: `Bearer ${token}` },
-        cache: "no-store",
-      });
-      networkError = undefined;
-      if (!TRANSIENT_STATUS.has(response.status)) break;
-    } catch (error) {
-      networkError = error;
-      response = undefined;
-    }
-    if (attempt < 2) await wait(800 * (attempt + 1));
-  }
-
-  if (!response) {
-    throw networkError instanceof Error ? networkError : new Error(`API unreachable on ${path}`);
-  }
+  if (!response) throw new Error(`API did not wake up in time on ${path}`);
   if (response.status === 401) throw new UnauthorizedError();
   if (response.status === 404) throw new NotFoundError(`API 404 on ${path}`);
   if (!response.ok) {
@@ -62,6 +41,37 @@ export const serverFetch = cache(async function serverFetch<T>(path: string): Pr
 
   return (await response.json()) as T;
 });
+
+/** While it wakes, Render answers 502/503/504 or drops the connection. */
+const WAKING_STATUS = new Set([502, 503, 504]);
+
+/**
+ * Covers a full cold wake, and stays under the 60-second `maxDuration` of the
+ * functions that call this (the app layout and the login route).
+ */
+const WAKE_BUDGET_MS = 50_000;
+
+/**
+ * One attempt per few seconds until the API answers something other than a
+ * waking status, or the budget runs out. Null means it never woke up. Any real
+ * answer — 401, 404, 500 — comes back at once for the caller to handle.
+ */
+export async function fetchThroughWake(url: string, init: RequestInit): Promise<Response | null> {
+  const deadline = Date.now() + WAKE_BUDGET_MS;
+  for (let attempt = 0; ; attempt += 1) {
+    const remaining = deadline - Date.now();
+    if (remaining <= 0) return null;
+    try {
+      const response = await fetch(url, { ...init, signal: AbortSignal.timeout(Math.min(remaining, 30_000)) });
+      if (!WAKING_STATUS.has(response.status)) return response;
+    } catch {
+      // Connection refused, reset, or this attempt timed out: the API is still waking.
+    }
+    const pause = Math.min(1_000 * 2 ** attempt, 5_000);
+    if (Date.now() + pause >= deadline) return null;
+    await new Promise((resolve) => setTimeout(resolve, pause));
+  }
+}
 
 /** Fetch, or send the viewer to the login screen. For pages, not for mutations. */
 export async function serverFetchOrLogin<T>(path: string, locale: string): Promise<T> {
